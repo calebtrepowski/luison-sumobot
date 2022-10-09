@@ -1,4 +1,18 @@
-3324968796696
+8312474140529
+luison-electronics
+EECO Rotary Switch
+
+
+0
+6
+6
+luison-electronics
+ESP32-Node32s
+
+
+0
+30
+30
 luison-electronics
 MPU6050 Breakout Board
 MPU6050 Gyroscope and Accelerometer Board
@@ -6,6 +20,13 @@ Gyroscope Accelerometer MPU6050
 0
 8
 8
+luison-electronics
+PinSocket_2x05_P2.54mm_Vertical
+Through hole straight socket strip, 2x05, 2.54mm pitch, double cols (from Kicad 4.0.7), script generated
+Through hole socket strip THT 2x05 2.54mm double row
+0
+10
+10
 luison-electronics
 YAAJ_DCDC_StepDown_LM2596
 
