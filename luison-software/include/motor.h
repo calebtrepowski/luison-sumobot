@@ -88,6 +88,24 @@ namespace motors
         ledcWrite(B.PWM_channel, speed);
     }
 
+    void turnRight()
+    {
+        digitalWrite(A.OUTPUT_2, LOW);
+        digitalWrite(A.OUTPUT_1, HIGH);
+
+        digitalWrite(B.OUTPUT_1, LOW);
+        digitalWrite(B.OUTPUT_2, HIGH);
+    }
+
+    void turnLeft()
+    {
+        digitalWrite(B.OUTPUT_2, LOW);
+        digitalWrite(B.OUTPUT_1, HIGH);
+
+        digitalWrite(A.OUTPUT_1, LOW);
+        digitalWrite(A.OUTPUT_2, HIGH);
+    }
+
 }
 
 #endif
