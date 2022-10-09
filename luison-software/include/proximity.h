@@ -37,6 +37,35 @@ namespace proximity
         right.state = digitalRead(right.pin);
         back.state = digitalRead(back.pin);
     }
+
+#ifdef DEBUG
+    void printStates()
+    {
+        Serial.println("-----------");
+        Serial.print(proximity::frontLeft.state);
+        Serial.print(" ");
+        Serial.print(proximity::frontCenter.state);
+        Serial.print(" ");
+        Serial.println(proximity::frontRight.state);
+
+        Serial.print(proximity::left.state);
+        Serial.print("   ");
+        Serial.println(proximity::right.state);
+
+        Serial.print("  ");
+        Serial.println(proximity::back.state);
+        Serial.println("-----------");
+    }
+#endif
 }
+
+#define OPPONENT_DETECTED_FRONT_LEFT_AND_FRONT_CENTER proximity::left.state && !proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_FRONT_CENTER_ONLY proximity::left.state &&proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_FRONT_CENTER_AND_FRONT_RIGHT proximity::left.state &&proximity::frontLeft.state && !proximity::frontCenter.state && !proximity::frontRight.state && proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_FRONT_RIGHT_AND_RIGHT proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state && !proximity::frontRight.state && !proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_RIGHT_ONLY proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state && !proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_BACK_ONLY proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state &&proximity::right.state && !proximity::back.state
+#define OPPONENT_DETECTED_LEFT_ONLY !proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state &&proximity::right.state &&proximity::back.state
+#define OPPONENT_DETECTED_LEFT_AND_FRONT_LEFT !proximity::left.state && !proximity::frontLeft.state && proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
 
 #endif
