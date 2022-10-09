@@ -20,6 +20,11 @@ namespace motors
         uint_fast8_t OUTPUT_2;
     } A, B;
 
+    /*
+    motor A: right
+    motor B: left
+    */
+
     void brake();
 
     void setup()
@@ -86,6 +91,12 @@ namespace motors
     {
         ledcWrite(A.PWM_channel, speed);
         ledcWrite(B.PWM_channel, speed);
+    }
+
+    void setSpeed(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
+    {
+        ledcWrite(A.PWM_channel, speedMotorA);
+        ledcWrite(B.PWM_channel, speedMotorB);
     }
 
     void turnRight()
