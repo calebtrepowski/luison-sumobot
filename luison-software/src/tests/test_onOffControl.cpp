@@ -12,7 +12,7 @@ bool state;
 
 void loop()
 {
-    state = digitalRead(onOffControl::control.pind);
+    state = digitalRead(onOffControl::control.pin);
     Serial.println(state);
     // delay(1);
 }

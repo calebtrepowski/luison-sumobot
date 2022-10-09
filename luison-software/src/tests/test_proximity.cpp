@@ -13,14 +13,13 @@ void setup()
 void loop()
 {
     proximity::readStates();
-    Serial.println("-----------");
     printStates();
-    Serial.println("-----------");
     delay(500);
 }
 
 void printStates()
 {
+    Serial.println("-----------");
     Serial.print(proximity::frontLeft.state);
     Serial.print(" ");
     Serial.print(proximity::frontCenter.state);
@@ -33,6 +32,7 @@ void printStates()
 
     Serial.print("  ");
     Serial.println(proximity::back.state);
+    Serial.println("-----------");
 }
 
 #endif
