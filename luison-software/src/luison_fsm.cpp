@@ -102,6 +102,8 @@ void loop()
 
 void idle()
 {
+    if (state != priorState)
+    {
 #ifdef DEBUG
         Serial.println("idle");
 #endif
@@ -122,6 +124,9 @@ namespace avoidFallFrontLeft_np
     const uint_fast8_t turnAngle = 120; // °
     uint_fast32_t referenceTime;
 
+    const uint_fast8_t reverseSpeed = 3U; // ms
+    const uint_fast8_t turnSpeed = 3U;    // ms
+
     void reverse();
     void turnRight();
 
@@ -134,7 +139,7 @@ namespace avoidFallFrontLeft_np
 #endif
             priorInnerState = innerState;
             referenceTime = millis();
-            motors::setSpeedBoth(5U);
+            motors::setSpeedBoth(reverseSpeed);
             motors::goBack();
         }
 
@@ -156,7 +161,7 @@ namespace avoidFallFrontLeft_np
 #endif
             priorInnerState = innerState;
             mpu.update();
-            motors::setSpeedBoth(5U);
+            motors::setSpeedBoth(turnSpeed);
             motors::turnRight();
             referenceAngleZ = mpu.getAngleZ();
             referenceTime = millis();
@@ -218,6 +223,7 @@ void avoidFallFrontLeft()
 //     }
 // }
 
+const uint_fast8_t normalSearchSpeed = 3U;
 void normalSearch()
 {
     if (state != priorState)
@@ -226,7 +232,7 @@ void normalSearch()
         Serial.println("normal operation");
 #endif
         priorState = state;
-        motors::setSpeedBoth(4U);
+        motors::setSpeedBoth(normalSearchSpeed);
         motors::goForward();
     }
 
