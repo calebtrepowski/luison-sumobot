@@ -9,6 +9,8 @@
 #include "proximity.h"
 // #include "fsm.h"
 
+// #define DEBUG
+
 typedef void (*STATE_HANDLER_T)();
 typedef void (*INNER_STATE_HANDLER_T)();
 
@@ -33,7 +35,7 @@ uint_fast32_t buttonTime = 0;
 uint_fast32_t lastButtonTime = 0;
 uint_fast32_t lastOnTime = 0;
 
-const uint_fast8_t debounceTime = 10;   // ms
+const uint_fast8_t debounceTime = 20;   // ms
 const uint_fast8_t minimumOnTime = 500; // ms
 
 uint_fast8_t initialStrategy = 0;
@@ -89,6 +91,7 @@ void setup()
     state = idle;
 #ifdef DEBUG
     Serial.begin(9600);
+    Serial.println("setup");
 #endif
 }
 
@@ -99,11 +102,11 @@ void loop()
 
 void idle()
 {
-    if (state != priorState)
-    {
 #ifdef DEBUG
         Serial.println("idle");
 #endif
+    if (state != priorState)
+    {
         priorState = state;
         motors::brake();
         motors::setSpeedBoth(0U);
