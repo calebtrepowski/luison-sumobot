@@ -7,7 +7,7 @@
 #include "onOffControl.h"
 #include "onOffInterruption.h"
 #include "proximity.h"
-#include "fsm.h"
+#include "fsm/fsm.h"
 
 // #define DEBUG
 
