@@ -9,7 +9,7 @@
 #include "proximity.h"
 // #include "fsm.h"
 
-// #define DEBUG
+//#define DEBUG
 
 typedef void (*STATE_HANDLER_T)();
 typedef void (*INNER_STATE_HANDLER_T)();
@@ -32,12 +32,14 @@ volatile INNER_STATE_HANDLER_T priorInnerState, innerState;
 uint_fast8_t turnAngle;
 
 /* INTERRUPTION */
-uint_fast32_t buttonTime = 0;
-uint_fast32_t lastButtonTime = 0;
-uint_fast32_t lastOnTime = 0;
+uint_fast32_t buttonTime = 0UL;
+uint_fast32_t lastButtonTime = 0UL;
+uint_fast32_t lastOnTime = 0UL;
+uint_fast32_t lastOffTime = 0UL;
 
-const uint_fast8_t debounceTime = 20;   // ms
-const uint_fast8_t minimumOnTime = 500; // ms
+const uint_fast8_t debounceTime = 30;     // ms
+const uint_fast8_t minimumOnTime = 500;   // ms
+const uint_fast8_t minimumOffTime = 3000; // ms
 
 uint_fast8_t initialStrategy = 0;
 
@@ -46,12 +48,12 @@ void IRAM_ATTR toggleIdleISR()
     buttonTime = millis();
     if (buttonTime - lastButtonTime > debounceTime)
     {
-        if (buttonTime - lastOnTime > minimumOnTime)
+        if (state == idle)
         {
-            // minimumOnTime es para que no se apague si el arbitro mantiene apretado
-
-            if (state == idle)
+            if (buttonTime - lastOnTime > minimumOffTime || lastOnTime == 0)
             {
+                // minimumOnTime es para que no se apague si el arbitro mantiene apretado
+
                 initialStrategy = dipSwitch::readInt();
                 switch (initialStrategy)
                 {
@@ -68,14 +70,19 @@ void IRAM_ATTR toggleIdleISR()
                     break;
                 }
 
-                lastOnTime = buttonTime;
+                lastOffTime = buttonTime;
             }
-            else
+        }
+        else
+        {
+            if (buttonTime - lastOffTime > minimumOnTime)
             {
                 state = idle;
+                lastOnTime = buttonTime;
             }
         }
     }
+
     lastButtonTime = buttonTime;
 }
 
@@ -108,8 +115,6 @@ void idle()
 #ifdef DEBUG
         Serial.println("idle");
 #endif
-    if (state != priorState)
-    {
         priorState = state;
         motors::brake();
         motors::setSpeedBoth(0U);
