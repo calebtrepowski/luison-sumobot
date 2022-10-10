@@ -7,29 +7,9 @@
 #include "onOffControl.h"
 #include "onOffInterruption.h"
 #include "proximity.h"
-// #include "fsm.h"
+#include "fsm.h"
 
-//#define DEBUG
-
-typedef void (*STATE_HANDLER_T)();
-typedef void (*INNER_STATE_HANDLER_T)();
-
-void idle();
-void avoidFallFrontLeft();
-void avoidFallFrontRight();
-void attackFront();
-void normalSearch();
-void turnRight();
-void turnLeft();
-
-/* initial strategies */
-void diagonalAttack();
-void diagonalKickBack();
-
-volatile STATE_HANDLER_T priorState, state;
-volatile INNER_STATE_HANDLER_T priorInnerState, innerState;
-
-uint_fast8_t turnAngle;
+// #define DEBUG
 
 /* INTERRUPTION */
 uint_fast32_t buttonTime = 0UL;
@@ -48,7 +28,7 @@ void IRAM_ATTR toggleIdleISR()
     buttonTime = millis();
     if (buttonTime - lastButtonTime > debounceTime)
     {
-        if (state == idle)
+        if (fsm::state == fsm::idle)
         {
             if (buttonTime - lastOnTime > minimumOffTime || lastOnTime == 0)
             {
@@ -66,7 +46,7 @@ void IRAM_ATTR toggleIdleISR()
                 // case 3:
                 // break;
                 default:
-                    state = normalSearch;
+                    fsm::state = fsm::normalSearch;
                     break;
                 }
 
@@ -77,7 +57,7 @@ void IRAM_ATTR toggleIdleISR()
         {
             if (buttonTime - lastOffTime > minimumOnTime)
             {
-                state = idle;
+                fsm::state = fsm::idle;
                 lastOnTime = buttonTime;
             }
         }
@@ -95,8 +75,8 @@ void setup()
     proximity::setup();
     attachInterrupt(onOffControl::control.pin, toggleIdleISR, RISING);
 
-    priorState = NULL;
-    state = idle;
+    fsm::priorState = NULL;
+    fsm::state = fsm::idle;
 #ifdef DEBUG
     Serial.begin(9600);
     Serial.println("setup");
@@ -105,192 +85,7 @@ void setup()
 
 void loop()
 {
-    state();
-}
-
-void idle()
-{
-    if (state != priorState)
-    {
-#ifdef DEBUG
-        Serial.println("idle");
-#endif
-        priorState = state;
-        motors::brake();
-        motors::setSpeedBoth(0U);
-    }
-}
-
-namespace avoidFallFrontLeft_np
-{
-    const uint_fast8_t reverseDuration = 300U;  // ms
-    const uint_fast8_t maxTurnDuration = 1000U; // ms
-    uint_fast32_t t;
-
-    const uint_fast8_t turnAngle = 120; // °
-    uint_fast32_t referenceTime;
-
-    const uint_fast8_t reverseSpeed = 3U; // ms
-    const uint_fast8_t turnSpeed = 3U;    // ms
-
-    void reverse();
-    void turnRight();
-
-    void reverse()
-    {
-        if (innerState != priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("reverse");
-#endif
-            priorInnerState = innerState;
-            referenceTime = millis();
-            motors::setSpeedBoth(reverseSpeed);
-            motors::goBack();
-        }
-
-        t = millis();
-
-        if (t - referenceTime > reverseDuration)
-        {
-            innerState = turnRight;
-        }
-    }
-
-    void turnRight()
-    {
-        using namespace gyroscope;
-        if (innerState != priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("turn right");
-#endif
-            priorInnerState = innerState;
-            mpu.update();
-            motors::setSpeedBoth(turnSpeed);
-            motors::turnRight();
-            referenceAngleZ = mpu.getAngleZ();
-            referenceTime = millis();
-        }
-
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
-        t = millis();
-
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || t - referenceTime > maxTurnDuration)
-        {
-            innerState = NULL;
-        }
-    }
-}
-
-void avoidFallFrontLeft()
-{
-
-    if (state != priorState)
-    {
-#ifdef DEBUG
-        Serial.println("avoid fall front");
-#endif
-        priorState = state;
-
-        priorInnerState = NULL;
-        innerState = avoidFallFrontLeft_np::reverse;
-    }
-
-    if (innerState != NULL)
-    {
-        innerState();
-        return;
-    }
-
-    state = normalSearch;
-}
-
-namespace avoidFallFrontRight_np
-{
-    const uint_fast8_t reverseDuration = 300U;  // ms
-    const uint_fast8_t maxTurnDuration = 1000U; // ms
-    uint_fast32_t t;
-
-    const uint_fast8_t turnAngle = 120; // °
-    uint_fast32_t referenceTime;
-
-    const uint_fast8_t reverseSpeed = 3U; // ms
-    const uint_fast8_t turnSpeed = 3U;    // ms
-
-    void reverse();
-    void turnLeft();
-
-    void reverse()
-    {
-        if (innerState != priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("reverse");
-#endif
-            priorInnerState = innerState;
-            referenceTime = millis();
-            motors::setSpeedBoth(reverseSpeed);
-            motors::goBack();
-        }
-
-        t = millis();
-
-        if (t - referenceTime > reverseDuration)
-        {
-            innerState = turnLeft;
-        }
-    }
-
-    void turnLeft()
-    {
-        using namespace gyroscope;
-        if (innerState != priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("turn left");
-#endif
-            priorInnerState = innerState;
-            mpu.update();
-            motors::setSpeedBoth(turnSpeed);
-            motors::turnLeft();
-            referenceAngleZ = mpu.getAngleZ();
-            referenceTime = millis();
-        }
-
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
-        t = millis();
-
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || t - referenceTime > maxTurnDuration)
-        {
-            innerState = NULL;
-        }
-    }
-}
-
-void avoidFallFrontRight()
-{
-
-    if (state != priorState)
-    {
-#ifdef DEBUG
-        Serial.println("avoid fall front");
-#endif
-        priorState = state;
-
-        priorInnerState = NULL;
-        innerState = avoidFallFrontRight_np::reverse;
-    }
-
-    if (innerState != NULL)
-    {
-        innerState();
-        return;
-    }
-
-    state = normalSearch;
+    fsm::state();
 }
 
 // void attackFront()
@@ -314,45 +109,6 @@ void avoidFallFrontRight()
 //         return;
 //     }
 // }
-
-const uint_fast8_t normalSearchSpeed = 3U;
-void normalSearch()
-{
-    if (state != priorState)
-    {
-#ifdef DEBUG
-        Serial.println("normal operation");
-#endif
-        priorState = state;
-        motors::setSpeedBoth(normalSearchSpeed);
-        motors::goForward();
-    }
-
-    line::readValues();
-
-    if (LINE_FRONT_LEFT_DETECTED)
-    {
-        state = avoidFallFrontLeft;
-        return;
-    }
-    
-    if (LINE_FRONT_RIGHT_DETECTED)
-    {
-        state = avoidFallFrontRight;
-        return;
-    }
-
-    // proximity::readStates();
-    // if (OPPONENT_DETECTED_FRONT_CENTER_ONLY)
-    // {
-    // }
-    // if (OPPONENT_DETECTED_BACK_ONLY)
-    // {
-    //     turnAngle = 180;
-    //     state = turnLeft;
-    //     return;
-    // }
-}
 
 // void turnRight()
 // {
