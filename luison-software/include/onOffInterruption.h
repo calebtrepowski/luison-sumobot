@@ -3,42 +3,67 @@
 #include <Arduino.h>
 #include "onOffControl.h"
 #include "dipSwitch.h"
+#include "fsm/fsm.h"
 
-namespace onOffControl
+namespace onOffInterruption
 {
-    volatile bool state;
+    uint_fast32_t buttonTime = 0UL;
+    uint_fast32_t lastButtonTime = 0UL;
+    uint_fast32_t lastOnTime = 0UL;
+    uint_fast32_t lastOffTime = 0UL;
 
-    uint_fast32_t buttonTime = 0;
-    uint_fast32_t lastButtonTime = 0;
-    uint_fast32_t lastOnTime = 0;
+    const uint_fast8_t debounceTime = 30;     // ms
+    const uint_fast8_t minimumOnTime = 500;   // ms
+    const uint_fast8_t minimumOffTime = 3000; // ms
 
-    const uint_fast8_t debounceTime = 10;   // ms
-    const uint_fast8_t minimumOnTime = 500; // ms
+    uint_fast8_t initialStrategy = 0;
 
-    uint_fast8_t strategy = 0;
-
-    void IRAM_ATTR toggleStateISR()
+    void IRAM_ATTR toggleIdleISR()
     {
         buttonTime = millis();
         if (buttonTime - lastButtonTime > debounceTime)
         {
-            if (buttonTime - lastOnTime > minimumOnTime)
+            if (fsm::state == fsm::idle)
             {
-                // para que no se apague si el árbitro mantiene apretado
-                if (!state)
+                if (buttonTime - lastOnTime > minimumOffTime || lastOnTime == 0)
                 {
-                    strategy = dipSwitch::readInt();
+                    // minimumOnTime es para que no se apague si el arbitro mantiene apretado
+
+                    initialStrategy = dipSwitch::readInt();
+                    switch (initialStrategy)
+                    {
+                    // case 1:
+                    //     state = diagonalAttack;
+                    //     break;
+                    // case 2:
+                    //     state = diagonalKickBack;
+                    //     break;
+                    // case 3:
+                    // break;
+                    default:
+                        fsm::state = fsm::normalSearch;
+                        break;
+                    }
+
+                    lastOffTime = buttonTime;
                 }
-                state = !state;
-                lastOnTime = buttonTime;
+            }
+            else
+            {
+                if (buttonTime - lastOffTime > minimumOnTime)
+                {
+                    fsm::state = fsm::idle;
+                    lastOnTime = buttonTime;
+                }
             }
         }
+
         lastButtonTime = buttonTime;
     }
 
     void setOnOffInterruption()
     {
-        attachInterrupt(control.pin, toggleStateISR, RISING);
+        attachInterrupt(onOffControl::control.pin, toggleIdleISR, RISING);
     }
 }
 
