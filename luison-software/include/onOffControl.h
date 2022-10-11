@@ -16,6 +16,6 @@ namespace onOffControl
         control.pin = ON_OFF_CONTROL;
         pinMode(control.pin, INPUT_PULLDOWN);
     }
-} // namespace pushButton
+}
 
 #endif

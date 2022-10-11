@@ -1,7 +1,7 @@
 #ifndef _fsm_idle_h_
 #define _fsm_idle_h_
+
 #include "fsm.h"
-#include "motor.h"
 
 namespace fsm
 {
@@ -18,4 +18,5 @@ namespace fsm
         }
     }
 }
+
 #endif

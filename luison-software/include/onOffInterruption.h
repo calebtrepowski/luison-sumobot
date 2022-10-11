@@ -14,7 +14,7 @@ namespace onOffInterruption
 
     const uint_fast8_t debounceTime = 30;     // ms
     const uint_fast8_t minimumOnTime = 500;   // ms
-    const uint_fast8_t minimumOffTime = 3000; // ms
+    const uint_fast8_t minimumOffTime = 2000; // ms
 
     uint_fast8_t initialStrategy = 0;
 
