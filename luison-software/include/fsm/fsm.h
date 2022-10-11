@@ -6,7 +6,6 @@
 #include "gyroscope.h"
 #include "proximity.h"
 
-
 namespace fsm
 {
     /* state handlers */
@@ -22,6 +21,8 @@ namespace fsm
     void avoidFallFrontRight();
     void attackFront();
     void normalSearch();
+    void aimFrontRight();
+    void aimFrontLeft();
     /* initial strategies */
     void diagonalAttack();
     void diagonalKickBack();
@@ -33,5 +34,7 @@ namespace fsm
 #include "fsm_avoidFallFrontRight.h"
 #include "fsm_avoidFallFrontLeft.h"
 #include "fsm_attackFront.h"
+#include "fsm_aimFrontRight.h"
+#include "fsm_aimFrontLeft.h"
 
 #endif

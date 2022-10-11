@@ -52,6 +52,18 @@ namespace fsm
             return;
         }
 
+        if (OPPONENT_DETECTED_FRONT_RIGHT)
+        {
+            fsm::state = fsm::aimFrontRight;
+            return;
+        }
+
+        if (OPPONENT_DETECTED_FRONT_LEFT)
+        {
+            fsm::state = fsm::aimFrontLeft;
+            return;
+        }
+
         // if (OPPONENT_DETECTED_BACK_ONLY)
         // {
         //     turnAngle = 180;
