@@ -36,7 +36,7 @@ namespace motors
             .OUTPUT_2 = MOTOR_A_OUTPUT_2};
 
         B = {
-            .PWM_channel = MOTOR_A_PWM_CHANNEL,
+            .PWM_channel = MOTOR_B_PWM_CHANNEL,
             .PWM_pin = MOTOR_B_PWM,
             .OUTPUT_1 = MOTOR_B_OUTPUT_1,
             .OUTPUT_2 = MOTOR_B_OUTPUT_2};
@@ -95,8 +95,13 @@ namespace motors
         ledcWrite(B.PWM_channel, speed);
     }
 
-    void setSpeed(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
+    /**
+     * speedMotorA: right motor speed
+     * speedMotorB: left motor speed
+     **/
+    void setSpeed(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB, const uint_fast8_t nominalCurrentSpeed)
     {
+        currentSpeed = nominalCurrentSpeed;
         ledcWrite(A.PWM_channel, speedMotorA);
         ledcWrite(B.PWM_channel, speedMotorB);
     }
