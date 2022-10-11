@@ -5,10 +5,10 @@
 
 namespace aimFrontRight_fsm
 {
-    const uint_fast8_t maxTurnDuration = 500U; // ms
+    const uint_fast8_t maxTurnDuration = 50U; // ms
 
     /* por alguna razon el giroscopio lee a la mitad */
-    const uint_fast8_t turnAngle = 2 * 90; // °
+    const uint_fast8_t turnAngle = 2 * 50; // °
     uint_fast32_t referenceTime;
     uint_fast32_t t;
     const uint_fast8_t aimSpeed = 3U;
@@ -57,6 +57,18 @@ namespace fsm
             return;
         }
 
+        if (OPPONENT_DETECTED_FRONT_LEFT)
+        {
+            fsm::state = fsm::aimFrontLeft;
+            return;
+        }
+
+        // if (OPPONENT_DETECTED_BACK)
+        // {
+        //     fsm::state = fsm::escapeBack;
+        //     return;
+        // }
+
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
 
@@ -67,7 +79,7 @@ namespace fsm
         }
 
         aimFrontRight_fsm::t = millis();
-        
+
         if (aimFrontRight_fsm::t - aimFrontRight_fsm::referenceTime > aimFrontRight_fsm::maxTurnDuration)
         {
             fsm::state = normalSearch;

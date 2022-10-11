@@ -59,24 +59,17 @@ namespace proximity
 #endif
 }
 
-#define OPPONENT_DETECTED_FRONT_LEFT_ONLY proximity::left.state && !proximity::frontLeft.state && proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
-#define OPPONENT_DETECTED_FRONT_LEFT_AND_FRONT_CENTER proximity::left.state && !proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
-
 #define OPPONENT_DETECTED_FRONT_LEFT !proximity::frontLeft.state
-
-#define OPPONENT_DETECTED_FRONT_CENTER_ONLY proximity::left.state &&proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
-
+#define OPPONENT_DETECTED_FRONT_LEFT_AND_FRONT_CENTER !proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state
+#define OPPONENT_DETECTED_FRONT_CENTER_ONLY proximity::frontLeft.state && !proximity::frontCenter.state && proximity::frontRight.state
+#define OPPONENT_DETECTED_FRONT_CENTER_AND_FRONT_RIGHT proximity::frontLeft.state && !proximity::frontCenter.state && !proximity::frontRight.state
 #define OPPONENT_DETECTED_FRONT_RIGHT !proximity::frontRight.state
-// #define OPPONENT_DETECTED_FRONT_CENTER_AND_FRONT_RIGHT proximity::left.state &&proximity::frontLeft.state && !proximity::frontCenter.state && !proximity::frontRight.state && proximity::right.state && proximity::back.state
-// #define OPPONENT_DETECTED_FRONT_RIGHT_ONLY proximity::left.state &&proximity::frontLeft.state && proximity::frontCenter.state && !proximity::frontRight.state && proximity::right.state && proximity::back.state
-
-#define OPPONENT_DETECTED_FRONT_RIGHT_AND_RIGHT proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state && !proximity::frontRight.state && !proximity::right.state && proximity::back.state
-#define OPPONENT_DETECTED_RIGHT_ONLY proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state && !proximity::right.state && proximity::back.state
-#define OPPONENT_DETECTED_BACK_ONLY proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state &&proximity::right.state && !proximity::back.state
-#define OPPONENT_DETECTED_LEFT_ONLY !proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state &&proximity::right.state &&proximity::back.state
-#define OPPONENT_DETECTED_LEFT_AND_FRONT_LEFT !proximity::left.state && !proximity::frontLeft.state && proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
+#define OPPONENT_DETECTED_RIGHT !proximity::right.state
+#define OPPONENT_DETECTED_BACK !proximity::back.state
+#define OPPONENT_DETECTED_LEFT !proximity::left.state
 
 #define OPPONENT_NOT_DETECTED_FRONT_CENTER proximity::frontCenter.state
 #define OPPONENT_NOT_DETECTED_FRONT_RIGHT proximity::frontRight.state
+#define OPPONENT_NOT_DETECTED_FRONT_LEFT proximity::frontLeft.state
 
 #endif

@@ -5,10 +5,10 @@
 
 namespace aimFrontLeft_fsm
 {
-    const uint_fast8_t maxTurnDuration = 500U; // ms
+    const uint_fast8_t maxTurnDuration = 50U; // ms
 
     /* por alguna razon el giroscopio lee a la mitad */
-    const uint_fast8_t turnAngle = 2 * 90; // °
+    const uint_fast8_t turnAngle = 2 * 50; // °
     uint_fast32_t referenceTime;
     uint_fast32_t t;
     const uint_fast8_t aimSpeed = 3U;
@@ -29,10 +29,10 @@ namespace fsm
             fsm::priorState = fsm::state;
 
             mpu.update();
+            motors::setSpeed(aimFrontLeft_fsm::aimSpeed + aimFrontLeft_fsm::aimDeltaSpeed, aimFrontLeft_fsm::aimSpeed, aimFrontLeft_fsm::aimSpeed);
             motors::goForward();
             referenceAngleZ = mpu.getAngleZ();
             aimFrontLeft_fsm::referenceTime = millis();
-            motors::setSpeed(aimFrontLeft_fsm::aimSpeed + aimFrontLeft_fsm::aimDeltaSpeed, aimFrontLeft_fsm::aimSpeed, aimFrontLeft_fsm::aimSpeed);
         }
 
         line::readValues();
@@ -57,6 +57,18 @@ namespace fsm
             return;
         }
 
+        if (OPPONENT_DETECTED_FRONT_RIGHT)
+        {
+            fsm::state = fsm::aimFrontRight;
+            return;
+        }
+
+        // if (OPPONENT_DETECTED_BACK)
+        // {
+        //     fsm::state = fsm::escapeBack;
+        //     return;
+        // }
+
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
 
@@ -75,5 +87,7 @@ namespace fsm
         }
     }
 }
+
+#define TRANSITION_AIM_FRONT_LEFT
 
 #endif

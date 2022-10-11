@@ -5,7 +5,7 @@
 
 namespace normalSearch_fsm
 {
-    const uint_fast8_t normalSearchSpeed = 6U;
+    const uint_fast8_t normalSearchSpeed = 5U;
 }
 
 namespace fsm
@@ -63,10 +63,9 @@ namespace fsm
             return;
         }
 
-        // if (OPPONENT_DETECTED_BACK_ONLY)
+        // if (OPPONENT_DETECTED_BACK)
         // {
-        //     turnAngle = 180;
-        //     state = turnLeft;
+        //     fsm::state = fsm::escapeBack;
         //     return;
         // }
     }

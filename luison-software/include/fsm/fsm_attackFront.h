@@ -5,7 +5,7 @@
 
 namespace attackFront_fsm
 {
-    const uint_fast8_t attackFrontSpeed = 10U;
+    const uint_fast8_t attackFrontSpeed = 6U;
 }
 
 namespace fsm
@@ -60,6 +60,11 @@ namespace fsm
             fsm::state = fsm::aimFrontLeft;
             return;
         }
+        // if (OPPONENT_DETECTED_BACK)
+        // {
+        //     fsm::state = fsm::escapeBack;
+        //     return;
+        // }
     }
 }
 
