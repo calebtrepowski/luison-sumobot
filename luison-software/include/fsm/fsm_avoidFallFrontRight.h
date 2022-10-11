@@ -5,15 +5,16 @@
 
 namespace avoidFallFrontRight_fsm
 {
-    const uint_fast8_t reverseDuration = 300U;  // ms
-    const uint_fast8_t maxTurnDuration = 3000U; // ms
+    const uint_fast8_t reverseDuration = 300U; // ms
+    const uint_fast8_t maxTurnDuration = 500U; // ms
     uint_fast32_t t;
 
-    const uint_fast8_t turnAngle = 120; // °
+    /* por alguna razon el giroscopio lee a la mitad */
+    const uint_fast8_t turnAngle = 2 * 30; // °
     uint_fast32_t referenceTime;
 
-    const uint_fast8_t reverseSpeed = 3U; // ms
-    const uint_fast8_t turnSpeed = 3U;    // ms
+    const uint_fast8_t reverseSpeed = 5U; // ms
+    const uint_fast8_t turnSpeed = 5U;    // ms
 
     void reverse();
     void turnLeft();
@@ -86,7 +87,7 @@ namespace fsm
             Serial.println("avoid fall front");
 #endif
             fsm::priorState = fsm::state;
-
+            
             fsm::priorInnerState = NULL;
             fsm::innerState = avoidFallFrontRight_fsm::reverse;
         }
