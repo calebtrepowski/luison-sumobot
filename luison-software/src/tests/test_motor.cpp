@@ -5,28 +5,19 @@
 
 void testCurrentDetection();
 void testForwardBack();
+void testDifferentSpeeds();
 
 void setup()
 {
     motors::setup();
-    motors::setSpeedBoth(4U);
+    // motors::setSpeedBoth(4U);
 }
 
 void loop()
 {
     // testCurrentDetection();
-    testForwardBack();
-    // motors::goForward();
-    // while (true)
-    // {
-    // }
-    // delay(1000);
-    // motors::brake();
-    // delay(200);
-    // motors::goBack();
-    // delay(1000);
-    // motors::brake();
-    // delay(200);
+    // testForwardBack();
+    testDifferentSpeeds();
 }
 
 void testCurrentDetection()
