@@ -4,6 +4,7 @@
 #include "motor.h"
 #include "line.h"
 #include "gyroscope.h"
+#include "proximity.h"
 
 
 namespace fsm
@@ -31,5 +32,6 @@ namespace fsm
 #include "fsm_normalSearch.h"
 #include "fsm_avoidFallFrontRight.h"
 #include "fsm_avoidFallFrontLeft.h"
+#include "fsm_attackFront.h"
 
 #endif

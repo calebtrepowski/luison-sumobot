@@ -68,4 +68,6 @@ namespace proximity
 #define OPPONENT_DETECTED_LEFT_ONLY !proximity::left.state &&proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state &&proximity::right.state &&proximity::back.state
 #define OPPONENT_DETECTED_LEFT_AND_FRONT_LEFT !proximity::left.state && !proximity::frontLeft.state && proximity::frontCenter.state && proximity::frontRight.state && proximity::right.state && proximity::back.state
 
+#define OPPONENT_NOT_DETECTED_FRONT_CENTER proximity::frontCenter.state
+
 #endif

@@ -1,38 +1,37 @@
-#ifndef _fsm_normal_search_h_
-#define _fsm_normal_search_h_
+#ifndef _fsm_attackFront_h_
+#define _fsm_attackFront_h_
 
 #include "fsm.h"
 
-namespace normalSearch_fsm
+namespace attackFront_fsm
 {
-    const uint_fast8_t normalSearchSpeed = 4U;
+    const uint_fast8_t attackFrontSpeed = 6U;
 }
 
 namespace fsm
 {
-    void normalSearch()
+    void attackFront()
     {
         if (fsm::state != fsm::priorState)
         {
 #ifdef DEBUG
-            Serial.println("normal operation");
+            Serial.println("attack front");
 #endif
             fsm::priorState = fsm::state;
-
+            // motors::setSpeedBoth(attackFront_fsm::attackFrontSpeed);
             motors::goForward();
         }
 
-        if (motors::currentSpeed > normalSearch_fsm::normalSearchSpeed)
+        if (motors::currentSpeed > attackFront_fsm::attackFrontSpeed)
         {
             motors::setSpeedBoth(motors::currentSpeed - 1);
         }
-        else if (motors::currentSpeed < normalSearch_fsm::normalSearchSpeed)
+        else if (motors::currentSpeed < attackFront_fsm::attackFrontSpeed)
         {
             motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         line::readValues();
-
         if (LINE_FRONT_LEFT_DETECTED)
         {
             fsm::state = fsm::avoidFallFrontLeft;
@@ -46,18 +45,11 @@ namespace fsm
         }
 
         proximity::readStates();
-        if (OPPONENT_DETECTED_FRONT_CENTER_ONLY)
+        if (OPPONENT_NOT_DETECTED_FRONT_CENTER)
         {
-            fsm::state = fsm::attackFront;
+            fsm::state = fsm::normalSearch;
             return;
         }
-
-        // if (OPPONENT_DETECTED_BACK_ONLY)
-        // {
-        //     turnAngle = 180;
-        //     state = turnLeft;
-        //     return;
-        // }
     }
 }
 
