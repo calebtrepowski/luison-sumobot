@@ -7,7 +7,7 @@ namespace motors
 {
     const uint_fast8_t PWM_FREQUENCY = 60000; // Hz
     const uint_fast8_t RESOLUTION = 4;        // speed will be divided in 2^RESOLUTION parts
-    // const uint_fast8_t maxStep = 8;           //
+    uint_fast8_t currentSpeed = 0;            // currentSpeed over 2^RESOLUTION steps
 
     const uint_fast8_t MOTOR_A_PWM_CHANNEL = 0;
     const uint_fast8_t MOTOR_B_PWM_CHANNEL = 1;
@@ -56,6 +56,7 @@ namespace motors
 
         ledcWrite(A.PWM_channel, 0);
         ledcWrite(B.PWM_channel, 0);
+        currentSpeed = 0;
 
         pinMode(MOTOR_CURRENT_DETECTION, INPUT);
     }
@@ -89,6 +90,7 @@ namespace motors
 
     void setSpeedBoth(const uint_fast8_t speed)
     {
+        currentSpeed = speed;
         ledcWrite(A.PWM_channel, speed);
         ledcWrite(B.PWM_channel, speed);
     }

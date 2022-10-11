@@ -6,7 +6,7 @@
 namespace avoidFallFrontRight_fsm
 {
     const uint_fast8_t reverseDuration = 300U;  // ms
-    const uint_fast8_t maxTurnDuration = 1000U; // ms
+    const uint_fast8_t maxTurnDuration = 3000U; // ms
     uint_fast32_t t;
 
     const uint_fast8_t turnAngle = 120; // °
@@ -27,8 +27,17 @@ namespace avoidFallFrontRight_fsm
 #endif
             fsm::priorInnerState = fsm::innerState;
             referenceTime = millis();
-            motors::setSpeedBoth(reverseSpeed);
+            // motors::setSpeedBoth(reverseSpeed);
             motors::goBack();
+        }
+
+        if (motors::currentSpeed > reverseSpeed)
+        {
+            motors::setSpeedBoth(motors::currentSpeed - 1);
+        }
+        else if (motors::currentSpeed < reverseSpeed)
+        {
+            motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         t = millis();
@@ -91,4 +100,5 @@ namespace fsm
         fsm::state = fsm::normalSearch;
     }
 }
+
 #endif
