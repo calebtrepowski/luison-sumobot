@@ -5,7 +5,7 @@
 
 namespace normalSearch_fsm
 {
-    const uint_fast8_t normalSearchSpeed = 4U;
+    const uint_fast8_t normalSearchSpeed = 6U;
 }
 
 namespace fsm
@@ -18,7 +18,6 @@ namespace fsm
             Serial.println("normal operation");
 #endif
             fsm::priorState = fsm::state;
-
             motors::goForward();
         }
 

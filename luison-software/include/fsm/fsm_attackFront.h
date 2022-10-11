@@ -5,7 +5,7 @@
 
 namespace attackFront_fsm
 {
-    const uint_fast8_t attackFrontSpeed = 6U;
+    const uint_fast8_t attackFrontSpeed = 10U;
 }
 
 namespace fsm
