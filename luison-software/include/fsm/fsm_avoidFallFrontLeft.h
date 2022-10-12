@@ -24,21 +24,12 @@ namespace avoidFallFrontLeft_fsm
         if (fsm::innerState != fsm::priorInnerState)
         {
 #ifdef DEBUG
-            Serial.println("reverse");
+            Serial.println("avoid fall front left: reverse");
 #endif
             fsm::priorInnerState = fsm::innerState;
             referenceTime = millis();
-            // motors::setSpeedBoth(reverseSpeed);
+            motors::setSpeedBoth(reverseSpeed);
             motors::goBack();
-        }
-
-        if (motors::currentSpeed > reverseSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed - 1);
-        }
-        else if (motors::currentSpeed < reverseSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         t = millis();
@@ -55,23 +46,14 @@ namespace avoidFallFrontLeft_fsm
         if (fsm::innerState != fsm::priorInnerState)
         {
 #ifdef DEBUG
-            Serial.println("turn right");
+            Serial.println("avoid fall front left: turn right");
 #endif
             fsm::priorInnerState = fsm::innerState;
             mpu.update();
-            // motors::setSpeedBoth(turnSpeed);
+            motors::setSpeedBoth(turnSpeed);
             motors::turnRight();
             referenceAngleZ = mpu.getAngleZ();
             referenceTime = millis();
-        }
-
-        if (motors::currentSpeed > turnSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed - 1);
-        }
-        else if (motors::currentSpeed < turnSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         mpu.update();
@@ -93,7 +75,7 @@ namespace fsm
         if (fsm::state != fsm::priorState)
         {
 #ifdef DEBUG
-            Serial.println("avoid fall front");
+            Serial.println("avoid fall front left");
 #endif
             fsm::priorState = fsm::state;
             fsm::priorInnerState = NULL;

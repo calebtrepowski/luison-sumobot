@@ -19,15 +19,7 @@ namespace fsm
 #endif
             fsm::priorState = fsm::state;
             motors::goForward();
-        }
-
-        if (motors::currentSpeed > normalSearch_fsm::normalSearchSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed - 1);
-        }
-        else if (motors::currentSpeed < normalSearch_fsm::normalSearchSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed + 1);
+            motors::setSpeedBoth(normalSearch_fsm::normalSearchSpeed);
         }
 
         line::readValues();
