@@ -23,6 +23,7 @@ namespace fsm
     void normalSearch();
     void aimFrontRight();
     void aimFrontLeft();
+    void aimLeft();
     /* initial strategies */
     void diagonalAttack();
     void diagonalKickBack();
@@ -36,5 +37,6 @@ namespace fsm
 #include "fsm_attackFront.h"
 #include "fsm_aimFrontRight.h"
 #include "fsm_aimFrontLeft.h"
+#include "fsm_aimLeft.h"
 
 #endif

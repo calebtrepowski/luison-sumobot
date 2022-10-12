@@ -63,6 +63,12 @@ namespace fsm
             return;
         }
 
+        if (OPPONENT_DETECTED_LEFT)
+        {
+            fsm::state = fsm::aimLeft;
+            return;
+        }
+
         // if (OPPONENT_DETECTED_BACK)
         // {
         //     fsm::state = fsm::escapeBack;
