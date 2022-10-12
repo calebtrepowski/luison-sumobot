@@ -53,13 +53,6 @@ namespace fsm
         TRANSITION_ATTACK_FRONT
         TRANSITION_AIM_FRONT_LEFT
 
-
-        // if (OPPONENT_DETECTED_BACK)
-        // {
-        //     fsm::state = fsm::escapeBack;
-        //     return;
-        // }
-
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
 

@@ -91,7 +91,19 @@ namespace fsm
 #define TRANSITION_AIM_RIGHT ;
 #endif
 
-    void escapeBack();
+#ifdef ENABLE_STATE_AIM_BACK
+    void aimBack();
+#define TRANSITION_AIM_BACK        \
+    if (OPPONENT_DETECTED_BACK)    \
+    {                              \
+        fsm::state = fsm::aimBack; \
+        return;                    \
+    }
+#else
+#define TRANSITION_AIM_BACK ;
+#endif
+
+
     /* initial strategies */
     void diagonalAttack();
     void diagonalKickBack();
@@ -106,5 +118,6 @@ namespace fsm
 #include "fsm_aimFrontLeft.h"
 #include "fsm_aimLeft.h"
 #include "fsm_aimRight.h"
+#include "fsm_aimBack.h"
 
 #endif
