@@ -16,4 +16,9 @@
 #define AIM_FRONT_SIDE_SPEED_OUTER 13U
 #define AIM_FRONT_SIDE_SPEED_INNER 6U
 
+#define AIM_SIDE_MAX_TURN_DURATION 150U // ms
+#define AIM_SIDE_TURN_ANGLE 2 * 90      // ° (degrees)
+#define AIM_SIDE_SPEED_OUTER 13U
+#define AIM_SIDE_SPEED_INNER 2U
+
 #endif

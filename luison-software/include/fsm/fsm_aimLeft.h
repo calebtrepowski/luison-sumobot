@@ -7,13 +7,12 @@
 
 namespace aimLeft_fsm
 {
-    const uint_fast8_t maxTurnDuration = 1000U; // ms
-
-    /* por alguna razon el giroscopio lee a la mitad */
-    const uint_fast8_t turnAngle = 2 * 75; // °
+    const uint_fast8_t maxTurnDuration = AIM_SIDE_MAX_TURN_DURATION; // ms
+    const uint_fast8_t turnAngle = AIM_SIDE_TURN_ANGLE;              // °
     uint_fast32_t referenceTime;
     uint_fast32_t t;
-    const uint_fast8_t aimSpeed = 8U;
+    const uint_fast8_t aimSpeedOuter = AIM_SIDE_SPEED_OUTER;
+    const uint_fast8_t aimSpeedInner = AIM_SIDE_SPEED_INNER;
 }
 
 namespace fsm
@@ -29,8 +28,8 @@ namespace fsm
             fsm::priorState = fsm::state;
 
             mpu.update();
-            motors::setSpeedBoth(aimLeft_fsm::aimSpeed);
-            motors::turnLeft();
+            motors::setSpeed(aimLeft_fsm::aimSpeedOuter, aimLeft_fsm::aimSpeedInner, aimLeft_fsm::aimSpeedOuter);
+            motors::goForward();
             referenceAngleZ = mpu.getAngleZ();
             aimLeft_fsm::referenceTime = millis();
         }
