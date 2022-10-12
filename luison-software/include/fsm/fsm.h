@@ -17,18 +17,82 @@ namespace fsm
 
     /* main states */
     void idle();
+
+#ifdef ENABLE_STATE_AVOID_FALL_FRONT_LEFT
     void avoidFallFrontLeft();
+#endif
+
+#ifdef ENABLE_STATE_AVOID_FALL_FRONT_RIGHT
     void avoidFallFrontRight();
+#endif
+
+#ifdef ENABLE_STATE_ATTACK_FRONT
     void attackFront();
+#define TRANSITION_ATTACK_FRONT              \
+    if (OPPONENT_DETECTED_FRONT_CENTER_ONLY) \
+    {                                        \
+        fsm::state = fsm::attackFront;       \
+        return;                              \
+    }
+#else
+#define TRANSITION_ATTACK_FRONT ;
+#endif
+
+#ifdef ENABLE_STATE_NORMAL_SEARCH
     void normalSearch();
+#endif
+#ifdef ENABLE_STATE_AIM_FRONT_RIGHT
     void aimFrontRight();
+#define TRANSITION_AIM_FRONT_RIGHT       \
+    if (OPPONENT_DETECTED_FRONT_RIGHT)   \
+    {                                    \
+        fsm::state = fsm::aimFrontRight; \
+        return;                          \
+    }
+#else
+#define TRANSITION_AIM_FRONT_RIGHT ;
+#endif
+
+#ifdef ENABLE_STATE_AIM_FRONT_LEFT
     void aimFrontLeft();
+#define TRANSITION_AIM_FRONT_LEFT       \
+    if (OPPONENT_DETECTED_FRONT_LEFT)   \
+    {                                   \
+        fsm::state = fsm::aimFrontLeft; \
+        return;                         \
+    }
+#else
+#define TRANSITION_AIM_FRONT_LEFT ;
+#endif
+
+#ifdef ENABLE_STATE_AIM_LEFT
     void aimLeft();
+#define TRANSITION_AIM_LEFT        \
+    if (OPPONENT_DETECTED_LEFT)    \
+    {                              \
+        fsm::state = fsm::aimLeft; \
+        return;                    \
+    }
+#else
+#define TRANSITION_AIM_LEFT ;
+#endif
+
+#ifdef ENABLE_STATE_AIM_RIGHT
     void aimRight();
+#define TRANSITION_AIM_RIGHT        \
+    if (OPPONENT_DETECTED_RIGHT)    \
+    {                               \
+        fsm::state = fsm::aimRight; \
+        return;                     \
+    }
+#else
+#define TRANSITION_AIM_RIGHT ;
+#endif
+
+    void escapeBack();
     /* initial strategies */
     void diagonalAttack();
     void diagonalKickBack();
-
 }
 
 #include "fsm_idle.h"

@@ -45,35 +45,11 @@ namespace fsm
         }
 
         proximity::readStates();
-        if (OPPONENT_DETECTED_FRONT_CENTER_ONLY)
-        {
-            fsm::state = fsm::attackFront;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_FRONT_RIGHT)
-        {
-            fsm::state = fsm::aimFrontRight;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_FRONT_LEFT)
-        {
-            fsm::state = fsm::aimFrontLeft;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_LEFT)
-        {
-            fsm::state = fsm::aimLeft;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_RIGHT)
-        {
-            fsm::state = fsm::aimRight;
-            return;
-        }
+        TRANSITION_ATTACK_FRONT
+        TRANSITION_AIM_FRONT_LEFT
+        TRANSITION_AIM_FRONT_RIGHT
+        TRANSITION_AIM_LEFT
+        TRANSITION_AIM_RIGHT
 
         // if (OPPONENT_DETECTED_BACK)
         // {

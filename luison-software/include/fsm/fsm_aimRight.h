@@ -3,6 +3,8 @@
 
 #include "fsm.h"
 
+#ifdef ENABLE_STATE_AIM_RIGHT
+
 namespace aimRight_fsm
 {
     const uint_fast8_t maxTurnDuration = 1000U; // ms
@@ -48,12 +50,7 @@ namespace fsm
         }
 
         proximity::readStates();
-
-        if (OPPONENT_DETECTED_FRONT_CENTER_ONLY)
-        {
-            fsm::state = fsm::attackFront;
-            return;
-        }
+        TRANSITION_ATTACK_FRONT
 
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
@@ -73,5 +70,7 @@ namespace fsm
         }
     }
 }
+
+#endif
 
 #endif

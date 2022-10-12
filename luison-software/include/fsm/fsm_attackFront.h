@@ -3,6 +3,8 @@
 
 #include "fsm.h"
 
+#ifdef ENABLE_STATE_ATTACK_FRONT
+
 namespace attackFront_fsm
 {
     const uint_fast8_t attackFrontSpeed = 6U;
@@ -51,23 +53,9 @@ namespace fsm
             return;
         }
 
-        if (OPPONENT_DETECTED_FRONT_RIGHT)
-        {
-            fsm::state = fsm::aimFrontRight;
-            return;
-        }
-        
-        if (OPPONENT_DETECTED_FRONT_LEFT)
-        {
-            fsm::state = fsm::aimFrontLeft;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_LEFT)
-        {
-            fsm::state = fsm::aimLeft;
-            return;
-        }
+        TRANSITION_AIM_FRONT_RIGHT
+        TRANSITION_AIM_FRONT_LEFT
+        TRANSITION_AIM_LEFT
 
         // if (OPPONENT_DETECTED_BACK)
         // {
@@ -76,5 +64,7 @@ namespace fsm
         // }
     }
 }
+
+#endif
 
 #endif

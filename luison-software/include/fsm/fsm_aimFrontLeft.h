@@ -3,6 +3,8 @@
 
 #include "fsm.h"
 
+#ifdef ENABLE_STATE_AIM_FRONT_LEFT
+
 namespace aimFrontLeft_fsm
 {
     const uint_fast8_t maxTurnDuration = 50U; // ms
@@ -51,17 +53,8 @@ namespace fsm
 
         proximity::readStates();
 
-        if (OPPONENT_DETECTED_FRONT_CENTER_ONLY)
-        {
-            fsm::state = fsm::attackFront;
-            return;
-        }
-
-        if (OPPONENT_DETECTED_FRONT_RIGHT)
-        {
-            fsm::state = fsm::aimFrontRight;
-            return;
-        }
+        TRANSITION_ATTACK_FRONT
+        TRANSITION_AIM_FRONT_RIGHT
 
         // if (OPPONENT_DETECTED_BACK)
         // {
@@ -88,6 +81,6 @@ namespace fsm
     }
 }
 
-#define TRANSITION_AIM_FRONT_LEFT
+#endif
 
 #endif
