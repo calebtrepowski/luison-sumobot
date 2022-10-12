@@ -7,7 +7,7 @@
 
 namespace attackFront_fsm
 {
-    const uint_fast8_t attackFrontSpeed = 6U;
+    const uint_fast8_t attackFrontSpeed = ATTACK_FRONT_SPEED;
 }
 
 namespace fsm
@@ -20,17 +20,8 @@ namespace fsm
             Serial.println("attack front");
 #endif
             fsm::priorState = fsm::state;
-            // motors::setSpeedBoth(attackFront_fsm::attackFrontSpeed);
+            motors::setSpeedBoth(attackFront_fsm::attackFrontSpeed);
             motors::goForward();
-        }
-
-        if (motors::currentSpeed > attackFront_fsm::attackFrontSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed - 1);
-        }
-        else if (motors::currentSpeed < attackFront_fsm::attackFrontSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         line::readValues();

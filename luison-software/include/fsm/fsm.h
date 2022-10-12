@@ -1,6 +1,8 @@
 #ifndef _fsm_h_
 #define _fsm_h_
 
+#include "fsm_configValues.h"
+
 #include "motor.h"
 #include "line.h"
 #include "gyroscope.h"

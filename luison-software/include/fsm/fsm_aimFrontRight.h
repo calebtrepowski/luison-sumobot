@@ -5,18 +5,14 @@
 
 #ifdef ENABLE_STATE_AIM_FRONT_RIGHT
 
-
 namespace aimFrontRight_fsm
 {
-    const uint_fast8_t maxTurnDuration = 50U; // ms
-
-    /* por alguna razon el giroscopio lee a la mitad */
-    const uint_fast8_t turnAngle = 2 * 50; // °
+    const uint_fast8_t maxTurnDuration = AIM_FRONT_SIDE_MAX_TURN_DURATION; // ms
+    const uint_fast8_t turnAngle = AIM_FRONT_SIDE_TURN_ANGLE;              // °
     uint_fast32_t referenceTime;
     uint_fast32_t t;
-    const uint_fast8_t aimSpeed = 3U;
-    const uint_fast8_t aimDeltaSpeed = 9U;
-    // juntos no tienen que sumar más de 14!
+    const uint_fast8_t aimSpeedOuter = AIM_FRONT_SIDE_SPEED_OUTER;
+    const uint_fast8_t aimSpeedInner = AIM_FRONT_SIDE_SPEED_INNER;
 }
 
 namespace fsm
@@ -35,7 +31,7 @@ namespace fsm
             motors::goForward();
             referenceAngleZ = mpu.getAngleZ();
             aimFrontRight_fsm::referenceTime = millis();
-            motors::setSpeed(aimFrontRight_fsm::aimSpeed, aimFrontRight_fsm::aimSpeed + aimFrontRight_fsm::aimDeltaSpeed, aimFrontRight_fsm::aimSpeed);
+            motors::setSpeed(aimFrontRight_fsm::aimSpeedInner, aimFrontRight_fsm::aimSpeedOuter, aimFrontRight_fsm::aimSpeedOuter);
         }
 
         line::readValues();
