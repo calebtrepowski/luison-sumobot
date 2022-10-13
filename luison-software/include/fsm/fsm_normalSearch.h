@@ -18,8 +18,7 @@ namespace fsm
             Serial.println("normal operation");
 #endif
             fsm::priorState = fsm::state;
-            motors::goForward();
-            motors::setSpeedBoth(normalSearch_fsm::normalSearchSpeed);
+            motors::goForward(normalSearch_fsm::normalSearchSpeed);
         }
 
         line::readValues();
