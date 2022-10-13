@@ -1,3 +1,7 @@
+#include "pinNumbers.h"
+
+#ifndef DRIVER_ZEROLAG
+
 #ifdef TEST_MOTOR
 
 #include <Arduino.h>
@@ -44,5 +48,7 @@ void testForwardBack()
         delay(500);
     }
 }
+
+#endif
 
 #endif

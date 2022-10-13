@@ -1,7 +1,11 @@
 #ifdef TEST_ONE
 #include <Arduino.h>
 #include "onOffControl.h"
+#ifndef DRIVER_ZEROLAG
 #include "motor.h"
+#else
+#include "motorZerolag.h"
+#endif
 #include "dipSwitch.h"
 #include "line.h"
 

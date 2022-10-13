@@ -2,7 +2,11 @@
 #include <Arduino.h>
 #include "proximity.h"
 #include "dipSwitch.h"
+#ifndef DRIVER_ZEROLAG
 #include "motor.h"
+#else
+#include "motorZerolag.h"
+#endif
 #include "onOffControl.h"
 #include "line.h"
 // #define INCLUDE_xTaskResumeFromISR
