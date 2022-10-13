@@ -1,9 +1,17 @@
 #ifdef LUISON_FSM
 #include <Arduino.h>
 
+#include "pinNumbers.h"
+
 #include "gyroscope.h"
 #include "line.h"
+
+#ifndef DRIVER_ZEROLAG
 #include "motor.h"
+#else
+#include "motorZerolag.h"
+#endif
+
 #include "onOffControl.h"
 #include "onOffInterruption.h"
 #include "proximity.h"
@@ -18,7 +26,7 @@ void setup()
     motors::setup();
     onOffControl::setup();
     proximity::setup();
-    
+
     onOffInterruption::setOnOffInterruption();
     // attachInterrupt(onOffControl::control.pin, toggleIdleISR, RISING);
 

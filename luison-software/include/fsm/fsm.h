@@ -3,7 +3,12 @@
 
 #include "fsm_configValues.h"
 
+#ifndef DRIVER_ZEROLAG
 #include "motor.h"
+#else
+#include "motorZerolag.h"
+#endif
+
 #include "line.h"
 #include "gyroscope.h"
 #include "proximity.h"
@@ -22,10 +27,26 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_LEFT
     void avoidFallFrontLeft();
+#define TRANSITION_AVOID_FALL_FRONT_LEFT      \
+    if (LINE_FRONT_LEFT_DETECTED)             \
+    {                                         \
+        fsm::state = fsm::avoidFallFrontLeft; \
+        return;                               \
+    }
+#else
+#define TRANSITION_AVOID_FALL_FRONT_LEFT ;
 #endif
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_RIGHT
     void avoidFallFrontRight();
+#define TRANSITION_AVOID_FALL_FRONT_RIGHT      \
+    if (LINE_FRONT_RIGHT_DETECTED)             \
+    {                                          \
+        fsm::state = fsm::avoidFallFrontRight; \
+        return;                                \
+    }
+#else
+#define TRANSITION_AVOID_FALL_FRONT_RIGHT ;
 #endif
 
 #ifdef ENABLE_STATE_ATTACK_FRONT
@@ -102,7 +123,6 @@ namespace fsm
 #else
 #define TRANSITION_AIM_BACK ;
 #endif
-
 
     /* initial strategies */
     void diagonalAttack();

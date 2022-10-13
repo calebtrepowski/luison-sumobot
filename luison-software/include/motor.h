@@ -3,6 +3,8 @@
 #include <Arduino.h>
 #include "pinNumbers.h"
 
+#ifndef DRIVER_ZEROLAG
+
 namespace motors
 {
     const uint_fast8_t PWM_FREQUENCY = 60000; // Hz
@@ -125,5 +127,7 @@ namespace motors
     }
 
 }
+
+#endif
 
 #endif
