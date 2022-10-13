@@ -35,17 +35,8 @@ namespace fsm
 
         line::readValues();
 
-        if (LINE_FRONT_LEFT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontLeft;
-            return;
-        }
-
-        if (LINE_FRONT_RIGHT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontRight;
-            return;
-        }
+        TRANSITION_AVOID_FALL_FRONT_LEFT
+        TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
 
