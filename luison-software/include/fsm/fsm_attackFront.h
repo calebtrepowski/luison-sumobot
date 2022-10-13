@@ -20,8 +20,7 @@ namespace fsm
             Serial.println("attack front");
 #endif
             fsm::priorState = fsm::state;
-            motors::setSpeedBoth(attackFront_fsm::attackFrontSpeed);
-            motors::goForward();
+            motors::goForward(attackFront_fsm::attackFrontSpeed);
         }
 
         line::readValues();

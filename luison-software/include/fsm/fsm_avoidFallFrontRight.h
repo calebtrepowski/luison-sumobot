@@ -28,8 +28,7 @@ namespace avoidFallFrontRight_fsm
 #endif
             fsm::priorInnerState = fsm::innerState;
             referenceTime = millis();
-            motors::setSpeedBoth(reverseSpeed);
-            motors::goBack();
+            motors::goBack(reverseSpeed);
         }
 
         t = millis();
@@ -50,8 +49,7 @@ namespace avoidFallFrontRight_fsm
 #endif
             fsm::priorInnerState = fsm::innerState;
             mpu.update();
-            motors::setSpeedBoth(turnSpeed);
-            motors::turnLeft();
+            motors::turnLeft(turnSpeed);
             referenceAngleZ = mpu.getAngleZ();
             referenceTime = millis();
         }

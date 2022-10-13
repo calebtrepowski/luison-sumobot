@@ -8,16 +8,13 @@
 namespace aimBack_fsm
 {
 
-    const uint_fast8_t goFrontDuration = 300U; // ms
-    const uint_fast8_t maxTurnDuration = 500U; // ms
-
-    /* por alguna razon el giroscopio lee a la mitad */
-    const uint_fast8_t turnAngle = 2 * 180U; // °
+    const uint_fast8_t goFrontDuration = AIM_BACK_GO_FRONT_DURATION; // ms
+    const uint_fast8_t maxTurnDuration = AIM_BACK_MAX_TURN_DURATION; // ms
+    const uint_fast8_t turnAngle = AIM_BACK_TURN_ANGLE;              // °
     uint_fast32_t referenceTime;
-
     uint_fast32_t t;
-    const uint_fast8_t goFrontSpeed = 6U;
-    const uint_fast8_t turnSpeed = 10U;
+    const uint_fast8_t goFrontSpeed = AIM_BACK_GO_FRONT_SPEED;
+    const uint_fast8_t turnSpeed = AIM_BACK_TURN_SPEED;
 
     void goFront();
     void turn180Right();
@@ -31,8 +28,7 @@ namespace aimBack_fsm
 #endif
             fsm::priorInnerState = fsm::innerState;
             referenceTime = millis();
-            motors::setSpeedBoth(goFrontDuration);
-            motors::goForward();
+            motors::goForward(goFrontDuration);
         }
 
         t = millis();
@@ -54,18 +50,9 @@ namespace aimBack_fsm
 #endif
             fsm::priorInnerState = fsm::innerState;
             mpu.update();
-            motors::turnRight();
+            motors::turnRight(turnSpeed);
             referenceAngleZ = mpu.getAngleZ();
             referenceTime = millis();
-        }
-
-        if (motors::currentSpeed > turnSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed - 1);
-        }
-        else if (motors::currentSpeed < turnSpeed)
-        {
-            motors::setSpeedBoth(motors::currentSpeed + 1);
         }
 
         mpu.update();
@@ -106,11 +93,7 @@ namespace fsm
             return;
         }
 
-        if (LINE_FRONT_RIGHT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontRight;
-            return;
-        }
+        TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
         TRANSITION_ATTACK_FRONT
@@ -122,29 +105,6 @@ namespace fsm
         }
 
         fsm::state = fsm::normalSearch;
-
-        // proximity::readStates();
-
-        // TRANSITION_ATTACK_FRONT
-        // TRANSITION_AIM_FRONT_RIGHT
-        // TRANSITION_AIM_FRONT_LEFT
-
-        // gyroscope::mpu.update();
-        // gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
-
-        // if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimBack_fsm::turnAngle)
-        // {
-        //     fsm::state = normalSearch;
-        //     return;
-        // }
-
-        // aimBack_fsm::t = millis();
-
-        // if (aimBack_fsm::t - aimBack_fsm::referenceTime > aimBack_fsm::maxTurnDuration)
-        // {
-        //     fsm::state = normalSearch;
-        //     return;
-        // }
     }
 }
 

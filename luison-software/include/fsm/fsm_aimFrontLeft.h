@@ -28,8 +28,7 @@ namespace fsm
             fsm::priorState = fsm::state;
 
             mpu.update();
-            motors::setSpeed(aimFrontLeft_fsm::aimSpeedOuter, aimFrontLeft_fsm::aimSpeedInner, aimFrontLeft_fsm::aimSpeedOuter);
-            motors::goForward();
+            motors::turnDifferentSpeeds(aimFrontLeft_fsm::aimSpeedOuter, aimFrontLeft_fsm::aimSpeedInner);
             referenceAngleZ = mpu.getAngleZ();
             aimFrontLeft_fsm::referenceTime = millis();
         }
