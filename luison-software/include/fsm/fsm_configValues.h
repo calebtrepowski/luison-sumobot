@@ -3,8 +3,14 @@
 
 /* Speeds: [1, 6] */
 
+/* Normal search */
 #define NORMAL_SEARCH_SPEED 1U
+
 #define ATTACK_FRONT_SPEED 2U
+#define ATTACK_FRONT_FULL_GAS_TIME 500  // ms
+#define ATTACK_FRONT_LIFT_OFF_TIME 1000 // ms, es acumulado! el tiempo de liftoff es liftofftime - fullgastime
+#define ATTACK_FRONT_FULL_GAS_SPEED 6U
+#define ATTACK_FRONT_LIFT_OFF_SPEED 4U
 
 #define AIM_FRONT_SIDE_MAX_TURN_DURATION 50U // ms
 #define AIM_FRONT_SIDE_TURN_ANGLE 2 * 45     // ° (degrees)
