@@ -34,12 +34,15 @@ namespace fsm
         }
 
         line::readValues();
-
         TRANSITION_AVOID_FALL_FRONT_LEFT
         TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
         TRANSITION_ATTACK_FRONT
+        TRANSITION_AIM_FRONT_RIGHT
+        TRANSITION_AIM_FRONT_LEFT
+        TRANSITION_AIM_LEFT
+        TRANSITION_AIM_BACK
 
         mpu.update();
         currentAngleZ = mpu.getAngleZ();

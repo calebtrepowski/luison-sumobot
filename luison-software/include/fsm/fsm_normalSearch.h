@@ -26,17 +26,12 @@ namespace fsm
         TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
-        TRANSITION_ATTACK_FRONT
         TRANSITION_AIM_FRONT_LEFT
         TRANSITION_AIM_FRONT_RIGHT
+        TRANSITION_ATTACK_FRONT
         TRANSITION_AIM_LEFT
         TRANSITION_AIM_RIGHT
-
-        // if (OPPONENT_DETECTED_BACK)
-        // {
-        //     fsm::state = fsm::aimBack;
-        //     return;
-        // }
+        TRANSITION_AIM_BACK
     }
 }
 

@@ -7,34 +7,30 @@
 
 namespace attackFront_fsm
 {
-    const uint_fast8_t attackFrontSpeed = ATTACK_FRONT_SPEED;
+    const uint_fast8_t fullGasSpeed = ATTACK_FRONT_FULL_GAS_SPEED;
+    const uint_fast8_t fullGasTime = ATTACK_FRONT_FULL_GAS_TIME;
+    const uint_fast8_t liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
+    const uint_fast8_t liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
+    uint_fast32_t t;
 }
 
 namespace fsm
 {
     void attackFront()
     {
+        using namespace attackFront_fsm;
         if (fsm::state != fsm::priorState)
         {
 #ifdef DEBUG
             Serial.println("attack front");
 #endif
             fsm::priorState = fsm::state;
-            motors::goForward(attackFront_fsm::attackFrontSpeed);
+            motors::goForward(fullGasSpeed);
         }
 
         line::readValues();
-        if (LINE_FRONT_LEFT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontLeft;
-            return;
-        }
-
-        if (LINE_FRONT_RIGHT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontRight;
-            return;
-        }
+        TRANSITION_AVOID_FALL_FRONT_LEFT
+        TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
         if (OPPONENT_NOT_DETECTED_FRONT_CENTER)
@@ -46,12 +42,18 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_FRONT_LEFT
         TRANSITION_AIM_LEFT
+        TRANSITION_AIM_RIGHT
+        TRANSITION_AIM_BACK
 
-        // if (OPPONENT_DETECTED_BACK)
-        // {
-        //     fsm::state = fsm::aimBack;
-        //     return;
-        // }
+        t = millis();
+        if (t % fullGasTime > fullGasTime)
+        {
+            motors::goForward(liftOffSpeed);
+        }
+        else if (t % liftOffTime > liftOffTime)
+        {
+            motors::goForward(fullGasSpeed);
+        }
     }
 }
 
