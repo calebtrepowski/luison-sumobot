@@ -125,8 +125,18 @@ namespace fsm
 #endif
 
     /* initial strategies */
+#ifdef ENABLE_STRATEGY_DIAGONAL_ATTACK
     void diagonalAttack();
+#endif
+
+#ifdef ENABLE_STRATEGY_DIAGONAL_KICKBACK
     void diagonalKickBack();
+#endif
+
+#ifdef ENABLE_STRATEGY_RANDOM_SPIN
+    void randomSpin();
+#endif
+
 }
 
 #include "fsm_idle.h"
@@ -139,5 +149,8 @@ namespace fsm
 #include "fsm_aimLeft.h"
 #include "fsm_aimRight.h"
 #include "fsm_aimBack.h"
+#include "fsm_diagonalAttack.h"
+#include "fsm_diagonalKickBack.h"
+#include "fsm_randomSpin.h"
 
 #endif

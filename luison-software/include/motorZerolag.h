@@ -125,6 +125,18 @@ namespace motors
         ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE + speedMotorB);
     }
 
+    /**
+     * speeds: [1, 6]
+     */
+    void goBackDifferentSpeeds(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
+    {
+        digitalWrite(A.enable, HIGH);
+        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - speedMotorA);
+
+        digitalWrite(B.enable, HIGH);
+        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - speedMotorB);
+    }
+
 }
 
 #endif

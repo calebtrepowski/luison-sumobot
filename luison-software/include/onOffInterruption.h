@@ -32,14 +32,21 @@ namespace onOffInterruption
                     initialStrategy = dipSwitch::readInt();
                     switch (initialStrategy)
                     {
-                    // case 1:
-                    //     state = diagonalAttack;
-                    //     break;
-                    // case 2:
-                    //     state = diagonalKickBack;
-                    //     break;
-                    // case 3:
-                    // break;
+#ifdef ENABLE_STRATEGY_DIAGONAL_ATTACK
+                    case 1:
+                        fsm::state = fsm::diagonalAttack;
+                        break;
+#endif
+#ifdef ENABLE_STRATEGY_DIAGONAL_KICKBACK
+                    case 2:
+                        fsm::state = fsm::diagonalKickBack;
+                        break;
+#endif
+#ifdef ENABLE_STRATEGY_RANDOM_SPIN
+                    case 3:
+                        fsm::state = fsm::randomSpin;
+                        break;
+#endif
                     default:
                         fsm::state = fsm::normalSearch;
                         break;
