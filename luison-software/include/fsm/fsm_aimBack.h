@@ -31,7 +31,7 @@ namespace fsm
             fsm::priorState = fsm::state;
 
             gyroscope::mpu.update();
-            motors::turnDifferentSpeeds(aimBack_fsm::turnSpeedInner, aimBack_fsm::turnSpeedOuter);
+            motors::goForward(aimBack_fsm::turnSpeedInner, aimBack_fsm::turnSpeedOuter);
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
             referenceTime = millis();
         }

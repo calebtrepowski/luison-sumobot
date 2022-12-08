@@ -2,16 +2,9 @@
 #include <Arduino.h>
 
 #include "pinNumbers.h"
-
 #include "gyroscope.h"
 #include "line.h"
-
-#ifndef DRIVER_ZEROLAG
-#include "motor.h"
-#else
-#include "motorZerolag.h"
-#endif
-
+#include "motorDriver.h"
 // #include "onOffControl.h"
 // #include "onOffInterruption.h"
 #include "proximity.h"

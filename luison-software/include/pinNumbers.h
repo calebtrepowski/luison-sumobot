@@ -36,6 +36,7 @@ const uint_fast8_t DIP_BIT_1 = 25;
 // Motor
 
 #define DRIVER_ZEROLAG
+// #define DRIVER_MEIMOTOR
 
 #ifdef DRIVER_ZEROLAG
 const uint_fast8_t MOTOR_A_PWM = 5;
@@ -44,7 +45,7 @@ const uint_fast8_t MOTOR_A_ENABLE = 18;
 const uint_fast8_t MOTOR_B_PWM = 16;
 const uint_fast8_t MOTOR_B_ENABLE = 4;
 
-#else
+#elif defined(DRIVER_MEIMOTOR)
 const uint_fast8_t MOTOR_A_PWM = 5;
 const uint_fast8_t MOTOR_A_OUTPUT_1 = 18;
 const uint_fast8_t MOTOR_A_OUTPUT_2 = 19;

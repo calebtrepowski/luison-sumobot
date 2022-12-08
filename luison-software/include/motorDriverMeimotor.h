@@ -1,9 +1,9 @@
-#ifndef _motor_h
-#define _motor_h
-#include <Arduino.h>
-#include "pinNumbers.h"
+#ifndef _motor_driver_meimotor_h
+#define _motor_driver_meimotor_h
 
-#ifndef DRIVER_ZEROLAG
+#ifdef DRIVER_MEIMOTOR
+
+#include "motorDriver.h"
 
 namespace motors
 {
@@ -26,8 +26,6 @@ namespace motors
     motor A: right
     motor B: left
     */
-
-    void brake();
 
     void setup()
     {
@@ -70,10 +68,16 @@ namespace motors
 
         digitalWrite(B.OUTPUT_1, LOW);
         digitalWrite(B.OUTPUT_2, LOW);
+
+        ledcWrite(A.PWM_channel, 0);
+        ledcWrite(B.PWM_channel, 0);
     }
 
-    void goForward()
+    void goForward(const uint_fast8_t commonSpeed)
     {
+        ledcWrite(A.PWM_channel, commonSpeed);
+        ledcWrite(B.PWM_channel, commonSpeed);
+
         digitalWrite(A.OUTPUT_1, LOW);
         digitalWrite(A.OUTPUT_2, HIGH);
 
@@ -81,8 +85,23 @@ namespace motors
         digitalWrite(B.OUTPUT_2, HIGH);
     }
 
-    void goBack()
+    void goForward(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
+        ledcWrite(A.PWM_channel, speedMotorA);
+        ledcWrite(B.PWM_channel, speedMotorB);
+
+        digitalWrite(A.OUTPUT_1, LOW);
+        digitalWrite(A.OUTPUT_2, HIGH);
+
+        digitalWrite(B.OUTPUT_1, LOW);
+        digitalWrite(B.OUTPUT_2, HIGH);
+    }
+
+    void goBack(const uint_fast8_t commonSpeed)
+    {
+        ledcWrite(A.PWM_channel, commonSpeed);
+        ledcWrite(B.PWM_channel, commonSpeed);
+
         digitalWrite(A.OUTPUT_2, LOW);
         digitalWrite(A.OUTPUT_1, HIGH);
 
@@ -90,26 +109,23 @@ namespace motors
         digitalWrite(B.OUTPUT_1, HIGH);
     }
 
-    void setSpeedBoth(const uint_fast8_t speed)
+    void goBack(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
-        currentSpeed = speed;
-        ledcWrite(A.PWM_channel, speed);
-        ledcWrite(B.PWM_channel, speed);
-    }
-
-    /**
-     * speedMotorA: right motor speed
-     * speedMotorB: left motor speed
-     **/
-    void setSpeed(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB, const uint_fast8_t nominalCurrentSpeed)
-    {
-        currentSpeed = nominalCurrentSpeed;
         ledcWrite(A.PWM_channel, speedMotorA);
         ledcWrite(B.PWM_channel, speedMotorB);
+
+        digitalWrite(A.OUTPUT_2, LOW);
+        digitalWrite(A.OUTPUT_1, HIGH);
+
+        digitalWrite(B.OUTPUT_2, LOW);
+        digitalWrite(B.OUTPUT_1, HIGH);
     }
 
-    void turnRight()
+    void turnRight(const uint_fast8_t commonSpeed)
     {
+        ledcWrite(A.PWM_channel, commonSpeed);
+        ledcWrite(B.PWM_channel, commonSpeed);
+
         digitalWrite(A.OUTPUT_2, LOW);
         digitalWrite(A.OUTPUT_1, HIGH);
 
@@ -117,8 +133,11 @@ namespace motors
         digitalWrite(B.OUTPUT_2, HIGH);
     }
 
-    void turnLeft()
+    void turnLeft(const uint_fast8_t commonSpeed)
     {
+        ledcWrite(A.PWM_channel, commonSpeed);
+        ledcWrite(B.PWM_channel, commonSpeed);
+
         digitalWrite(B.OUTPUT_2, LOW);
         digitalWrite(B.OUTPUT_1, HIGH);
 

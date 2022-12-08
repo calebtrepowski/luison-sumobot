@@ -2,13 +2,7 @@
 #define _fsm_h_
 
 #include "fsm_configValues.h"
-
-#ifndef DRIVER_ZEROLAG
-#include "motor.h"
-#else
-#include "motorZerolag.h"
-#endif
-
+#include "motorDriver.h"
 #include "line.h"
 #include "gyroscope.h"
 #include "proximity.h"

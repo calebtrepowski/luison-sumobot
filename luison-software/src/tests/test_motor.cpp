@@ -1,54 +1,40 @@
-#include "pinNumbers.h"
-
-#ifndef DRIVER_ZEROLAG
-
 #ifdef TEST_MOTOR
 
 #include <Arduino.h>
-#include "motor.h"
 
-void testCurrentDetection();
-void testForwardBack();
-void testDifferentSpeeds();
+#include "pinNumbers.h"
+#include "motorDriver.h"
+
+void testForward();
+void testBack();
 
 void setup()
 {
     motors::setup();
-    // motors::setSpeedBoth(4U);
 }
 
 void loop()
 {
-    // testCurrentDetection();
-    // testForwardBack();
-    testDifferentSpeeds();
+    testForward();
+    // testBack();
 }
 
-void testCurrentDetection()
+void testForward()
 {
-    Serial.begin(9600);
-    motors::goForward();
+    /* pay attention to speeds */
+    motors::goForward(1);
     while (true)
     {
-        Serial.println(analogRead(MOTOR_CURRENT_DETECTION));
     }
 }
 
-void testForwardBack()
+void testBack()
 {
+    /* pay attention to speeds */
+    motors::goBack(1);
     while (true)
     {
-        motors::goForward();
-        delay(1500);
-        motors::brake();
-        delay(500);
-        motors::goBack();
-        delay(1500);
-        motors::brake();
-        delay(500);
     }
 }
-
-#endif
 
 #endif

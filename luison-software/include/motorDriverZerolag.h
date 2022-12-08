@@ -1,10 +1,9 @@
-#ifndef _motor_zerolag_h
-#define _motor_zerolag_h
-
-#include <Arduino.h>
-#include "pinNumbers.h"
+#ifndef _motor_driver_zerolag_h
+#define _motor_driver_zerolag_h
 
 #ifdef DRIVER_ZEROLAG
+
+#include "motorDriver.h"
 
 namespace motors
 {
@@ -69,54 +68,19 @@ namespace motors
     /**
      * speed: [1, 6]
      */
-    void goForward(const uint_fast8_t speed)
+    void goForward(const uint_fast8_t commonSpeed)
     {
         digitalWrite(A.enable, HIGH);
-        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE + speed);
+        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE + commonSpeed);
 
         digitalWrite(B.enable, HIGH);
-        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE + speed);
-    }
-
-    /**
-     * speed: [1, 6]
-     */
-    void goBack(const uint_fast8_t speed)
-    {
-        digitalWrite(A.enable, HIGH);
-        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - speed);
-
-        digitalWrite(B.enable, HIGH);
-        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - speed);
-    }
-
-    /**
-     * speed: [1, 6]
-     */
-    void turnRight(const uint_fast8_t speed)
-    {
-        digitalWrite(A.enable, HIGH);
-        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE + speed);
-
-        digitalWrite(B.enable, HIGH);
-        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - speed);
-    }
-
-    /**
-     * speed: [1, 6]
-     */
-    void turnLeft(const uint_fast8_t speed)
-    {
-        digitalWrite(A.enable, HIGH);
-        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - speed);
-        digitalWrite(B.enable, HIGH);
-        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE + speed);
+        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE + commonSpeed);
     }
 
     /**
      * speeds: [1, 6]
      */
-    void turnDifferentSpeeds(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
+    void goForward(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
         digitalWrite(A.enable, HIGH);
         ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE + speedMotorA);
@@ -126,15 +90,50 @@ namespace motors
     }
 
     /**
+     * speed: [1, 6]
+     */
+    void goBack(const uint_fast8_t commonSpeed)
+    {
+        digitalWrite(A.enable, HIGH);
+        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - commonSpeed);
+
+        digitalWrite(B.enable, HIGH);
+        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - commonSpeed);
+    }
+
+    /**
      * speeds: [1, 6]
      */
-    void goBackDifferentSpeeds(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
+    void goBack(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
         digitalWrite(A.enable, HIGH);
         ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - speedMotorA);
 
         digitalWrite(B.enable, HIGH);
         ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - speedMotorB);
+    }
+
+    /**
+     * speed: [1, 6]
+     */
+    void turnRight(const uint_fast8_t commonSpeed)
+    {
+        digitalWrite(A.enable, HIGH);
+        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE + commonSpeed);
+
+        digitalWrite(B.enable, HIGH);
+        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE - commonSpeed);
+    }
+
+    /**
+     * speed: [1, 6]
+     */
+    void turnLeft(const uint_fast8_t commonSpeed)
+    {
+        digitalWrite(A.enable, HIGH);
+        ledcWrite(A.PWM_channel, BRAKE_DUTY_CYCLE - commonSpeed);
+        digitalWrite(B.enable, HIGH);
+        ledcWrite(B.PWM_channel, BRAKE_DUTY_CYCLE + commonSpeed);
     }
 
 }

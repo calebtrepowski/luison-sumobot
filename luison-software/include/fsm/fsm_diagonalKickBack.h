@@ -26,7 +26,7 @@ namespace fsm
 #endif
             fsm::priorState = fsm::state;
 
-            motors::goBackDifferentSpeeds(innerReverseSpeed, outerReverseSpeed);
+            motors::goBack(innerReverseSpeed, outerReverseSpeed);
             referenceTime = millis();
         }
 
