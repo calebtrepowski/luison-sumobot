@@ -8,7 +8,7 @@
 
 namespace motors
 {
-    const uint_fast8_t PWM_FREQUENCY = 3900; // Hz
+    const uint_fast8_t PWM_FREQUENCY = 40000; // Hz
 
     /* NO CAMBIAR RESOLUCION, SI ES MÁS DE 4 SE VA A QUEMAR EL DRIVER */
     const uint_fast8_t RESOLUTION = 4; // speed will be divided in 2^RESOLUTION parts
