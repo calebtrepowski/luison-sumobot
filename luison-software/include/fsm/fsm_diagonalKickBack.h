@@ -25,8 +25,9 @@ namespace fsm
             Serial.println("diagonal kick back");
 #endif
             fsm::priorState = fsm::state;
-            referenceTime = millis();
+
             motors::goBackDifferentSpeeds(innerReverseSpeed, outerReverseSpeed);
+            referenceTime = millis();
         }
 
         proximity::readStates();
