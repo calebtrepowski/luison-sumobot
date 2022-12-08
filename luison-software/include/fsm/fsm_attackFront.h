@@ -12,6 +12,7 @@ namespace attackFront_fsm
     const uint_fast8_t liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
     const uint_fast8_t liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
     uint_fast32_t t;
+    uint_fast8_t currentSpeed;
 }
 
 namespace fsm
@@ -26,6 +27,7 @@ namespace fsm
 #endif
             fsm::priorState = fsm::state;
             motors::goForward(fullGasSpeed);
+            currentSpeed = fullGasSpeed;
         }
 
         line::readValues();
@@ -46,13 +48,21 @@ namespace fsm
         TRANSITION_AIM_BACK
 
         t = millis();
-        if (t % fullGasTime > fullGasTime)
+        if (t % liftOffTime > fullGasTime && currentSpeed == fullGasSpeed)
         {
+#ifdef DEBUG
+            Serial.println("lift off speed");
+#endif
             motors::goForward(liftOffSpeed);
+            currentSpeed = liftOffSpeed;
         }
-        else if (t % liftOffTime > liftOffTime)
+        else if (currentSpeed == liftOffSpeed)
         {
+#ifdef DEBUG
+            Serial.println("full gas speed");
+#endif
             motors::goForward(fullGasSpeed);
+            currentSpeed = fullGasSpeed;
         }
     }
 }
