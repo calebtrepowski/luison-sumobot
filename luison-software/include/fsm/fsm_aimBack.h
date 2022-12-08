@@ -7,74 +7,19 @@
 
 namespace aimBack_fsm
 {
-
-    const uint_fast8_t goFrontDuration = AIM_BACK_GO_FRONT_DURATION; // ms
     const uint_fast8_t maxTurnDuration = AIM_BACK_MAX_TURN_DURATION; // ms
     const uint_fast8_t turnAngle = AIM_BACK_TURN_ANGLE;              // °
     uint_fast32_t referenceTime;
     uint_fast32_t t;
-    const uint_fast8_t goFrontSpeed = AIM_BACK_GO_FRONT_SPEED;
-    const uint_fast8_t turnSpeed = AIM_BACK_TURN_SPEED;
-
-    void goFront();
-    void turn180Right();
-
-    void goFront()
-    {
-        if (fsm::innerState != fsm::priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("aim back: go front");
-#endif
-            fsm::priorInnerState = fsm::innerState;
-            referenceTime = millis();
-            motors::goForward(goFrontDuration);
-        }
-
-        t = millis();
-
-        if (t - referenceTime > goFrontDuration)
-        {
-            fsm::innerState = turn180Right;
-        }
-    }
-
-    void turn180Right()
-    {
-        using namespace gyroscope;
-
-        if (fsm::innerState != fsm::priorInnerState)
-        {
-#ifdef DEBUG
-            Serial.println("aim back: turn 180 right");
-#endif
-            fsm::priorInnerState = fsm::innerState;
-            mpu.update();
-            motors::turnRight(turnSpeed);
-            referenceAngleZ = mpu.getAngleZ();
-            referenceTime = millis();
-        }
-
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
-
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle)
-        {
-            fsm::innerState = NULL;
-        }
-
-        t = millis();
-        if (t - referenceTime > maxTurnDuration)
-        {
-            fsm::innerState = NULL;
-        }
-    }
+    const uint_fast8_t turnSpeedOuter = AIM_BACK_SPEED_OUTER;
+    const uint_fast8_t turnSpeedInner = AIM_BACK_SPEED_INNER;
 }
 
 namespace fsm
 {
     void aimBack()
     {
+        using namespace aimBack_fsm;
         if (fsm::state != fsm::priorState)
         {
 #ifdef DEBUG
@@ -82,29 +27,35 @@ namespace fsm
 #endif
             fsm::priorState = fsm::state;
 
-            fsm::priorInnerState = NULL;
-            fsm::innerState = aimBack_fsm::goFront;
+            gyroscope::mpu.update();
+            motors::turnDifferentSpeeds(aimBack_fsm::turnSpeedInner, aimBack_fsm::turnSpeedOuter);
+            gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+            referenceTime = millis();
         }
 
         line::readValues();
-        if (LINE_FRONT_LEFT_DETECTED)
-        {
-            fsm::state = fsm::avoidFallFrontLeft;
-            return;
-        }
-
+        TRANSITION_AVOID_FALL_FRONT_LEFT
         TRANSITION_AVOID_FALL_FRONT_RIGHT
 
         proximity::readStates();
         TRANSITION_ATTACK_FRONT
+        TRANSITION_AIM_FRONT_RIGHT
+        TRANSITION_AIM_RIGHT
 
-        if (fsm::innerState != NULL)
+        gyroscope::mpu.update();
+        gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
+        if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimBack_fsm::turnAngle)
         {
-            fsm::innerState();
+            fsm::state = normalSearch;
             return;
         }
 
-        fsm::state = fsm::normalSearch;
+        aimBack_fsm::t = millis();
+        if (aimBack_fsm::t - aimBack_fsm::referenceTime > aimBack_fsm::maxTurnDuration)
+        {
+            fsm::state = normalSearch;
+            return;
+        }
     }
 }
 
