@@ -25,6 +25,9 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("attack front");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("attack front");
+#endif
             fsm::priorState = fsm::state;
             motors::goForward(fullGasSpeed);
             currentSpeed = fullGasSpeed;

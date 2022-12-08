@@ -25,6 +25,9 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("aim right");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("aim right");
+#endif
             fsm::priorState = fsm::state;
 
             mpu.update();

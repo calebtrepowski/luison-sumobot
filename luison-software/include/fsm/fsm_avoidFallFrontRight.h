@@ -23,6 +23,10 @@ namespace avoidFallFrontRight_fsm
 #ifdef DEBUG
             Serial.println("avoid fall front right: reverse");
 #endif
+
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("avoid fall front right: reverse");
+#endif
             fsm::priorInnerState = fsm::innerState;
             referenceTime = millis();
             motors::goBack(reverseSpeed);
@@ -43,6 +47,10 @@ namespace avoidFallFrontRight_fsm
         {
 #ifdef DEBUG
             Serial.println("avoid fall front right: turn left");
+#endif
+
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("avoid fall front right: turn left");
 #endif
             fsm::priorInnerState = fsm::innerState;
             mpu.update();
@@ -71,6 +79,10 @@ namespace fsm
         {
 #ifdef DEBUG
             Serial.println("avoid fall front right");
+#endif
+
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("avoid fall front right");
 #endif
             fsm::priorState = fsm::state;
 

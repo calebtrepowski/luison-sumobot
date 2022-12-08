@@ -25,6 +25,9 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("aim back");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("aim back");
+#endif
             fsm::priorState = fsm::state;
 
             gyroscope::mpu.update();

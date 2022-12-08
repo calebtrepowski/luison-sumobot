@@ -13,6 +13,10 @@
 #include "gyroscope.h"
 #include "proximity.h"
 
+#ifdef DEBUG_BLUETOOTH
+#include "bluetooth.h"
+#endif
+
 namespace fsm
 {
     /* state handlers */

@@ -12,6 +12,9 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("idle");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("idle");
+#endif
             fsm::priorState = fsm::state;
         }
         motors::brake();

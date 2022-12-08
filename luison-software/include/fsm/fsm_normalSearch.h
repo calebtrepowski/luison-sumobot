@@ -17,8 +17,12 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("normal operation");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("normal operation");
+#endif
             fsm::priorState = fsm::state;
             motors::goForward(normalSearch_fsm::normalSearchSpeed);
+            // motors::brake(); //uncomment for testing turns
         }
 
         line::readValues();

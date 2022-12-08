@@ -25,6 +25,9 @@ namespace fsm
 #ifdef DEBUG
             Serial.println("aim left");
 #endif
+#ifdef DEBUG_BLUETOOTH
+            bluetooth::SerialBT.println("aim left");
+#endif
             fsm::priorState = fsm::state;
 
             mpu.update();
@@ -43,7 +46,7 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
-        
+
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
 
