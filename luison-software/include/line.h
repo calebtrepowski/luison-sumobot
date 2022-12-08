@@ -19,8 +19,8 @@ namespace line
         backRight.pin = LINE_BACK_RIGHT;
         backLeft.pin = LINE_BACK_LEFT;
 
-        frontLeft.referenceValue = 200;
-        frontRight.referenceValue = 200;
+        frontLeft.referenceValue = 300;
+        frontRight.referenceValue = 300;
         // rightBack.referenceValue = 200;
         // leftBack.referenceValue = 2700;
 
