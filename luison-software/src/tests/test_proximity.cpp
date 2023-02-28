@@ -1,5 +1,6 @@
 #ifdef TEST_PROXIMITY
 #include <Arduino.h>
+#include "debugUtils.h"
 #include "proximity.h"
 
 void printStates();
@@ -7,7 +8,7 @@ void printStates();
 void setup()
 {
     proximity::setup();
-    Serial.begin(9600);
+    DEBUG_BEGIN(MONITOR_SPEED);
 }
 
 void loop()
@@ -19,20 +20,20 @@ void loop()
 
 void printStates()
 {
-    Serial.println("-----------");
-    Serial.print(proximity::frontLeft.state);
-    Serial.print(" ");
-    Serial.print(proximity::frontCenter.state);
-    Serial.print(" ");
-    Serial.println(proximity::frontRight.state);
+    DEBUG_PRINTLN("-----------");
+    DEBUG_PRINT(proximity::frontLeft.state);
+    DEBUG_PRINT(" ");
+    DEBUG_PRINT(proximity::frontCenter.state);
+    DEBUG_PRINT(" ");
+    DEBUG_PRINTLN(proximity::frontRight.state);
 
-    Serial.print(proximity::left.state);
-    Serial.print("   ");
-    Serial.println(proximity::right.state);
+    DEBUG_PRINT(proximity::left.state);
+    DEBUG_PRINT("   ");
+    DEBUG_PRINTLN(proximity::right.state);
 
-    Serial.print("  ");
-    Serial.println(proximity::back.state);
-    Serial.println("-----------");
+    DEBUG_PRINT("  ");
+    DEBUG_PRINTLN(proximity::back.state);
+    DEBUG_PRINTLN("-----------");
 }
 
 #endif

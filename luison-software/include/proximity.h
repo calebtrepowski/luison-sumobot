@@ -20,43 +20,23 @@ namespace proximity
         right.pin = PROXIMITY_RIGHT;
         back.pin = PROXIMITY_BACK;
 
-        pinMode(left.pin, INPUT);
-        pinMode(frontLeft.pin, INPUT);
-        pinMode(frontCenter.pin, INPUT);
-        pinMode(frontRight.pin, INPUT);
-        pinMode(right.pin, INPUT);
-        pinMode(back.pin, INPUT);
+        pinMode(left.pin, INPUT_PULLUP);
+        pinMode(frontLeft.pin, INPUT_PULLUP);
+        pinMode(frontCenter.pin, INPUT_PULLUP);
+        pinMode(frontRight.pin, INPUT_PULLUP);
+        pinMode(right.pin, INPUT_PULLUP);
+        pinMode(back.pin, INPUT_PULLUP);
     }
 
-    void readStates()
-    {
-        left.state = digitalRead(left.pin);
-        frontLeft.state = digitalRead(frontLeft.pin);
-        frontCenter.state = digitalRead(frontCenter.pin);
-        frontRight.state = digitalRead(frontRight.pin);
-        right.state = digitalRead(right.pin);
-        back.state = digitalRead(back.pin);
+    inline void readStates()
+    {      
+        left.state = (GPIO.in >> left.pin) & 0x1;
+        frontLeft.state = (GPIO.in >> frontLeft.pin) & 0x1;
+        frontCenter.state = (GPIO.in >> frontCenter.pin) & 0x1;
+        frontRight.state = (GPIO.in1.val >> frontRight.pin) & 0x1;
+        right.state = (GPIO.in1.val >> right.pin) & 0x1;
+        back.state = (GPIO.in1.val >> back.pin) & 0x1;
     }
-
-#ifdef DEBUG
-    void printStates()
-    {
-        Serial.println("-----------");
-        Serial.print(proximity::frontLeft.state);
-        Serial.print(" ");
-        Serial.print(proximity::frontCenter.state);
-        Serial.print(" ");
-        Serial.println(proximity::frontRight.state);
-
-        Serial.print(proximity::left.state);
-        Serial.print("   ");
-        Serial.println(proximity::right.state);
-
-        Serial.print("  ");
-        Serial.println(proximity::back.state);
-        Serial.println("-----------");
-    }
-#endif
 }
 
 #define OPPONENT_DETECTED_FRONT_LEFT !proximity::frontLeft.state
