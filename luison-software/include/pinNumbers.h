@@ -33,6 +33,9 @@ const uint_fast8_t LINE_BACK_LEFT = 14;
 const uint_fast8_t DIP_BIT_0 = 26;
 const uint_fast8_t DIP_BIT_1 = 25;
 
+// RGB Led
+const uint_fast8_t RGB_LED_PIN = 18;
+
 // Motor
 
 #define DRIVER_ZEROLAG
