@@ -345,8 +345,12 @@
     }
   },
   "libraries": {
-    "pinned_footprint_libs": [],
-    "pinned_symbol_libs": []
+    "pinned_footprint_libs": [
+      "luison-electronics"
+    ],
+    "pinned_symbol_libs": [
+      "luison-electronics"
+    ]
   },
   "meta": {
     "filename": "luison-electronics.kicad_pro",
