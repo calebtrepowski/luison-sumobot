@@ -1,3 +1,4 @@
 (sym_lib_table
+  (version 7)
   (lib (name "luison-electronics")(type "KiCad")(uri "${KIPRJMOD}/libraries/luison-electronics.kicad_sym")(options "")(descr ""))
 )
