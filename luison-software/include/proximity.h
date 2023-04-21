@@ -28,13 +28,13 @@ namespace proximity
         pinMode(back.pin, INPUT_PULLUP);
     }
 
-    inline void readStates()
-    {      
-        left.state = (GPIO.in >> left.pin) & 0x1;
-        frontLeft.state = (GPIO.in >> frontLeft.pin) & 0x1;
+    void readStates()
+    {
+        left.state = (GPIO.in1.val >> left.pin) & 0x1;
+        frontLeft.state = (GPIO.in1.val >> frontLeft.pin) & 0x1;
         frontCenter.state = (GPIO.in >> frontCenter.pin) & 0x1;
-        frontRight.state = (GPIO.in1.val >> frontRight.pin) & 0x1;
-        right.state = (GPIO.in1.val >> right.pin) & 0x1;
+        frontRight.state = (GPIO.in >> frontRight.pin) & 0x1;
+        right.state = (GPIO.in >> right.pin) & 0x1;
         back.state = (GPIO.in1.val >> back.pin) & 0x1;
     }
 }

@@ -13,6 +13,10 @@ void setup()
 
 void loop()
 {
+    // benchmarkFunction(proximity::readStates, 5000000ULL);
+    // while (true)
+    // {
+    // }
     proximity::readStates();
     printStates();
     delay(500);
