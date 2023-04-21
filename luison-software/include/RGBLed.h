@@ -7,8 +7,8 @@
 
 namespace RGBLed
 {
-    const uint_fast8_t BRIGHTNESS_PERCENTAGE = 10; // 0 % - 100 %
-    const uint_fast8_t BRIGHTNESS_VALUE = (uint8_t)(255/100) * BRIGHTNESS_PERCENTAGE;
+    const uint_fast8_t BRIGHTNESS_PERCENTAGE = RGB_LED_BRIGHTNESS; // 0 % - 100 %
+    const uint_fast8_t BRIGHTNESS_VALUE = (uint8_t)(255 / 100) * BRIGHTNESS_PERCENTAGE;
 
     void showRed()
     {
@@ -23,6 +23,11 @@ namespace RGBLed
     void showBlue()
     {
         neopixelWrite(RGB_LED_PIN, 0, 0, BRIGHTNESS_VALUE);
+    }
+
+    void showColor(uint8_t redVal, uint8_t greenVal, uint8_t blueVal)
+    {
+        neopixelWrite(redVal, greenVal, blueVal, BRIGHTNESS_VALUE);
     }
 
 }
