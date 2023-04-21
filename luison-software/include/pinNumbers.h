@@ -4,44 +4,47 @@
 #include <Arduino.h>
 
 // Gyroscope
-const uint_fast8_t GYROSCOPE_SCL = 22;
-const uint_fast8_t GYROSCOPE_SDA = 21;
+const uint_fast8_t I2C_SCL = 40;
+const uint_fast8_t I2C_SDA = 42;
 
-// Start button/control
-const uint_fast8_t ON_OFF_CONTROL = 23;
-// const uint_fast8_t ON_OFF_CONTROL = 14;
+// Kill Switch
+const uint_fast8_t KILL_SWITCH_EMERGENCY_STOP = 7;
+const uint_fast8_t KILL_SWITCH_START = 8;
 
 // Proximity Sensors
-const uint_fast8_t PROXIMITY_LEFT = 19;
-const uint_fast8_t PROXIMITY_FRONT_LEFT = 20;
-const uint_fast8_t PROXIMITY_FRONT_CENTER = 21;
-const uint_fast8_t PROXIMITY_FRONT_RIGHT = 33;
-const uint_fast8_t PROXIMITY_RIGHT = 34;
-const uint_fast8_t PROXIMITY_BACK = 35;
+const uint_fast8_t PROXIMITY_LEFT = 35;
+const uint_fast8_t PROXIMITY_FRONT_LEFT = 46;
+const uint_fast8_t PROXIMITY_FRONT_CENTER = 12;
+const uint_fast8_t PROXIMITY_FRONT_RIGHT = 13;
+const uint_fast8_t PROXIMITY_RIGHT = 21;
+const uint_fast8_t PROXIMITY_BACK = 47;
 
 // Line Sensors
-/* front left y front right están intercambiados
-respecto al esquemático */
-const uint_fast8_t LINE_FRONT_LEFT = 12;
-const uint_fast8_t LINE_FRONT_RIGHT = 13;
-// const uint_fast8_t LINE_BACK_RIGHT = 23;
-const uint_fast8_t LINE_BACK_RIGHT = 27;
-const uint_fast8_t LINE_BACK_LEFT = 14;
-// const uint_fast8_t LINE_BACK_LEFT = 27;
+const uint_fast8_t LINE_FRONT_LEFT = 4;
+const uint_fast8_t LINE_FRONT_RIGHT = 1;
+const uint_fast8_t LINE_BACK_RIGHT = 2;
+const uint_fast8_t LINE_BACK_LEFT = 5;
 
 // Dip Switch
-const uint_fast8_t DIP_BIT_0 = 26;
-const uint_fast8_t DIP_BIT_1 = 25;
+const uint_fast8_t DIP_BIT_0 = 37;
+const uint_fast8_t DIP_BIT_1 = 41;
+const uint_fast8_t DIP_BIT_2 = 38;
+const uint_fast8_t DIP_BIT_3 = 39;
 
 // RGB Led
-const uint_fast8_t RGB_LED_PIN = 18;
+const uint_fast8_t RGB_LED_PIN = 48;
+
+// Aux GPIOs
+const uint_fast8_t AUX_PIN_6 = 6;
+const uint_fast8_t AUX_PIN_15 = 15;
+const uint_fast8_t AUX_PIN_16 = 16;
 
 // Motor
+#ifdef DRIVER_ROBOCLAW
+const uint_fast8_t MOTOR_TX_PIN = 17;
+const uint_fast8_t MOTOR_RX_PIN = 18;
 
-#define DRIVER_ZEROLAG
-// #define DRIVER_MEIMOTOR
-
-#ifdef DRIVER_ZEROLAG
+#elif defined(DRIVER_ZEROLAG)
 const uint_fast8_t MOTOR_A_PWM = 5;
 const uint_fast8_t MOTOR_A_ENABLE = 18;
 
