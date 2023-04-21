@@ -1,16 +1,17 @@
 #ifdef TEST_DIP_SWITCH
 #include <Arduino.h>
+#include "debugUtils.h"
 #include "dipSwitch.h"
 
 void setup()
 {
-    Serial.begin(9600);
     dipSwitch::setup();
+    DEBUG_BEGIN(MONITOR_SPEED);
 }
 
 void loop()
 {
-    Serial.println(dipSwitch::readInt());
+    DEBUG_PRINTLN(dipSwitch::readInt());
     delay(100);
 }
 #endif
