@@ -25,6 +25,11 @@ const uint_fast8_t LINE_FRONT_RIGHT = 1;
 const uint_fast8_t LINE_BACK_RIGHT = 2;
 const uint_fast8_t LINE_BACK_LEFT = 5;
 
+const uint_fast8_t LINE_FRONT_LEFT_THRESHOLD_VALUE = 300;
+const uint_fast8_t LINE_FRONT_RIGHT_THRESHOLD_VALUE = 300;
+const uint_fast8_t LINE_BACK_RIGHT_THRESHOLD_VALUE = 300;
+const uint_fast8_t LINE_BACK_LEFT_THRESHOLD_VALUE = 300;
+
 // Dip Switch
 const uint_fast8_t DIP_BIT_0 = 37;
 const uint_fast8_t DIP_BIT_1 = 41;
@@ -40,7 +45,7 @@ const uint_fast8_t AUX_PIN_15 = 15;
 const uint_fast8_t AUX_PIN_16 = 16;
 
 // Motor
-#ifdef DRIVER_ROBOCLAW
+#ifdef DRIVER_ROBOCLAW_SERIAL
 const uint_fast8_t MOTOR_TX_PIN = 17;
 const uint_fast8_t MOTOR_RX_PIN = 18;
 
