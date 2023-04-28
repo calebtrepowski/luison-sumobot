@@ -3,36 +3,58 @@
 #define TEST_GYROSCOPE
 #ifdef TEST_GYROSCOPE
 #include "Wire.h"
-#include <MPU6050_light.h>
 #include "gyroscope.h"
+#include "debugUtils.h"
 
-// float referenceAngleZ, angleZ;
+void getAngleZ();
+void getAccelerationXYZ();
+
+unsigned long referenceTime, currentTime;
+float angleZ;
 
 void setup()
 {
     gyroscope::setup();
-    Serial.begin(115200);
+    DEBUG_BEGIN(MONITOR_SPEED);
+    // benchmarkFunction<void>(getAngleZ_benchmark, (uint64_t)100000);
+
+    referenceTime = micros();
 }
+
 void loop()
 {
+    getAngleZ();
+    currentTime = micros();
+    if (currentTime - referenceTime > 100)
+    {
+        DEBUG_PRINTLN(angleZ);
+    }
+
+    // getAccelerationXYZ();
+}
+
+void getAngleZ()
+{
     using namespace gyroscope;
-    mpu.update();
-    referenceAngleZ = mpu.getAngleZ();
+    mpu.updateAngleZ();
+    angleZ = mpu.getAngleZ();
+}
+
+void getAccelerationXYZ()
+{
+    using namespace gyroscope;
 
     while (true)
     {
-        if (status == 0)
-        {
-            mpu.update();
-            Serial.println(mpu.getAngleZ());
-            delay(100);
-        }
-        else
-        {
-            Serial.println("no entro");
-            gyroscope::setup();
-        }
+        mpu.update();
+        DEBUG_PRINT(mpu.getAccX());
+        DEBUG_PRINT("\t");
+        DEBUG_PRINT(mpu.getAccY());
+        DEBUG_PRINT("\t");
+        DEBUG_PRINTLN(mpu.getAccZ());
+        delay(100);
     }
 }
+
 #endif
 #endif

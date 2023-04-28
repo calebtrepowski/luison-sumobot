@@ -5,31 +5,42 @@
 #include <Wire.h>
 #include <MPU6050_light.h>
 
-const uint_fast8_t BUILTIN_LED = 2;
+#include "pinNumbers.h"
+#include "RGBLed.h"
 
 namespace gyroscope
 {
 
     MPU6050 mpu(Wire);
 
+    int GYRO_CONFIG_NUM = 3;
+    int ACC_CONFIG_NUM = 2;
+
     float referenceAngleZ, currentAngleZ;
 
     /* 0 if OK */
-    byte status;
+    byte status = -1;
 
     void setup()
     {
-        pinMode(BUILTIN_LED, OUTPUT);
-        digitalWrite(BUILTIN_LED, HIGH);
-        Wire.begin();
-        status = mpu.begin();
-        unsigned char attempts = 0;
+        RGBLed::showBlue();
+        delay(500);
+
+        Wire.begin(I2C_SDA, I2C_SCL, 1000001UL);
+        
         while (status != 0)
         {
-            status = mpu.begin();
+            status = mpu.begin(GYRO_CONFIG_NUM, ACC_CONFIG_NUM);
         }
-        digitalWrite(BUILTIN_LED, LOW);
-        mpu.calcOffsets(); // gyro and accelero
+
+        RGBLed::showGreen();
+
+        mpu.calcOffsets();
+    }
+
+    float getAngleZ(void)
+    {
+        return mpu.getAngleZ();
     }
 }
 
