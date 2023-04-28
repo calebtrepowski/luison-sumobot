@@ -1,46 +1,32 @@
 #ifdef TEST_LINE
 #include <Arduino.h>
 #include "line.h"
-#include "bluetooth.h"
+#include "debugUtils.h"
 
 void printValues();
-void printValuesBT();
 
 void setup()
 {
     line::setup();
-    Serial.begin(9600);
-    bluetooth::setup();
+    DEBUG_BEGIN(MONITOR_SPEED);
+    benchmarkFunction<void>(line::readValues, 500000ULL);
 }
 
 void loop()
 {
     line::readValues();
-    Serial.println("-----------");
-    printValuesBT();
-    Serial.println("-----------");
+    printValues();
     delay(500);
 }
 
 void printValues()
 {
-    Serial.print(line::frontLeft.value);
-    Serial.print("\t");
-    Serial.println(line::frontRight.value);
-    // Serial.print(line::backLeft.value);
-    // Serial.print("\t");
-    // Serial.print(line::backRight.value);
-    Serial.println();
-}
-void printValuesBT()
-{
-    using namespace bluetooth;
-    SerialBT.print(line::frontLeft.value);
-    SerialBT.print("\t");
-    SerialBT.println(line::frontRight.value);
-    SerialBT.print(line::backLeft.value);
-    SerialBT.print("\t");
-    SerialBT.print(line::backRight.value);
-    SerialBT.println();
+    DEBUG_PRINT(line::frontLeft.value);
+    DEBUG_PRINT("\t");
+    DEBUG_PRINTLN(line::frontRight.value);
+    DEBUG_PRINT(line::backLeft.value);
+    DEBUG_PRINT("\t");
+    DEBUG_PRINT(line::backRight.value);
+    DEBUG_PRINTLN("\n");
 }
 #endif

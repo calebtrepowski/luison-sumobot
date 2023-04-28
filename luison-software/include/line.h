@@ -1,6 +1,8 @@
 #ifndef _lineFollower_h
 #define _lineFollower_h
 #include <Arduino.h>
+#include <driver/adc.h>
+#include "esp32-hal-gpio.h"
 #include "pinNumbers.h"
 
 namespace line
@@ -8,8 +10,9 @@ namespace line
     struct lineSensor
     {
         uint_fast8_t pin;
+        adc1_channel_t channel;
         uint_fast8_t value;
-        uint_fast8_t referenceValue;
+        uint_fast8_t thresholdValue;
     } frontLeft, frontRight, backRight, backLeft;
 
     void setup()
@@ -19,23 +22,28 @@ namespace line
         backRight.pin = LINE_BACK_RIGHT;
         backLeft.pin = LINE_BACK_LEFT;
 
-        frontLeft.referenceValue = 300;
-        frontRight.referenceValue = 300;
-        // rightBack.referenceValue = 200;
-        // leftBack.referenceValue = 2700;
+        frontLeft.channel = (adc1_channel_t)digitalPinToAnalogChannel(frontLeft.pin);
+        frontRight.channel = (adc1_channel_t)digitalPinToAnalogChannel(frontRight.pin);
+        backRight.channel = (adc1_channel_t)digitalPinToAnalogChannel(backRight.pin);
+        backLeft.channel = (adc1_channel_t)digitalPinToAnalogChannel(backLeft.pin);
 
-        pinMode(frontLeft.pin, INPUT);
-        pinMode(frontRight.pin, INPUT);
-        pinMode(backRight.pin, INPUT);
-        pinMode(backLeft.pin, INPUT);
+        frontLeft.thresholdValue = LINE_FRONT_LEFT_THRESHOLD_VALUE;
+        frontRight.thresholdValue = LINE_FRONT_RIGHT_THRESHOLD_VALUE;
+        backRight.thresholdValue = LINE_BACK_RIGHT_THRESHOLD_VALUE;
+        backLeft.thresholdValue = LINE_BACK_LEFT_THRESHOLD_VALUE;
+
+        pinMode(frontLeft.pin, ANALOG);
+        pinMode(frontRight.pin, ANALOG);
+        pinMode(backRight.pin, ANALOG);
+        pinMode(backLeft.pin, ANALOG);
     }
 
     void readValues()
     {
-        frontLeft.value = analogRead(frontLeft.pin);
-        frontRight.value = analogRead(frontRight.pin);
-        backRight.value = analogRead(backRight.pin);
-        backLeft.value = analogRead(backLeft.pin);
+        frontLeft.value = adc1_get_raw(frontLeft.channel);
+        frontRight.value = adc1_get_raw(frontRight.channel);
+        backRight.value = adc1_get_raw(backRight.channel);
+        backLeft.value = adc1_get_raw(backLeft.channel);
     }
 }
 
