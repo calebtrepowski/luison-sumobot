@@ -1,8 +1,9 @@
 #ifdef TEST_BLUETOOTH
 #include <Arduino.h>
 #include "bluetooth.h"
+#include "debugUtils.h"
 
-uint_fast8_t active;
+uint_fast8_t active = 0;
 
 void setup()
 {
@@ -11,17 +12,16 @@ void setup()
 
 void loop()
 {
-    // bluetooth::echo();
-    if (!active)
-    {
-        bluetooth::sendData(std::string("Idle\n"));
-    }
-    if (bluetooth::loadStart(active))
-    {
-        bluetooth::sendData(std::string("Estado inicial\n"));
-    }
-    delay(100);
+    bluetooth::echo();
+    // if (!active)
+    // {
+    //     DEBUG_PRINTLN(std::string("Idle"));
+    // }
+    // if (bluetooth::loadStart(active))
+    // {
+    //     DEBUG_PRINTLN(std::string("Estado inicial"));
+    // }
+    // delay(100);
 }
-
 
 #endif

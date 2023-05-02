@@ -17,9 +17,7 @@ namespace bluetooth
 
     bool deviceConnected = false;
 
-    uint8_t txValue = 0;
     std::string rxValue;
-    bool bufferedRxData = false;
 
     class MyServerCallbacks : public BLEServerCallbacks
     {
@@ -31,6 +29,7 @@ namespace bluetooth
         void onDisconnect(BLEServer *pServer)
         {
             deviceConnected = false;
+            pServer->getAdvertising()->start();
         }
     };
 
@@ -39,7 +38,6 @@ namespace bluetooth
         void onWrite(BLECharacteristic *pCharacteristic)
         {
             rxValue = pCharacteristic->getValue();
-            bufferedRxData = true;
         }
     };
 
@@ -78,51 +76,120 @@ namespace bluetooth
     {
         if (deviceConnected)
         {
-            if (bufferedRxData)
+            if (rxValue.length() > 0)
             {
                 pCharacteristic->setValue(rxValue.data());
                 pCharacteristic->notify();
-                bufferedRxData = false;
+                rxValue.clear();
             }
         }
     }
 
+    void BLEPrint(std::string value);
+    void BLEPrint(uint32_t value);
+    void BLEPrint(uint64_t value);
+    void BLEPrint(float value);
+    void BLEPrint(double value);
+    void BLEPrintln(std::string value);
+    void BLEPrintln(uint32_t value);
+    void BLEPrintln(uint64_t value);
+    void BLEPrintln(float value);
+    void BLEPrintln(double value);
+
+    /**
+     * For some reason, for rxValue = "1" it keeps entering
+     * the corresponding if block. In order to get it work,
+     * in the BLE client, send "1" and inmediately after "" (blank)
+     */
     bool loadStart(uint_fast8_t &active)
     {
-        if (rxValue.length() > 0)
+        if (deviceConnected)
         {
-            if (rxValue.front() == '1')
+
+            if (rxValue.length() > 0)
             {
-                pCharacteristic->setValue("Iniciado!");
-                pCharacteristic->notify();
-                active = 1;
-                return true;
+                if (rxValue.front() == '1')
+                {
+                    BLEPrintln(std::string("Iniciado!"));
+                    active = 1;
+                    return true;
+                }
+                else if (rxValue.front() == '0')
+                {
+                    BLEPrintln(std::string("Detenido!"));
+                    active = 0;
+                }
+                else
+                {
+                    BLEPrintln(rxValue);
+                }
+                rxValue.clear();
             }
-            else if (rxValue.front() == '0')
-            {
-                pCharacteristic->setValue("Detenido!");
-                pCharacteristic->notify();
-                active = 0;
-            }
-            else
-            {
-                pCharacteristic->setValue(rxValue);
-                pCharacteristic->notify();
-            }
-            rxValue.clear();
         }
         return false;
     }
 
-    void sendData(std::string value)
+    void BLEPrint(std::string value)
     {
         pCharacteristic->setValue(value.data());
         pCharacteristic->notify();
     }
 
-    void sendData(float &value)
+    void BLEPrint(uint32_t value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->notify();
+    }
+
+    void BLEPrint(uint64_t value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->notify();
+    }
+
+    void BLEPrint(float value)
     {
         pCharacteristic->setValue(value);
+        pCharacteristic->notify();
+    }
+
+    void BLEPrint(double value)
+    {
+        pCharacteristic->setValue(value);
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(std::string value)
+    {
+        pCharacteristic->setValue(value.append("\n").data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(uint32_t value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->setValue(pCharacteristic->getValue().append("\n").data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(uint64_t value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->setValue(pCharacteristic->getValue().append("\n").data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(float value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->setValue(pCharacteristic->getValue().append("\n").data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(double value)
+    {
+        pCharacteristic->setValue(&(uint8_t &)value, sizeof(value));
+        pCharacteristic->setValue(pCharacteristic->getValue().append("\n").data());
         pCharacteristic->notify();
     }
 }
