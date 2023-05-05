@@ -6,16 +6,13 @@
 
 namespace onOffControl
 {
-    struct OnOffControl
-    {
-        uint_fast8_t pin;
-    } control;
+    uint_fast8_t active;
 
-    void setup()
-    {
-        control.pin = ON_OFF_CONTROL;
-        pinMode(control.pin, INPUT_PULLDOWN);
-    }
+    void setup();
+    bool loadStart(uint_fast8_t &active);
 }
+
+#include "onOffKillSwitch.h"
+#include "onOffBluetooth.h"
 
 #endif

@@ -3,10 +3,7 @@
 
 #include "pinNumbers.h"
 #include "gyroscope.h"
-#include "line.h"
-#include "motorDriver.h"
-// #include "onOffControl.h"
-// #include "onOffInterruption.h"
+#include "onOffControl.h"
 #include "proximity.h"
 #include "fsm/fsm.h"
 
@@ -15,7 +12,7 @@ void setup()
     gyroscope::setup();
     line::setup();
     motors::setup();
-    // onOffControl::setup();
+    onOffControl::setup();
     proximity::setup();
 
     fsm::priorState = NULL;
@@ -26,12 +23,15 @@ void setup()
 
 void loop()
 {
-    if (!active)
+    if (!onOffControl::active)
     {
         fsm::state = fsm::idle;
     }
+
     fsm::state();
-    if(bluetooth::loadStart(active)){
+
+    if (onOffControl::loadStart(onOffControl::active))
+    {
         fsm::state = fsm::normalSearch;
     };
 }
