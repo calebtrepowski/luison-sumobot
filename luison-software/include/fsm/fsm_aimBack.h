@@ -22,12 +22,8 @@ namespace fsm
         using namespace aimBack_fsm;
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("aim back");
-#endif
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("aim back");
-#endif
+            DEBUG_PRINTLN(std::string("aim back"));
+
             fsm::priorState = fsm::state;
 
             gyroscope::mpu.update();

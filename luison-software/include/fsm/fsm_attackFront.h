@@ -22,13 +22,10 @@ namespace fsm
         using namespace attackFront_fsm;
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("attack front");
-#endif
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("attack front");
-#endif
+            DEBUG_PRINTLN(std::string("attack front"));
+
             fsm::priorState = fsm::state;
+
             motors::goForward(fullGasSpeed);
             currentSpeed = fullGasSpeed;
         }

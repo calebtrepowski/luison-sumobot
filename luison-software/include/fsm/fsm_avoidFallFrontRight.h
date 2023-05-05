@@ -20,14 +20,10 @@ namespace avoidFallFrontRight_fsm
     {
         if (fsm::innerState != fsm::priorInnerState)
         {
-#ifdef DEBUG
-            Serial.println("avoid fall front right: reverse");
-#endif
+            DEBUG_PRINTLN(std::string("avoid fall front right: reverse"));
 
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("avoid fall front right: reverse");
-#endif
             fsm::priorInnerState = fsm::innerState;
+
             referenceTime = millis();
             motors::goBack(reverseSpeed);
         }
@@ -45,14 +41,10 @@ namespace avoidFallFrontRight_fsm
         using namespace gyroscope;
         if (fsm::innerState != fsm::priorInnerState)
         {
-#ifdef DEBUG
-            Serial.println("avoid fall front right: turn left");
-#endif
+            DEBUG_PRINTLN(std::string("avoid fall front right: turn left"));
 
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("avoid fall front right: turn left");
-#endif
             fsm::priorInnerState = fsm::innerState;
+
             mpu.update();
             motors::turnLeft(turnSpeed);
             referenceAngleZ = mpu.getAngleZ();
@@ -77,13 +69,8 @@ namespace fsm
 
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("avoid fall front right");
-#endif
+            DEBUG_PRINTLN(std::string("avoid fall front right"));
 
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("avoid fall front right");
-#endif
             fsm::priorState = fsm::state;
 
             fsm::priorInnerState = NULL;

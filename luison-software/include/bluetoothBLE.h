@@ -1,7 +1,7 @@
 #ifndef _bluetooth_ble_h_
 #define _bluetooth_ble_h_
 
-#if defined(DEBUG_BLUETOOTH_BLE)
+#if DEBUG_METHOD == 3 || ON_OFF_METHOD == 1
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>

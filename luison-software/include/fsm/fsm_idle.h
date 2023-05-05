@@ -9,12 +9,8 @@ namespace fsm
     {
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("idle");
-#endif
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("idle");
-#endif
+            DEBUG_PRINTLN(std::string("idle"));
+
             fsm::priorState = fsm::state;
         }
         motors::brake();

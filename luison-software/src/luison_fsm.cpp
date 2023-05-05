@@ -9,9 +9,6 @@
 // #include "onOffInterruption.h"
 #include "proximity.h"
 #include "fsm/fsm.h"
-#include "bluetooth.h"
-
-uint_fast8_t active;
 
 void setup()
 {
@@ -21,23 +18,10 @@ void setup()
     // onOffControl::setup();
     proximity::setup();
 
-    bluetooth::setup();
-
-    // onOffInterruption::setOnOffInterruption();
-
     fsm::priorState = NULL;
     fsm::state = fsm::idle;
 
-    active = false;
-
-#ifdef DEBUG
-    Serial.begin(9600);
-    Serial.println("setup");
-#endif
-
-#ifdef DEBUG_BLUETOOTH
-    bluetooth::SerialBT.println("setup");
-#endif
+    DEBUG_BEGIN(MONITOR_SPEED);
 }
 
 void loop()

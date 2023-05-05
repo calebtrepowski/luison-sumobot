@@ -21,9 +21,8 @@ namespace fsm
         using namespace diagonalKickBack_fsm;
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("diagonal kick back");
-#endif
+            DEBUG_PRINTLN(std::string("diagonal kick back"));
+
             fsm::priorState = fsm::state;
 
             motors::goBack(innerReverseSpeed, outerReverseSpeed);

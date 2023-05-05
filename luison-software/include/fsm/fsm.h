@@ -6,10 +6,7 @@
 #include "line.h"
 #include "gyroscope.h"
 #include "proximity.h"
-
-#ifdef DEBUG_BLUETOOTH
-#include "bluetooth.h"
-#endif
+#include "debugUtils.h"
 
 namespace fsm
 {

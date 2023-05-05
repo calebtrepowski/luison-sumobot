@@ -1,7 +1,7 @@
 #ifndef _bluetooth_serial_h_
 #define _bluetooth_serial_h_
 
-#if defined(DEBUG_BLUETOOTH_SERIAL)
+#if DEBUG_METHOD == 2 || ON_OFF_METHOD == 2
 
 #include "bluetooth.h"
 

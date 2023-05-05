@@ -22,13 +22,8 @@ namespace fsm
         using namespace gyroscope;
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("aim front left");
-#endif
+            DEBUG_PRINTLN(std::string("aim front left"));
 
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("aim front left");
-#endif
             fsm::priorState = fsm::state;
 
             mpu.update();

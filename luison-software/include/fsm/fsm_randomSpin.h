@@ -20,13 +20,11 @@ namespace fsm
         using namespace randomSpin_fsm;
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("aim front right");
-#endif
+            DEBUG_PRINTLN(std::string("random spin"));
+
             fsm::priorState = fsm::state;
 
             referenceTime = millis();
-            
         }
     }
 }
