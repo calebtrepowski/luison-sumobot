@@ -7,7 +7,7 @@ namespace avoidFallFrontLeft_fsm
 {
     const uint_fast8_t reverseDuration = AVOID_FALL_FRONT_REVERSE_DURATION;  // ms
     const uint_fast8_t maxTurnDuration = AVOID_FALL_FRONT_MAX_TURN_DURATION; // ms
-    uint_fast32_t t;
+    uint_fast32_t currentTime;
     const uint_fast8_t turnAngle = AVOID_FALL_FRONT_TURN_ANGLE; // °
     uint_fast32_t referenceTime;
     const uint_fast8_t reverseSpeed = AVOID_FALL_FRONT_REVERSE_SPEED; // ms
@@ -28,9 +28,9 @@ namespace avoidFallFrontLeft_fsm
             motors::goBack(reverseSpeed);
         }
 
-        t = millis();
+        currentTime = millis();
 
-        if (t - referenceTime > reverseDuration)
+        if (currentTime - referenceTime > reverseDuration)
         {
             fsm::innerState = turnRight;
         }
@@ -57,9 +57,9 @@ namespace avoidFallFrontLeft_fsm
 
         mpu.update();
         currentAngleZ = mpu.getAngleZ();
-        t = millis();
+        currentTime = millis();
 
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || t - referenceTime > maxTurnDuration)
+        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || currentTime - referenceTime > maxTurnDuration)
         {
             fsm::innerState = NULL;
         }

@@ -11,7 +11,7 @@ namespace diagonalKickBack_fsm
     const uint_fast8_t innerReverseSpeed = DIAGONAL_KICKBACK_INNER_REVERSE_SPEED;
     const uint_fast8_t outerReverseSpeed = DIAGONAL_KICKBACK_OUTER_REVERSE_SPEED;
     uint_fast32_t referenceTime;
-    uint_fast32_t t;
+    uint_fast32_t currentTime;
 }
 
 namespace fsm
@@ -33,8 +33,8 @@ namespace fsm
         TRANSITION_AIM_LEFT
         TRANSITION_AIM_RIGHT
 
-        t = millis();
-        if (t - referenceTime > maxReverseTime)
+        currentTime = millis();
+        if (currentTime - referenceTime > maxReverseTime)
         {
             fsm::state = fsm::normalSearch;
             return;

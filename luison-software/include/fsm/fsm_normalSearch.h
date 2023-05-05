@@ -14,12 +14,7 @@ namespace fsm
     {
         if (fsm::state != fsm::priorState)
         {
-#ifdef DEBUG
-            Serial.println("normal operation");
-#endif
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("normal operation");
-#endif
+            DEBUG_PRINTLN(std::string("normal operation"));
             fsm::priorState = fsm::state;
             motors::goForward(normalSearch_fsm::normalSearchSpeed);
             // motors::brake(); //uncomment for testing turns

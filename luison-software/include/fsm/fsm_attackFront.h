@@ -11,7 +11,7 @@ namespace attackFront_fsm
     const uint_fast8_t fullGasTime = ATTACK_FRONT_FULL_GAS_TIME;
     const uint_fast8_t liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
     const uint_fast8_t liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
-    uint_fast32_t t;
+    uint_fast32_t currentTime;
     uint_fast8_t currentSpeed;
 }
 
@@ -47,8 +47,8 @@ namespace fsm
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
 
-        t = millis();
-        if (t % liftOffTime > fullGasTime && currentSpeed == fullGasSpeed)
+        currentTime = millis();
+        if (currentTime % liftOffTime > fullGasTime && currentSpeed == fullGasSpeed)
         {
 #ifdef DEBUG
             Serial.println("lift off speed");

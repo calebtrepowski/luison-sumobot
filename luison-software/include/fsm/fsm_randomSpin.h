@@ -9,7 +9,7 @@ namespace randomSpin_fsm
 {
     uint_fast8_t goForwardTime;
     uint_fast32_t referenceTime;
-    uint_fast32_t t;
+    uint_fast32_t currentTime;
     uint_fast8_t turnAngle;
 }
 

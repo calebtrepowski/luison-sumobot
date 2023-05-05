@@ -10,7 +10,7 @@ namespace aimRight_fsm
     const uint_fast8_t maxTurnDuration = AIM_SIDE_MAX_TURN_DURATION; // ms
     const uint_fast8_t turnAngle = AIM_SIDE_TURN_ANGLE;              // °
     uint_fast32_t referenceTime;
-    uint_fast32_t t;
+    uint_fast32_t currentTime;
     const uint_fast8_t aimSpeedOuter = AIM_SIDE_SPEED_OUTER;
     const uint_fast8_t aimSpeedInner = AIM_SIDE_SPEED_INNER;
 }
@@ -52,9 +52,9 @@ namespace fsm
             return;
         }
 
-        aimRight_fsm::t = millis();
+        aimRight_fsm::currentTime = millis();
 
-        if (aimRight_fsm::t - aimRight_fsm::referenceTime > aimRight_fsm::maxTurnDuration)
+        if (aimRight_fsm::currentTime - aimRight_fsm::referenceTime > aimRight_fsm::maxTurnDuration)
         {
             fsm::state = normalSearch;
             return;
