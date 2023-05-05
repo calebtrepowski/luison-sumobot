@@ -47,8 +47,12 @@ namespace line
     }
 }
 
-#define LINE_FRONT_DETECTED line::frontLeft.value < line::frontLeft.referenceValue || line::frontRight.value < line::frontRight.referenceValue
-#define LINE_FRONT_LEFT_DETECTED line::frontLeft.value < line::frontLeft.referenceValue
-#define LINE_FRONT_RIGHT_DETECTED line::frontRight.value < line::frontRight.referenceValue
+#define LINE_FRONT_DETECTED line::frontLeft.value < line::frontLeft.thresholdValue || line::frontRight.value < line::frontRight.thresholdValue
+#define LINE_FRONT_LEFT_DETECTED line::frontLeft.value < line::frontLeft.thresholdValue
+#define LINE_FRONT_RIGHT_DETECTED line::frontRight.value < line::frontRight.thresholdValue
+
+#define LINE_BACK_DETECTED line::backLeft.value < line::backLeft.thresholdValue || line::backRight.value < line::backRight.thresholdValue
+#define LINE_BACK_LEFT_DETECTED line::backLeft.value < line::backLeft.thresholdValue
+#define LINE_BACK_RIGHT_DETECTED line::backRight.value < line::backRight.thresholdValue
 
 #endif
