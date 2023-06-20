@@ -22,7 +22,7 @@ void loop()
 void testForward()
 {
     /* pay attention to speeds */
-    motors::goForward(1);
+    motors::goForward(2);
     while (true)
     {
     }

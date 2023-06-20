@@ -12,12 +12,12 @@ const uint_fast8_t KILL_SWITCH_EMERGENCY_STOP = 7;
 const uint_fast8_t KILL_SWITCH_START = 8;
 
 // Proximity Sensors
-const uint_fast8_t PROXIMITY_LEFT = 35;
-const uint_fast8_t PROXIMITY_FRONT_LEFT = 46;
-const uint_fast8_t PROXIMITY_FRONT_CENTER = 12;
-const uint_fast8_t PROXIMITY_FRONT_RIGHT = 13;
-const uint_fast8_t PROXIMITY_RIGHT = 21;
-const uint_fast8_t PROXIMITY_BACK = 47;
+const uint_fast8_t PROXIMITY_LEFT = 46;
+const uint_fast8_t PROXIMITY_FRONT_LEFT = 35;
+const uint_fast8_t PROXIMITY_FRONT_CENTER = 47;
+const uint_fast8_t PROXIMITY_FRONT_RIGHT = 21;
+const uint_fast8_t PROXIMITY_RIGHT = 13;
+const uint_fast8_t PROXIMITY_BACK = 12;
 
 // Line Sensors
 const uint_fast8_t LINE_FRONT_LEFT = 4;
@@ -48,6 +48,10 @@ const uint_fast8_t AUX_PIN_16 = 16;
 #ifdef DRIVER_ROBOCLAW_SERIAL
 const uint_fast8_t MOTOR_TX_PIN = 17;
 const uint_fast8_t MOTOR_RX_PIN = 18;
+
+#elif defined(DRIVER_ROBOCLAW_RC)
+const uint_fast8_t MOTOR_1_PIN = 17;
+const uint_fast8_t MOTOR_2_PIN = 18;
 
 #elif defined(DRIVER_ZEROLAG)
 const uint_fast8_t MOTOR_A_PWM = 5;
