@@ -70,7 +70,7 @@ namespace onOffInterruption
 
     void setOnOffInterruption()
     {
-        attachInterrupt(onOffControl::control.pin, toggleIdleISR, RISING);
+        // attachInterrupt(onOffControl::control.pin, toggleIdleISR, RISING);
     }
 }
 
