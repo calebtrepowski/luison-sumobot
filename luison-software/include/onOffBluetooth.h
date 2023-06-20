@@ -1,7 +1,7 @@
 #ifndef _on_off_bluetooth_h_
 #define _on_off_bluetooth_h_
 
-#if ON_OFF_METHOD == 1 || ON_OFF_METHOD == 2
+#if ON_OFF_METHOD == 1 || ON_OFF_METHOD == 2 || ON_OFF_METHOD == 4
 #include "onOffControl.h"
 
 #include "bluetooth.h"

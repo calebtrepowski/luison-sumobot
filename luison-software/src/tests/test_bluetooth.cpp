@@ -12,14 +12,15 @@ void setup()
 
 void loop()
 {
+    // DEBUG_PRINTLN("Idle");
     bluetooth::echo();
     // if (!active)
     // {
-    //     DEBUG_PRINTLN(std::string("Idle"));
+    //     DEBUG_PRINTLN("Idle");
     // }
     // if (bluetooth::loadStart(active))
     // {
-    //     DEBUG_PRINTLN(std::string("Estado inicial"));
+    //     DEBUG_PRINTLN("Estado inicial");
     // }
     // delay(100);
 }

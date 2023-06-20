@@ -11,5 +11,6 @@ namespace bluetooth
 
 #include "bluetoothSerial.h"
 #include "bluetoothBLE.h"
+#include "bluetoothDabble.h"
 
 #endif

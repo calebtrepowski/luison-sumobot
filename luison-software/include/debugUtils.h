@@ -12,15 +12,21 @@
 #elif DEBUG_METHOD == 2
 #include "bluetoothSerial.h"
 using namespace bluetooth;
-#define DEBUG_BEGIN(...) SerialBT.begin(__VA_ARGS__)
+#define DEBUG_BEGIN(...) bluetooth::setup()
 #define DEBUG_PRINT(...) SerialBT.print(__VA_ARGS__)
 #define DEBUG_PRINTLN(...) SerialBT.println(__VA_ARGS__)
 #elif DEBUG_METHOD == 3
 #include "bluetoothBLE.h"
 using namespace bluetooth;
-#define DEBUG_BEGIN(...)
+#define DEBUG_BEGIN(...) bluetooth::setup()
 #define DEBUG_PRINT(...) BLEPrint(__VA_ARGS__)
 #define DEBUG_PRINTLN(...) BLEPrintln(__VA_ARGS__)
+#elif DEBUG_METHOD == 4
+#include "bluetoothDabble.h"
+using namespace bluetooth;
+#define DEBUG_BEGIN(...) bluetooth::setup()
+#define DEBUG_PRINT(...) Terminal.print(__VA_ARGS__)
+#define DEBUG_PRINTLN(...) Terminal.println(__VA_ARGS__)
 #else
 #define DEBUG_BEGIN(...)
 #define DEBUG_PRINT(...)
@@ -33,22 +39,21 @@ using namespace bluetooth;
 template <typename R>
 void benchmarkFunction(R (*function)(void), const uint64_t MEASUREMENTS)
 {
+  // DEBUG_PRINTLN("Starting measurement...");
+  // uint64_t start = esp_timer_get_time();
+  // for (int retries = 0; retries < MEASUREMENTS; ++retries)
+  // {
+  //   function();
+  // }
 
-  DEBUG_PRINTLN("Starting measurement...");
-  uint64_t start = esp_timer_get_time();
-  for (int retries = 0; retries < MEASUREMENTS; ++retries)
-  {
-    function();
-  }
+  // uint64_t end = esp_timer_get_time();
 
-  uint64_t end = esp_timer_get_time();
-
-  DEBUG_PRINT(MEASUREMENTS);
-  DEBUG_PRINT(" iterations took ");
-  DEBUG_PRINT((end - start));
-  DEBUG_PRINT(" microseconds (");
-  DEBUG_PRINT((double)(end - start) / MEASUREMENTS);
-  DEBUG_PRINTLN(") microseconds per invocation)");
+  // DEBUG_PRINT((unsigned long)MEASUREMENTS);
+  // DEBUG_PRINT(" iterations took ");
+  // DEBUG_PRINT((end - start));
+  // DEBUG_PRINT(" microseconds (");
+  // DEBUG_PRINT((double)(end - start) / MEASUREMENTS);
+  // DEBUG_PRINTLN(") microseconds per invocation)");
 }
 
 #include <soc/rtc.h>
