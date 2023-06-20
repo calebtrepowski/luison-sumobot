@@ -32,10 +32,10 @@ namespace proximity
     {
         left.state = (GPIO.in1.val >> left.pin) & 0x1;
         frontLeft.state = (GPIO.in1.val >> frontLeft.pin) & 0x1;
-        frontCenter.state = (GPIO.in >> frontCenter.pin) & 0x1;
+        frontCenter.state = (GPIO.in1.val >> frontCenter.pin) & 0x1;
         frontRight.state = (GPIO.in >> frontRight.pin) & 0x1;
         right.state = (GPIO.in >> right.pin) & 0x1;
-        back.state = (GPIO.in1.val >> back.pin) & 0x1;
+        back.state = (GPIO.in >> back.pin) & 0x1;
     }
 }
 

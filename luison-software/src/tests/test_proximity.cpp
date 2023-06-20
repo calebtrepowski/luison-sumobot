@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include "debugUtils.h"
 #include "proximity.h"
+#include "sstream"
 
 void printStates();
 
@@ -24,20 +25,25 @@ void loop()
 
 void printStates()
 {
-    DEBUG_PRINTLN("-----------");
-    DEBUG_PRINT(proximity::frontLeft.state);
-    DEBUG_PRINT(" ");
-    DEBUG_PRINT(proximity::frontCenter.state);
-    DEBUG_PRINT(" ");
-    DEBUG_PRINTLN(proximity::frontRight.state);
+    std::ostringstream aux;
+    aux << "-----------\n";
+    aux << proximity::frontLeft.state;
+    aux << " ";
+    aux << proximity::frontCenter.state;
+    aux << " ";
+    aux << proximity::frontRight.state;
+    aux << "\n";
 
-    DEBUG_PRINT(proximity::left.state);
-    DEBUG_PRINT("   ");
-    DEBUG_PRINTLN(proximity::right.state);
+    aux << proximity::left.state;
+    aux << "   ";
+    aux << proximity::right.state;
+    aux << "\n";
 
-    DEBUG_PRINT("  ");
-    DEBUG_PRINTLN(proximity::back.state);
-    DEBUG_PRINTLN("-----------");
+    aux << "  ";
+    aux << proximity::back.state;
+    aux << "\n-----------";
+
+    DEBUG_PRINTLN(aux.str().data());
 }
 
 #endif

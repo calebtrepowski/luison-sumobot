@@ -9,7 +9,7 @@ void setup()
 {
     line::setup();
     DEBUG_BEGIN(MONITOR_SPEED);
-    benchmarkFunction<void>(line::readValues, 500000ULL);
+    // benchmarkFunction<void>(line::readValues, 500000ULL);
 }
 
 void loop()

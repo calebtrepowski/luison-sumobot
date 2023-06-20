@@ -86,11 +86,13 @@ namespace bluetooth
     }
 
     void BLEPrint(std::string value);
+    void BLEPrint(char const *value);
     void BLEPrint(uint32_t value);
     void BLEPrint(uint64_t value);
     void BLEPrint(float value);
     void BLEPrint(double value);
     void BLEPrintln(std::string value);
+    void BLEPrintln(char const *value);
     void BLEPrintln(uint32_t value);
     void BLEPrintln(uint64_t value);
     void BLEPrintln(float value);
@@ -105,18 +107,17 @@ namespace bluetooth
     {
         if (deviceConnected)
         {
-
             if (rxValue.length() > 0)
             {
                 if (rxValue.front() == '1')
                 {
-                    BLEPrintln(std::string("Iniciado!"));
+                    BLEPrintln("Iniciado!");
                     active = 1;
                     return true;
                 }
                 else if (rxValue.front() == '0')
                 {
-                    BLEPrintln(std::string("Detenido!"));
+                    BLEPrintln("Detenido!");
                     active = 0;
                 }
                 else
@@ -132,6 +133,12 @@ namespace bluetooth
     void BLEPrint(std::string value)
     {
         pCharacteristic->setValue(value.data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrint(char const *value)
+    {
+        pCharacteristic->setValue(value);
         pCharacteristic->notify();
     }
 
@@ -162,6 +169,13 @@ namespace bluetooth
     void BLEPrintln(std::string value)
     {
         pCharacteristic->setValue(value.append("\n").data());
+        pCharacteristic->notify();
+    }
+
+    void BLEPrintln(char const *value)
+    {
+        pCharacteristic->setValue(value);
+        pCharacteristic->setValue(pCharacteristic->getValue().append("\n").data());
         pCharacteristic->notify();
     }
 
