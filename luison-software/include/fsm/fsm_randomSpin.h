@@ -20,7 +20,7 @@ namespace fsm
         using namespace randomSpin_fsm;
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("random spin"));
+            DEBUG_PRINTLN("random spin");
 
             fsm::priorState = fsm::state;
 

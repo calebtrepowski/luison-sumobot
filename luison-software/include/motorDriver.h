@@ -4,10 +4,6 @@
 #include <Arduino.h>
 #include "pinNumbers.h"
 
-#if defined(DRIVER_MEIMOTOR) && defined(DRIVER_ZEROLAG)
-#error Only one driver at time!
-#endif
-
 namespace motors
 {
     void setup();
@@ -26,5 +22,7 @@ definitions if files are not included explicitly
 */
 #include "motorDriverMeimotor.h"
 #include "motorDriverZerolag.h"
+#include "motorDriverRoboclawSerial.h"
+#include "motorDriverRoboclawRC.h"
 
 #endif
