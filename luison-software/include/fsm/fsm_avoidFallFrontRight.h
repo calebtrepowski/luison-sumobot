@@ -20,7 +20,7 @@ namespace avoidFallFrontRight_fsm
     {
         if (fsm::innerState != fsm::priorInnerState)
         {
-            DEBUG_PRINTLN(std::string("avoid fall front right: reverse"));
+            DEBUG_PRINTLN("avoid fall front right: reverse");
 
             fsm::priorInnerState = fsm::innerState;
 
@@ -38,26 +38,37 @@ namespace avoidFallFrontRight_fsm
 
     void turnLeft()
     {
-        using namespace gyroscope;
         if (fsm::innerState != fsm::priorInnerState)
         {
-            DEBUG_PRINTLN(std::string("avoid fall front right: turn left"));
+            DEBUG_PRINTLN("avoid fall front right: turn left");
 
             fsm::priorInnerState = fsm::innerState;
 
-            mpu.update();
+#if defined(ENABLE_GYRO)
+            gyroscope::mpu.update();
+#endif
             motors::turnLeft(turnSpeed);
-            referenceAngleZ = mpu.getAngleZ();
+#if defined(ENABLE_GYRO)
+            gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+#endif
             referenceTime = millis();
         }
 
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
-        currentTime = millis();
-
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || currentTime - referenceTime > maxTurnDuration)
+#if defined(ENABLE_GYRO)
+        gyroscope::mpu.update();
+        gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
+        if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > turnAngle)
         {
             fsm::innerState = NULL;
+            return;
+        }
+#endif
+        
+        currentTime = millis();
+        if (currentTime - referenceTime > maxTurnDuration)
+        {
+            fsm::innerState = NULL;
+            return;
         }
     }
 }
@@ -69,7 +80,7 @@ namespace fsm
 
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("avoid fall front right"));
+            DEBUG_PRINTLN("avoid fall front right");
 
             fsm::priorState = fsm::state;
 

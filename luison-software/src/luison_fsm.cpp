@@ -2,14 +2,18 @@
 #include <Arduino.h>
 
 #include "pinNumbers.h"
+#if defined(ENABLE_GYRO)
 #include "gyroscope.h"
+#endif
 #include "onOffControl.h"
 #include "proximity.h"
 #include "fsm/fsm.h"
 
 void setup()
 {
+#if defined(ENABLE_GYRO)
     gyroscope::setup();
+#endif
     line::setup();
     motors::setup();
     onOffControl::setup();

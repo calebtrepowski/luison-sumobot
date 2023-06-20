@@ -4,7 +4,9 @@
 #include "fsm_configValues.h"
 #include "motorDriver.h"
 #include "line.h"
+#if defined(ENABLE_GYRO)
 #include "gyroscope.h"
+#endif
 #include "proximity.h"
 #include "debugUtils.h"
 

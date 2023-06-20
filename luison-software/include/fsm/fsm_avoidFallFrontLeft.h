@@ -20,7 +20,7 @@ namespace avoidFallFrontLeft_fsm
     {
         if (fsm::innerState != fsm::priorInnerState)
         {
-            DEBUG_PRINTLN(std::string("avoid fall front left: reverse"));
+            DEBUG_PRINTLN("avoid fall front left: reverse");
 
             fsm::priorInnerState = fsm::innerState;
 
@@ -38,30 +38,37 @@ namespace avoidFallFrontLeft_fsm
 
     void turnRight()
     {
-        using namespace gyroscope;
         if (fsm::innerState != fsm::priorInnerState)
         {
-#ifdef DEBUG
-            Serial.println("avoid fall front left: turn right");
-#endif
+            DEBUG_PRINTLN("avoid fall front left: turn right");
 
-#ifdef DEBUG_BLUETOOTH
-            bluetooth::SerialBT.println("avoid fall front left: turn right");
-#endif
             fsm::priorInnerState = fsm::innerState;
-            mpu.update();
+#if defined(ENABLE_GYRO)
+            gyroscope::mpu.update();
+#endif
             motors::turnRight(turnSpeed);
-            referenceAngleZ = mpu.getAngleZ();
+#if defined(ENABLE_GYRO)
+            gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+#endif
             referenceTime = millis();
         }
 
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
+#if defined(ENABLE_GYRO)
+        gyroscope::mpu.update();
+        gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
         currentTime = millis();
 
-        if (abs(currentAngleZ - referenceAngleZ) > turnAngle || currentTime - referenceTime > maxTurnDuration)
+        if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > turnAngle)
         {
             fsm::innerState = NULL;
+            return;
+        }
+#endif
+
+        if (currentTime - referenceTime > maxTurnDuration)
+        {
+            fsm::innerState = NULL;
+            return;
         }
     }
 }
@@ -73,7 +80,7 @@ namespace fsm
 
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("avoid fall front left"));
+            DEBUG_PRINTLN("avoid fall front left");
 
             fsm::priorState = fsm::state;
             fsm::priorInnerState = NULL;

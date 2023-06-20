@@ -19,16 +19,19 @@ namespace fsm
 {
     void aimLeft()
     {
-        using namespace gyroscope;
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("aim left"));
+            DEBUG_PRINTLN("aim left");
 
             fsm::priorState = fsm::state;
 
-            mpu.update();
+#if defined(ENABLE_GYRO)
+            gyroscope::mpu.update();
+#endif
             motors::goForward(aimLeft_fsm::aimSpeedInner, aimLeft_fsm::aimSpeedOuter);
-            referenceAngleZ = mpu.getAngleZ();
+#if defined(ENABLE_GYRO)
+            gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+#endif
             aimLeft_fsm::referenceTime = millis();
         }
 
@@ -43,14 +46,16 @@ namespace fsm
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
 
-        mpu.update();
-        currentAngleZ = mpu.getAngleZ();
+#if defined(ENABLE_GYRO)
+        gyroscope::mpu.update();
+        gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
 
-        if (abs(currentAngleZ - referenceAngleZ) > aimLeft_fsm::turnAngle)
+        if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimLeft_fsm::turnAngle)
         {
             fsm::state = normalSearch;
             return;
         }
+#endif
 
         aimLeft_fsm::currentTime = millis();
 

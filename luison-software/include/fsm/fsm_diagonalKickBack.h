@@ -21,7 +21,7 @@ namespace fsm
         using namespace diagonalKickBack_fsm;
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("diagonal kick back"));
+            DEBUG_PRINTLN("diagonal kick back");
 
             fsm::priorState = fsm::state;
 

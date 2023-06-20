@@ -14,8 +14,8 @@ float angleZ;
 
 void setup()
 {
-    gyroscope::setup();
     DEBUG_BEGIN(MONITOR_SPEED);
+    gyroscope::setup();
     // benchmarkFunction<void>(getAngleZ_benchmark, (uint64_t)100000);
 
     referenceTime = micros();
@@ -25,7 +25,7 @@ void loop()
 {
     getAngleZ();
     currentTime = micros();
-    if (currentTime - referenceTime > 100)
+    if (currentTime - referenceTime > 500)
     {
         DEBUG_PRINTLN(angleZ);
     }

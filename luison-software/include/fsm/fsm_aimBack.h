@@ -22,13 +22,17 @@ namespace fsm
         using namespace aimBack_fsm;
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("aim back"));
+            DEBUG_PRINTLN("aim back");
 
             fsm::priorState = fsm::state;
 
+#if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
+#endif
             motors::goForward(aimBack_fsm::turnSpeedInner, aimBack_fsm::turnSpeedOuter);
+#if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+#endif
             referenceTime = millis();
         }
 
@@ -41,6 +45,7 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_RIGHT
 
+#if defined(ENABLE_GYRO)
         gyroscope::mpu.update();
         gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
         if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimBack_fsm::turnAngle)
@@ -48,6 +53,7 @@ namespace fsm
             fsm::state = normalSearch;
             return;
         }
+#endif
 
         aimBack_fsm::currentTime = millis();
         if (aimBack_fsm::currentTime - aimBack_fsm::referenceTime > aimBack_fsm::maxTurnDuration)

@@ -22,7 +22,7 @@ namespace fsm
         using namespace attackFront_fsm;
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("attack front"));
+            DEBUG_PRINTLN("attack front");
 
             fsm::priorState = fsm::state;
 
@@ -50,17 +50,13 @@ namespace fsm
         currentTime = millis();
         if (currentTime % liftOffTime > fullGasTime && currentSpeed == fullGasSpeed)
         {
-#ifdef DEBUG
-            Serial.println("lift off speed");
-#endif
+            DEBUG_PRINTLN("lift off speed");
             motors::goForward(liftOffSpeed);
             currentSpeed = liftOffSpeed;
         }
         else if (currentSpeed == liftOffSpeed)
         {
-#ifdef DEBUG
-            Serial.println("full gas speed");
-#endif
+            DEBUG_PRINTLN("full gas speed");
             motors::goForward(fullGasSpeed);
             currentSpeed = fullGasSpeed;
         }

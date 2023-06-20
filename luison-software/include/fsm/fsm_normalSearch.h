@@ -14,7 +14,7 @@ namespace fsm
     {
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("normal operation"));
+            DEBUG_PRINTLN("normal operation");
             fsm::priorState = fsm::state;
             motors::goForward(normalSearch_fsm::normalSearchSpeed);
             // motors::brake(); //uncomment for testing turns

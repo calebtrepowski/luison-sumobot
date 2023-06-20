@@ -9,7 +9,7 @@ namespace fsm
     {
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN(std::string("idle"));
+            DEBUG_PRINTLN("idle");
 
             fsm::priorState = fsm::state;
         }
