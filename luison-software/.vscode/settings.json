@@ -1,0 +1,21 @@
+{
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#e77200",
+        "titleBar.activeForeground": "#ffffff",
+        "titleBar.inactiveBackground": "#e77200",
+        "titleBar.inactiveForeground": "#ffffff",
+    },
+    "files.associations": {
+        "esp32-hal-rgb-led.h": "c",
+        "cmath": "cpp",
+        "optional": "cpp",
+        "istream": "cpp",
+        "ostream": "cpp",
+        "system_error": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+    }
+}
