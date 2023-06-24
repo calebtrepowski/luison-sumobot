@@ -1,44 +1,68 @@
-#include <Arduino.h>
+// #include <Arduino.h>
+// #include "menu/menuDabbleTerminal.hpp"
+// #include "bluetooth.h"
+// #include "proximity.h"
+// #include "line.h"
+// #ifdef ENABLE_GYRO
+// #include "gyroscope.h"
+// #endif
+// #include "motorDriver.h"
+// #include "fsm/fsm.h"
 
-#include "menu/menuDabbleTerminal.hpp"
+// void fsmSetup();
+// void fsmAction();
+// void fsmCleanup();
 
-void action1();
-void action2();
-void action2cleanup();
-void action3();
+// unsigned long referenceTime;
+// void printLineReadingsSetup();
+// void printLineReadings();
 
-MenuDabbleTerminal menu;
+// MenuDabbleTerminal menu;
 
-void setup()
-{
-    Dabble.begin("LuisonBT");
+// void setup()
+// {
+//     Dabble.begin("LuisonBT");
 
-    menu.addOption("Option 1", action1, nullptr, nullptr);
-    menu.addOption("Option 2", nullptr, action2, action2cleanup);
-    menu.addOption("Option 3", action3, nullptr, nullptr);
-}
+//     fsm::setup();
 
-void loop()
-{
-    menu.run();
-}
+//     menu.addOption("FSM", fsmSetup, fsmAction, fsmCleanup);
+//     menu.addOption("Sensores de linea", printLineReadingsSetup, printLineReadings, nullptr);
+// }
 
-void action1()
-{
-    Terminal.println("Option 1 selected");
-}
+// void loop()
+// {
+//     menu.run();
+// }
 
-void action2()
-{
-    Terminal.println("Option 2 selected");
-    delay(500);
-}
-void action2cleanup()
-{
-    Terminal.println("Terminado opcion 2");
-}
+// void fsmSetup()
+// {
+//     fsm::priorState = NULL;
+//     fsm::state = fsm::idle;
+//     fsm::state();
+//     fsm::state = fsm::normalSearch;
+// }
 
-void action3()
-{
-    Terminal.println("Option 3 selected");
-}
+// void fsmAction()
+// {
+//     fsm::state();
+// }
+
+// void fsmCleanup()
+// {
+//     fsm::priorState = NULL;
+//     fsm::state = fsm::idle;
+//     fsm::state();
+// }
+// void printLineReadingsSetup()
+// {
+//     referenceTime = millis();
+// }
+
+// void printLineReadings()
+// {
+//     if (millis() % referenceTime > 500)
+//     {
+//         line::readValues();
+//         Terminal.println(line::valuesToString());
+//     }
+// }

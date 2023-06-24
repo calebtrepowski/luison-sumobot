@@ -39,7 +39,7 @@ namespace proximity
         back.state = (GPIO.in >> back.pin) & 0x1;
     }
 
-    const char *printStates()
+    const char *valuesToString()
     {
         std::ostringstream aux;
         aux << "-----------" << '\n';
