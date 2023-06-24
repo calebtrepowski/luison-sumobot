@@ -27,13 +27,20 @@ namespace gyroscope
         delay(500);
 
         Wire.begin(I2C_SDA, I2C_SCL, 1000001UL);
-        
-        while (status != 0)
+
+        for (u_int8_t i = 0; i < 10; i++)
         {
             status = mpu.begin(GYRO_CONFIG_NUM, ACC_CONFIG_NUM);
         }
 
-        RGBLed::showGreen();
+        if (status == 0)
+        {
+            RGBLed::showGreen();
+        }
+        else
+        {
+            RGBLed::showYellow();
+        }
 
         mpu.calcOffsets();
     }
