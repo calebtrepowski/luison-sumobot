@@ -25,6 +25,11 @@ namespace RGBLed
         neopixelWrite(RGB_LED_PIN, 0, 0, BRIGHTNESS_VALUE);
     }
 
+    void showYellow()
+    {
+        neopixelWrite(RGB_LED_PIN, BRIGHTNESS_VALUE / 2, BRIGHTNESS_VALUE / 2, 0);
+    }
+
     void showColor(uint8_t redVal, uint8_t greenVal, uint8_t blueVal)
     {
         neopixelWrite(redVal, greenVal, blueVal, BRIGHTNESS_VALUE);
