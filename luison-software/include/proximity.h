@@ -1,6 +1,7 @@
 #ifndef _proximity_h
 #define _proximity_h
 #include <Arduino.h>
+#include <sstream>
 #include "pinNumbers.h"
 
 namespace proximity
@@ -36,6 +37,19 @@ namespace proximity
         frontRight.state = (GPIO.in >> frontRight.pin) & 0x1;
         right.state = (GPIO.in >> right.pin) & 0x1;
         back.state = (GPIO.in >> back.pin) & 0x1;
+    }
+
+    const char *printStates()
+    {
+        std::ostringstream aux;
+        aux << "-----------" << '\n';
+        aux << proximity::frontLeft.state << ' ' << proximity::frontCenter.state
+            << ' ' << proximity::frontRight.state << '\n';
+        aux << proximity::left.state << "   " << proximity::right.state << '\n';
+        aux << "  " << proximity::back.state;
+        aux << "-----------";
+
+        return aux.str().data();
     }
 }
 
