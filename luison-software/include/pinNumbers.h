@@ -20,10 +20,10 @@ const uint_fast8_t PROXIMITY_RIGHT = 13;
 const uint_fast8_t PROXIMITY_BACK = 12;
 
 // Line Sensors
-const uint_fast8_t LINE_FRONT_LEFT = 4;
-const uint_fast8_t LINE_FRONT_RIGHT = 1;
-const uint_fast8_t LINE_BACK_RIGHT = 2;
-const uint_fast8_t LINE_BACK_LEFT = 5;
+const uint_fast8_t LINE_FRONT_LEFT = 1;
+const uint_fast8_t LINE_FRONT_RIGHT = 2;
+// const uint_fast8_t LINE_BACK_RIGHT = 4;
+// const uint_fast8_t LINE_BACK_LEFT = 5;
 
 const uint_fast8_t LINE_FRONT_LEFT_THRESHOLD_VALUE = 300;
 const uint_fast8_t LINE_FRONT_RIGHT_THRESHOLD_VALUE = 300;
