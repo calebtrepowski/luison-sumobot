@@ -27,6 +27,7 @@ namespace fsm
 #define TRANSITION_AVOID_FALL_FRONT_LEFT      \
     if (LINE_FRONT_LEFT_DETECTED)             \
     {                                         \
+        motors::brake();                      \
         fsm::state = fsm::avoidFallFrontLeft; \
         return;                               \
     }
@@ -39,6 +40,7 @@ namespace fsm
 #define TRANSITION_AVOID_FALL_FRONT_RIGHT      \
     if (LINE_FRONT_RIGHT_DETECTED)             \
     {                                          \
+        motors::brake();                      \
         fsm::state = fsm::avoidFallFrontRight; \
         return;                                \
     }

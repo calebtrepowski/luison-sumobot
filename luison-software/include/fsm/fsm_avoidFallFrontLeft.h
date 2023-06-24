@@ -56,7 +56,6 @@ namespace avoidFallFrontLeft_fsm
 #if defined(ENABLE_GYRO)
         gyroscope::mpu.update();
         gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
-        currentTime = millis();
 
         if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > turnAngle)
         {

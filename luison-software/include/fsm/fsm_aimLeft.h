@@ -28,7 +28,7 @@ namespace fsm
 #if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
 #endif
-            motors::goForward(aimLeft_fsm::aimSpeedInner, aimLeft_fsm::aimSpeedOuter);
+            motors::turnLeft(aimLeft_fsm::aimSpeedOuter);
 #if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
 #endif
@@ -41,9 +41,9 @@ namespace fsm
 
         proximity::readStates();
         TRANSITION_ATTACK_FRONT
-        TRANSITION_AIM_FRONT_LEFT
-        TRANSITION_AIM_FRONT_RIGHT
+        // TRANSITION_AIM_FRONT_LEFT
         TRANSITION_AIM_RIGHT
+        TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
 
 #if defined(ENABLE_GYRO)
