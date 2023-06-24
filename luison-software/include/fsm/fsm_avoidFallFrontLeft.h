@@ -65,6 +65,7 @@ namespace avoidFallFrontLeft_fsm
         }
 #endif
 
+        currentTime = millis();
         if (currentTime - referenceTime > maxTurnDuration)
         {
             fsm::innerState = NULL;

@@ -26,13 +26,14 @@ namespace fsm
             fsm::priorState = fsm::state;
 
 #if defined(ENABLE_GYRO)
-            gyroscope::mpu.update();
-#endif
-            motors::goForward(aimFrontLeft_fsm::aimSpeedInner, aimFrontLeft_fsm::aimSpeedOuter);
-#if defined(ENABLE_GYRO)
-            gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+            if (gyroscope::status == 0)
+            {
+                gyroscope::mpu.update();
+                gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
+            }
 #endif
             aimFrontLeft_fsm::referenceTime = millis();
+            motors::goForward(aimFrontLeft_fsm::aimSpeedInner, aimFrontLeft_fsm::aimSpeedOuter);
         }
 
         line::readValues();
@@ -47,13 +48,16 @@ namespace fsm
         TRANSITION_AIM_BACK
 
 #if defined(ENABLE_GYRO)
-        gyroscope::mpu.update();
-        gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
-
-        if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimFrontLeft_fsm::turnAngle)
+        if (gyroscope::status == 0)
         {
-            fsm::state = normalSearch;
-            return;
+            gyroscope::mpu.update();
+            gyroscope::currentAngleZ = gyroscope::mpu.getAngleZ();
+
+            if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimFrontLeft_fsm::turnAngle)
+            {
+                fsm::state = normalSearch;
+                return;
+            }
         }
 #endif
 
@@ -68,5 +72,4 @@ namespace fsm
 }
 
 #endif
-
 #endif
