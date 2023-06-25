@@ -77,7 +77,6 @@ namespace fsm
 {
     void avoidFallFrontLeft()
     {
-
         if (fsm::state != fsm::priorState)
         {
             DEBUG_PRINTLN("avoid fall front left");

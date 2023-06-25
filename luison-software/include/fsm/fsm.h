@@ -40,7 +40,7 @@ namespace fsm
 #define TRANSITION_AVOID_FALL_FRONT_RIGHT      \
     if (LINE_FRONT_RIGHT_DETECTED)             \
     {                                          \
-        motors::brake();                      \
+        motors::brake();                       \
         fsm::state = fsm::avoidFallFrontRight; \
         return;                                \
     }
@@ -135,6 +135,20 @@ namespace fsm
 #ifdef ENABLE_STRATEGY_RANDOM_SPIN
     void randomSpin();
 #endif
+
+    void setup()
+    {
+        proximity::setup();
+        line::setup();
+#ifdef ENABLE_GYRO
+        gyroscope::setup();
+#endif
+        motors::setup();
+
+        fsm::priorState = NULL;
+        fsm::state = fsm::idle;
+        fsm::state();
+    }
 
 }
 
