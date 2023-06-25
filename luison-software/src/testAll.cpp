@@ -4,6 +4,7 @@
 #include "menu/calibrationMenu.hpp"
 
 #include "bluetooth.h"
+#include "dipSwitch.h"
 
 /* fsm already includes line, proximity, motor and gyro */
 #include "fsm/fsm.h"
@@ -21,9 +22,14 @@ void printReadingsSetup();
 void printLineReadings();
 void printProximityReadings();
 
+void printDipSwitchReading();
+
+void calibrateValue();
+
 void setup()
 {
     bluetooth::setup();
+    dipSwitch::setup();
     fsm::setup();
 
     menu.addOption("FSM", fsmSetup, fsmAction, fsmCleanup);
@@ -45,6 +51,7 @@ void setup()
         "Motores: derecha", []()
         { motors::turnRight(3); },
         []() {}, motors::brake);
+    menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
 
     calibrationMenu.addField("Normal search speed [1-6]", &NORMAL_SEARCH_SPEED);
@@ -57,10 +64,16 @@ void loop()
 
 void fsmSetup()
 {
-    fsm::priorState = NULL;
-    fsm::state = fsm::idle;
-    fsm::state();
-    fsm::state = fsm::normalSearch;
+    int initialStrategy = dipSwitch::readInt();
+    switch (initialStrategy)
+    {
+    case 1:
+        fsm::state = fsm::diagonalAttack;
+        break;
+    default:
+        fsm::state = fsm::normalSearch;
+        break;
+    }
 }
 
 void fsmAction()
@@ -94,6 +107,14 @@ void printProximityReadings()
     {
         proximity::readStates();
         Terminal.println(proximity::valuesToString());
+    }
+}
+
+void printDipSwitchReading()
+{
+    if (millis() % referenceTime > 2000)
+    {
+        Terminal.println(dipSwitch::readInt());
     }
 }
 
