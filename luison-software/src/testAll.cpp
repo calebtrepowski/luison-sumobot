@@ -1,6 +1,7 @@
 #ifdef TEST_ALL
 #include <Arduino.h>
 #include "menu/menuDabbleTerminal.hpp"
+#include "menu/calibrationMenu.hpp"
 
 #include "bluetooth.h"
 
@@ -8,6 +9,7 @@
 #include "fsm/fsm.h"
 
 MenuDabbleTerminal menu;
+CalibrationMenu calibrationMenu;
 
 void fsmSetup();
 void fsmAction();
@@ -29,7 +31,7 @@ void setup()
     menu.addOption("Sensores de proximidad", printReadingsSetup, printProximityReadings, nullptr);
     menu.addOption(
         "Motores: adelante", []()
-        { motors::goForward(3); },
+        { motors::goForward(NORMAL_SEARCH_SPEED); },
         []() {}, motors::brake);
     menu.addOption(
         "Motores: atras", []()
@@ -43,6 +45,9 @@ void setup()
         "Motores: derecha", []()
         { motors::turnRight(3); },
         []() {}, motors::brake);
+    menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
+
+    calibrationMenu.addField("Normal search speed [1-6]", &NORMAL_SEARCH_SPEED);
 }
 
 void loop()
@@ -90,5 +95,38 @@ void printProximityReadings()
         proximity::readStates();
         Terminal.println(proximity::valuesToString());
     }
+}
+
+void calibrateValue()
+{
+    Terminal.println(calibrationMenu.getFields());
+
+    while (true)
+    {
+        Dabble.processInput();
+        if (Terminal.available())
+            break;
+    }
+
+    int fieldNumber = Terminal.readString().toInt();
+    if (fieldNumber <= 0 || fieldNumber > calibrationMenu.getFieldCount())
+    {
+        Terminal.println("Asignacion cancelada.");
+        return;
+    }
+
+    Terminal.println("Ingresar nuevo valor");
+
+    while (true)
+    {
+        Dabble.processInput();
+        if (Terminal.available())
+            break;
+    }
+
+    int newValue = Terminal.readString().toInt();
+    calibrationMenu.updateField(fieldNumber - 1, newValue);
+
+    Terminal.println("Asignacion correcta");
 }
 #endif
