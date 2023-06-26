@@ -132,8 +132,8 @@ namespace fsm
     void diagonalKickBack();
 #endif
 
-#ifdef ENABLE_STRATEGY_RANDOM_SPIN
-    void randomSpin();
+#ifdef ENABLE_STRATEGY_WAIT_SENSORS
+    void waitSensors();
 #endif
 
     void setup()
@@ -164,6 +164,6 @@ namespace fsm
 #include "fsm_aimBack.h"
 #include "fsm_diagonalAttack.h"
 #include "fsm_diagonalKickBack.h"
-#include "fsm_randomSpin.h"
+#include "fsm_waitSensors.h"
 
 #endif

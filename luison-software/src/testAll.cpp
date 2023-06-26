@@ -5,6 +5,7 @@
 
 #include "bluetooth.h"
 #include "dipSwitch.h"
+#include "RGBLed.h"
 
 /* fsm already includes line, proximity, motor and gyro */
 #include "fsm/fsm.h"
@@ -54,7 +55,12 @@ void setup()
     menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
 
-    calibrationMenu.addField("Normal search speed [1-6]", &NORMAL_SEARCH_SPEED);
+
+    calibrationMenu.addField("WS: forward speed [1-6]", &waitSensors_fsm::goForwardSpeed);
+    calibrationMenu.addField("WS: forward duration [ms]", &waitSensors_fsm::goForwardDuration);
+    calibrationMenu.addField("WS: wait duration [ms]", &waitSensors_fsm::waitMaxDuration);
+
+    RGBLed::showYellow();
 }
 
 void loop()
@@ -70,10 +76,14 @@ void fsmSetup()
     case 1:
         fsm::state = fsm::diagonalAttack;
         break;
+    case 2:
+        fsm::state = fsm::waitSensors;
+        break;
     default:
         fsm::state = fsm::normalSearch;
         break;
     }
+    RGBLed::showRed();
 }
 
 void fsmAction()
@@ -86,6 +96,7 @@ void fsmCleanup()
     fsm::priorState = NULL;
     fsm::state = fsm::idle;
     fsm::state();
+    RGBLed::showYellow();
 }
 void printReadingsSetup()
 {
