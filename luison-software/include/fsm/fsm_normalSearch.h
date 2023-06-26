@@ -5,7 +5,7 @@
 
 namespace normalSearch_fsm
 {
-    const uint_fast8_t normalSearchSpeed = NORMAL_SEARCH_SPEED;
+    int normalSearchSpeed = NORMAL_SEARCH_SPEED;
 }
 
 namespace fsm

@@ -4,7 +4,7 @@
 /* Speeds: [1, 6] */
 
 #ifdef METAL_RING
-int NORMAL_SEARCH_SPEED = 3U;
+#define NORMAL_SEARCH_SPEED 3U
 
 #define ATTACK_FRONT_FULL_GAS_TIME 500  // ms
 #define ATTACK_FRONT_LIFT_OFF_TIME 1000 // ms, es acumulado! el tiempo de liftoff es liftofftime - fullgastime

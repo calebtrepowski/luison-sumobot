@@ -40,21 +40,35 @@ void setup()
         "Motores: adelante", []()
         { motors::goForward(NORMAL_SEARCH_SPEED); },
         []() {}, motors::brake);
-    menu.addOption(
-        "Motores: atras", []()
-        { motors::goBack(3); },
-        []() {}, motors::brake);
-    menu.addOption(
-        "Motores: izquierda", []()
-        { motors::turnLeft(3); },
-        []() {}, motors::brake);
-    menu.addOption(
-        "Motores: derecha", []()
-        { motors::turnRight(3); },
-        []() {}, motors::brake);
-    menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
+    // menu.addOption(
+    //     "Motores: atras", []()
+    //     { motors::goBack(3); },
+    //     []() {}, motors::brake);
+    // menu.addOption(
+    //     "Motores: izquierda", []()
+    //     { motors::turnLeft(3); },
+    //     []() {}, motors::brake);
+    // menu.addOption(
+    //     "Motores: derecha", []()
+    //     { motors::turnRight(3); },
+    //     []() {}, motors::brake);
+    // menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
 
+    calibrationMenu.addField("Normal search speed [1-6]", &normalSearch_fsm::normalSearchSpeed);
+
+    /* Attack front */
+    // calibrationMenu.addField("AF: full gas speed [1-6]", &attackFront_fsm::fullGasSpeed);
+    // calibrationMenu.addField("AF: full gas time [ms]", &attackFront_fsm::fullGasTime);
+    // calibrationMenu.addField("AF: lift off speed [1-6]", &attackFront_fsm::liftOffSpeed);
+    // calibrationMenu.addField("AF: lift off time [ms]", &attackFront_fsm::liftOffTime);
+
+    /* Diagonal Attack */
+    // calibrationMenu.addField("DA: forward speed [1-6]", &diagonalAttack_fsm::moveForwardSpeed);
+    // calibrationMenu.addField("DA: forward duration [ms]", &diagonalAttack_fsm::moveForwardDuration);
+    // calibrationMenu.addField("DA: turn speed outer [1-6]", &diagonalAttack_fsm::turnAimSpeedOuter);
+    // calibrationMenu.addField("DA: turn speed inner [1-6]", &diagonalAttack_fsm::turnAimSpeedInner);
+    // calibrationMenu.addField("DA: turn duration [ms]", &diagonalAttack_fsm::turnAimDuration);
 
     calibrationMenu.addField("WS: forward speed [1-6]", &waitSensors_fsm::goForwardSpeed);
     calibrationMenu.addField("WS: forward duration [ms]", &waitSensors_fsm::goForwardDuration);

@@ -7,13 +7,13 @@
 
 namespace diagonalAttack_fsm
 {
-    const uint_fast8_t moveForwardSpeed = DIAGONAL_ATTACK_MOVE_FORWARD_SPEED;
-    const uint_fast8_t moveForwardDuration = DIAGONAL_ATTACK_MOVE_FORWARD_DURATION;
+    int moveForwardSpeed = DIAGONAL_ATTACK_MOVE_FORWARD_SPEED;
+    int moveForwardDuration = DIAGONAL_ATTACK_MOVE_FORWARD_DURATION;
     uint_fast32_t currentTime;
     uint_fast32_t referenceTime;
-    const uint_fast8_t turnAimSpeedOuter = DIAGONAL_ATTACK_TURN_AIM_SPEED_OUTER;
-    const uint_fast8_t turnAimSpeedInner = DIAGONAL_ATTACK_TURN_AIM_SPEED_INNER;
-    const uint_fast8_t turnAimDuration = DIAGONAL_ATTACK_TURN_AIM_DURATION;
+    int turnAimSpeedOuter = DIAGONAL_ATTACK_TURN_AIM_SPEED_OUTER;
+    int turnAimSpeedInner = DIAGONAL_ATTACK_TURN_AIM_SPEED_INNER;
+    int turnAimDuration = DIAGONAL_ATTACK_TURN_AIM_DURATION;
 
     void moveForward();
     void turnAim();

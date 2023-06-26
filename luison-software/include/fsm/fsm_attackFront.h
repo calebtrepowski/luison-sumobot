@@ -7,10 +7,10 @@
 
 namespace attackFront_fsm
 {
-    const uint_fast8_t fullGasSpeed = ATTACK_FRONT_FULL_GAS_SPEED;
-    const uint_fast8_t fullGasTime = ATTACK_FRONT_FULL_GAS_TIME;
-    const uint_fast8_t liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
-    const uint_fast8_t liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
+    int fullGasSpeed = ATTACK_FRONT_FULL_GAS_SPEED;
+    int fullGasTime = ATTACK_FRONT_FULL_GAS_TIME;
+    int liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
+    int liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
     uint_fast32_t currentTime;
     uint_fast8_t currentSpeed;
 }
