@@ -32,7 +32,12 @@ namespace RGBLed
 
     void showColor(uint8_t redVal, uint8_t greenVal, uint8_t blueVal)
     {
-        neopixelWrite(redVal, greenVal, blueVal, BRIGHTNESS_VALUE);
+        neopixelWrite(RGB_LED_PIN, redVal, greenVal, blueVal);
+    }
+
+    void turnOff()
+    {
+        neopixelWrite(RGB_LED_PIN, 0, 0, 0);
     }
 
 }
