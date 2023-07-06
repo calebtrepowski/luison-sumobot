@@ -24,12 +24,12 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_LEFT
     void avoidFallFrontLeft();
-#define TRANSITION_AVOID_FALL_FRONT_LEFT      \
-    if (LINE_FRONT_LEFT_DETECTED)             \
-    {                                         \
-        motors::brake();                      \
-        fsm::state = fsm::avoidFallFrontLeft; \
-        return;                               \
+#define TRANSITION_AVOID_FALL_FRONT_LEFT                \
+    if (LINE_FRONT_LEFT_DETECTED)                       \
+    {                                                   \
+        motors::goBack(AVOID_FALL_FRONT_REVERSE_SPEED); \
+        fsm::state = fsm::avoidFallFrontLeft;           \
+        return;                                         \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_LEFT ;
@@ -37,12 +37,12 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_RIGHT
     void avoidFallFrontRight();
-#define TRANSITION_AVOID_FALL_FRONT_RIGHT      \
-    if (LINE_FRONT_RIGHT_DETECTED)             \
-    {                                          \
-        motors::brake();                       \
-        fsm::state = fsm::avoidFallFrontRight; \
-        return;                                \
+#define TRANSITION_AVOID_FALL_FRONT_RIGHT               \
+    if (LINE_FRONT_RIGHT_DETECTED)                      \
+    {                                                   \
+        motors::goBack(AVOID_FALL_FRONT_REVERSE_SPEED); \
+        fsm::state = fsm::avoidFallFrontRight;          \
+        return;                                         \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_RIGHT ;
