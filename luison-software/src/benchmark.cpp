@@ -1,6 +1,7 @@
 #ifdef BENCHMARK
 #include <Arduino.h>
 #include <esp_timer.h>
+#include <sstream>
 #include "debugUtils.h"
 
 #include "proximity.h"
@@ -12,13 +13,14 @@ void setup()
   /* initialize requirements here: */
 
   DEBUG_BEGIN(MONITOR_SPEED);
+  delay(3000);
 }
 
 void loop()
 {
-  measureFunction(5000000ULL);
-  while(true){
-
+  measureFunction(50000ULL);
+  while (true)
+  {
   }
 }
 
@@ -31,17 +33,16 @@ void measureFunction(const uint64_t MEASUREMENTS)
   for (int retries = 0; retries < MEASUREMENTS; ++retries)
   {
     /* invoke here the function to benchmark */
-    
+    Dabble.processInput();
   }
 
   uint64_t end = esp_timer_get_time();
 
-  DEBUG_PRINT(MEASUREMENTS);
-  DEBUG_PRINT(" iterations took ");
-  DEBUG_PRINT((end - start));
-  DEBUG_PRINT(" microseconds (");
-  DEBUG_PRINT((double)(end - start) / MEASUREMENTS);
-  DEBUG_PRINTLN(") microseconds per invocation)");
+  std::ostringstream aux;
+  aux << MEASUREMENTS << " iterations took " << (end - start)
+      << " microseconds (" << (double)(end - start) / MEASUREMENTS
+      << ") microseconds per invocation)\n";
+  DEBUG_PRINTLN(aux.str().data());
 }
 
 #endif

@@ -1,199 +1,145 @@
 #ifdef TEST_DUAL_CORE
 #include <Arduino.h>
-#include "proximity.h"
-#include "dipSwitch.h"
-#include "motorDriver.h"
-#include "onOffControl.h"
+#include <sstream>
+#include "esp_task_wdt.h"
+#include "esp_err.h"
+
+#include "bluetooth.h"
 #include "line.h"
-// #define INCLUDE_xTaskResumeFromISR
+#include "proximity.h"
+#include "gyroscope.h"
+#include "motorDriver.h"
+#include "fsm/fsm.h"
 
-TaskHandle_t taskRead;
-TaskHandle_t taskExecute;
-TaskHandle_t taskPrintDot;
-TaskHandle_t taskPrintDash;
+TaskHandle_t bluetoothTaskHandle;
+TaskHandle_t actionTaskHandle;
 
-void printDot(void *pvParameters);
-void printDash(void *pvParameters);
-void readSensors(void *pvParameters);
-void printSensors(void *pvParameters);
-void execute(void *pvParameters);
+void bluetoothMenuTask(void *pvParameters);
+void emptyTask(void *pvParameters) {}
+void testLineSensorsTask(void *pvParameters);
+void testProximitySensorsTask(void *pvParameters);
+void FSMTask(void *pvParameters);
+const char *getMenuToString();
 
-volatile bool state;
-
-unsigned long buttonTime = 0;
-unsigned long lastButtonTime = 0;
-unsigned long lastOnTime = 0;
-
-const uint_fast8_t debounceTime = 10;    // ms
-const uint_fast8_t minimumOnTime = 2000; // ms
-
-uint_fast8_t strategy = 0;
-
-void IRAM_ATTR toggleStateISR()
-{
-    buttonTime = millis();
-    if (buttonTime - lastButtonTime > debounceTime)
-    {
-        if (buttonTime - lastOnTime > minimumOnTime)
-        {
-            // para que no se apague si el árbitro mantiene apretado
-            // hacer lo que se requiera, idealmente interrumpir/empezar un task
-            if (!state)
-            {
-                strategy = dipSwitch::readInt();
-                vTaskResume(taskExecute);
-            }
-            else
-            {
-                motors::brake();
-                motors::setSpeedBoth(0U);
-                vTaskSuspend(taskExecute);
-            }
-            state = !state;
-            lastOnTime = buttonTime;
-        }
-    }
-    lastButtonTime = buttonTime;
-}
+BaseType_t CORE_0 = 0;
+BaseType_t CORE_1 = 1;
 
 void setup()
 {
-    // pinMode(13, INPUT_PULLDOWN);
-    motors::setup();
-    onOffControl::setup();
+    Serial.begin(MONITOR_SPEED);
+
+    bluetooth::setup();
     proximity::setup();
     line::setup();
-    dipSwitch::setup();
-    strategy = dipSwitch::readInt();
-    // line::setup();
-    // Serial.begin(9600);
+    gyroscope::setup();
+    motors::setup();
 
-    xTaskCreatePinnedToCore(readSensors, "READ_SENSORS", 2048, NULL, 1, &taskPrintDot, 1);
-    // xTaskCreatePinnedToCore(printSensors, "PRINT_SENSORS", 2048, NULL, 1, &taskPrintDot, 0);
-    xTaskCreatePinnedToCore(execute, "EXECUTE", 2048, NULL, 1, &taskExecute, 0);
-    // vTaskSuspend(taskExecute);
-    // xTaskCreate(printDot, "PRINT_DOT", 2048, NULL, 1, &taskPrintDot);
-    // xTaskCreate(printDash, "PRINT_DOT", 2048, NULL, 1, &taskPrintDash);
+    fsm::priorState = NULL;
+    fsm::state = fsm::idle;
+
+    xTaskCreatePinnedToCore(bluetoothMenuTask, "Bluetooth_Menu", 8000, NULL, 1, &bluetoothTaskHandle, CORE_1);
+    vTaskDelete(NULL);
 }
 
 void loop()
 {
-    // vTaskSuspend(taskPrintDot);
-    // vTaskResume(taskPrintDash);
-    // vTaskDelay(1000 / portTICK_PERIOD_MS);
-    // vTaskSuspend(taskPrintDash);
-    // vTaskResume(taskPrintDot);
-    // vTaskDelay(1000 / portTICK_PERIOD_MS);
 }
 
-void printDot(void *pvParameters)
+void bluetoothMenuTask(void *pvParameters)
 {
-    for (;;)
+    String command;
+    int choice;
+    bool taskRunning = false;
+
+    while (true)
     {
-        Serial.println(".");
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-    }
-}
-void printDash(void *pvParameters)
-{
-    for (;;)
-    {
-        Serial.println("-");
-        vTaskDelay(100 / portTICK_PERIOD_MS);
+        Dabble.processInput();
+        if (Terminal.available() > 0)
+        {
+            command = Terminal.readString();
+            choice = command.toInt();
+            command = "";
+
+            switch (choice)
+            {
+            case 0:
+                motors::brake();
+                Terminal.println(getMenuToString());
+                vTaskDelete(actionTaskHandle);
+                break;
+            case 2:
+            {
+                BaseType_t taskCreationSuccess = xTaskCreatePinnedToCore(testLineSensorsTask, "TestLineSensorsTask", 8000, NULL, 1, &actionTaskHandle, CORE_0);
+                if (taskCreationSuccess == pdFAIL)
+                {
+                    Terminal.println("Error al crear la tarea");
+                }
+                break;
+            }
+            default:
+                motors::brake();
+                Terminal.println("Comando no válido.");
+                Terminal.println(getMenuToString());
+                break;
+            }
+        }
     }
 }
 
-void readSensors(void *pvParameters)
+void testLineSensorsTask(void *pvParameters)
 {
-    for (;;)
+    Terminal.println("Enviar 0 para detener.");
+
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+    const TickType_t xDelay500ms = pdMS_TO_TICKS(500);
+    while (true)
     {
         line::readValues();
-        proximity::readStates();
-    }
-}
-void printSensors(void *pvParameters)
-{
-    // for (;;)
-    // {
-    //     Serial.print(proximity::frontLeft.state);
-    //     Serial.print(" ");
-    //     Serial.print(proximity::frontCenter.state);
-    //     Serial.print(" ");
-    //     Serial.println(proximity::frontRight.state);
-
-    //     Serial.print(proximity::left.state);
-    //     Serial.print("   ");
-    //     Serial.println(proximity::right.state);
-
-    //     Serial.print("  ");
-    //     Serial.println(proximity::back.state);
-    //     vTaskDelay(200 / portTICK_PERIOD_MS);
-    // }
-    for (;;)
-    {
-        Serial.print(line::frontLeft.value);
-        Serial.print("\t");
-        Serial.println(line::frontRight.value);
-        Serial.print(line::backLeft.value);
-        Serial.print("\t");
-        Serial.println(line::backRight.value);
-        Serial.println();
-        vTaskDelay(200 / portTICK_PERIOD_MS);
+        Terminal.println(line::valuesToString());
+        vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
     }
 }
 
-// #define LINE_FRONT_LEFT_DETECTED
-void execute(void *pvParameters)
+void testProximitySensorsTask(void *pvParameters)
 {
-    // if (state)
-    // {
-    // Serial.println(1);
-    if (line::frontLeft.value < line::frontLeft.referenceValue || line::frontRight.value < line::frontRight.referenceValue)
+    Terminal.println("Enviar 0 para detener.");
+
+    TickType_t xLastWakeTime = xTaskGetTickCount();
+    const TickType_t xDelay500ms = pdMS_TO_TICKS(500);
+    while (true)
     {
-        motors::brake();
-        motors::setSpeedBoth(0U);
+        line::readValues();
+        Terminal.println(line::valuesToString());
+        vTaskDelayUntil(&xLastWakeTime, xDelay500ms);
     }
-    else
+}
+
+void FSMTask(void *pvParameters)
+{
+    Terminal.println("Enviar 0 para detener.");
+    fsm::state = fsm::normalSearch;
+
+    while (true)
     {
-        motors::setSpeedBoth(1U);
-        motors::goForward();
+        Terminal.println("antes de state");
+        fsm::state();
+        Terminal.println("despues de state");
+        vTaskDelay(500 / portTICK_PERIOD_MS);
     }
-    // switch (strategy)
-    // {
-    // case 1:
-    //     if (line::frontLeft.value < line::frontLeft.referenceValue || line::frontRight.value < line::frontRight.referenceValue)
-    //     {
-    //         motors::brake();
-    //         motors::setSpeedBoth(0U);
-    //     }
-    //     else
-    //     {
-    //         motors::setSpeedBoth(1U);
-    //         motors::goForward();
-    //     }
-    //     break;
-    // case 2:
-    //     if (line::frontLeft.value < line::frontLeft.referenceValue || line::frontRight.value < line::frontRight.referenceValue)
-    //     {
-    //         motors::brake();
-    //         motors::setSpeedBoth(0U);
-    //     }
-    //     else
-    //     {
-    //         motors::setSpeedBoth(1U);
-    //         motors::goBack();
-    //     }
-    //     break;
-    // default:
-    //     motors::brake();
-    //     motors::setSpeedBoth(0U);
-    //     break;
-    // }
-    // }
-    // else
-    // {
-    //     // Serial.println(0);
-    // }
+}
+
+const char *getMenuToString()
+{
+    std::ostringstream menuText;
+    menuText << "=== Probar: ===" << '\n';
+    menuText << "1. Sensores de proximidad" << '\n';
+    menuText << "2. Sensores de linea" << '\n';
+    menuText << "3. MPU" << '\n';
+    menuText << "4. Motores (adelante)" << '\n';
+    menuText << "5. Motores (reversa)" << '\n';
+    menuText << "6. FSM" << '\n';
+    menuText << "7. minimum" << '\n';
+    return menuText.str().data();
 }
 
 #endif

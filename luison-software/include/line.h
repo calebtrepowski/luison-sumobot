@@ -41,8 +41,10 @@ namespace line
 
     void readValues()
     {
-        frontLeft.value = adc1_get_raw(frontLeft.channel);
-        frontRight.value = adc1_get_raw(frontRight.channel);
+        frontLeft.value = analogRead(frontLeft.pin);
+        frontRight.value = analogRead(frontRight.pin);
+        // frontLeft.value = adc1_get_raw(frontLeft.channel);
+        // frontRight.value = adc1_get_raw(frontRight.channel);
         // backRight.value = adc1_get_raw(backRight.channel);
         // backLeft.value = adc1_get_raw(backLeft.channel);
     }

@@ -1,7 +1,6 @@
 #ifndef _on_off_killswitch_h_
 #define _on_off_killswitch_h_
 
-#if ON_OFF_METHOD == 3
 #include "onOffControl.h"
 
 #include "fsm/fsm.h"
@@ -11,10 +10,10 @@ namespace onOffControl
 {
     void setup()
     {
-        pinMode(KILL_SWITCH_START, INPUT_PULLDOWN);
-        pinMode(KILL_SWITCH_EMERGENCY_STOP, INPUT_PULLUP);
+        pinMode(KILL_SWITCH_START, INPUT);
+        pinMode(KILL_SWITCH_EMERGENCY_STOP, INPUT);
 
-        attachInterrupt(KILL_SWITCH_EMERGENCY_STOP, switchToIdleISR, FALLING);
+        // attachInterrupt(KILL_SWITCH_EMERGENCY_STOP, switchToIdleISR, FALLING);
     }
 
     bool loadStart(uint_fast8_t &active)
@@ -31,11 +30,9 @@ namespace onOffControl
 
     void IRAM_ATTR switchToIdleISR()
     {
-        fsm::state = fsm::idle;
+        fsm::cleanupAction();
     }
 
 }
-
-#endif
 
 #endif

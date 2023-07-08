@@ -1,24 +1,26 @@
 #ifdef TEST_ROBOCLAW
 #include <Arduino.h>
-#include <ESP32Servo.h>
+#include <RoboClaw.h>
 #include "pinNumbers.h"
 
-Servo servo1, servo2;
+RoboClaw roboclaw(&Serial1, 10000);
+
+const int address = 0x80;
 
 void setup()
 {
-    servo1.attach(17);
-    servo2.attach(18);
+    roboclaw.begin(38400);
+    roboclaw.ForwardMixed(address, 0);
+    roboclaw.TurnRightMixed(address, 0);
+    // roboclaw.DutyAccelM1M2
 }
 
 void loop()
 {
-    servo1.writeMicroseconds(1520);
-    servo2.writeMicroseconds(1520);
-    delay(1000);
-    servo1.writeMicroseconds(1600);
-    servo2.writeMicroseconds(1600);
-    delay(1000);
+    roboclaw.ForwardMixed(address, 64);
+    delay(2000);
+    roboclaw.BackwardMixed(address, 64);
+    delay(2000);
 }
 
 #endif
