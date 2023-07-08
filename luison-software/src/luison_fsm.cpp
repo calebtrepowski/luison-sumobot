@@ -1,43 +1,44 @@
 #ifdef LUISON_FSM
 #include <Arduino.h>
-
-#include "pinNumbers.h"
-#if defined(ENABLE_GYRO)
-#include "gyroscope.h"
-#endif
-#include "onOffControl.h"
-#include "proximity.h"
+#include "onOffKillSwitch.h"
+#include "RGBLed.h"
+#include "dipSwitch.h"
 #include "fsm/fsm.h"
 
 void setup()
 {
-#if defined(ENABLE_GYRO)
-    gyroscope::setup();
-#endif
-    line::setup();
-    motors::setup();
     onOffControl::setup();
-    proximity::setup();
-
-    fsm::priorState = NULL;
-    fsm::state = fsm::idle;
-
-    DEBUG_BEGIN(MONITOR_SPEED);
+    dipSwitch::setup();
+    RGBLed::showGreen();
+    fsm::setup();
 }
 
 void loop()
 {
-    if (!onOffControl::active)
+    while (!digitalRead(KILL_SWITCH_START))
     {
-        fsm::state = fsm::idle;
     }
 
-    fsm::state();
+    fsm::initialAction(dipSwitch::readInt());
 
-    if (onOffControl::loadStart(onOffControl::active))
+    RGBLed::showRed();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
+    RGBLed::showRed();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
+    RGBLed::showRed();
+    delay(1000);
+
+    while (digitalRead(KILL_SWITCH_START))
     {
-        fsm::state = fsm::normalSearch;
-    };
+        fsm::state();
+    }
+
+    fsm::cleanupAction();
+    RGBLed::showGreen();
 }
 
 #endif

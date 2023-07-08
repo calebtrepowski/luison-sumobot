@@ -19,17 +19,24 @@ namespace fsm
     volatile STATE_HANDLER_T priorState, state;
     volatile INNER_STATE_HANDLER_T priorInnerState, innerState;
 
+    ConfigValues *configValues = &woodRing;
+
+    uint_fast32_t currentTime;
+    uint_fast32_t referenceTime;
+
+    void initializeValues(void);
+
     /* main states */
     void idle();
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_LEFT
     void avoidFallFrontLeft();
-#define TRANSITION_AVOID_FALL_FRONT_LEFT                \
-    if (LINE_FRONT_LEFT_DETECTED)                       \
-    {                                                   \
-        motors::goBack(AVOID_FALL_FRONT_REVERSE_SPEED); \
-        fsm::state = fsm::avoidFallFrontLeft;           \
-        return;                                         \
+#define TRANSITION_AVOID_FALL_FRONT_LEFT                               \
+    if (LINE_FRONT_LEFT_DETECTED)                                      \
+    {                                                                  \
+        motors::goBack(fsm::configValues->avoidFallFrontReverseSpeed); \
+        fsm::state = fsm::avoidFallFrontLeft;                          \
+        return;                                                        \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_LEFT ;
@@ -37,12 +44,12 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_RIGHT
     void avoidFallFrontRight();
-#define TRANSITION_AVOID_FALL_FRONT_RIGHT               \
-    if (LINE_FRONT_RIGHT_DETECTED)                      \
-    {                                                   \
-        motors::goBack(AVOID_FALL_FRONT_REVERSE_SPEED); \
-        fsm::state = fsm::avoidFallFrontRight;          \
-        return;                                         \
+#define TRANSITION_AVOID_FALL_FRONT_RIGHT                              \
+    if (LINE_FRONT_RIGHT_DETECTED)                                     \
+    {                                                                  \
+        motors::goBack(fsm::configValues->avoidFallFrontReverseSpeed); \
+        fsm::state = fsm::avoidFallFrontRight;                         \
+        return;                                                        \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_RIGHT ;
@@ -136,6 +143,10 @@ namespace fsm
     void waitSensors();
 #endif
 
+#ifdef ENABLE_STRATEGY_AVOID_BACK
+    void avoidBack();
+#endif
+
     void setup()
     {
         proximity::setup();
@@ -144,14 +155,71 @@ namespace fsm
         gyroscope::setup();
 #endif
         motors::setup();
+        initializeValues();
 
         fsm::priorState = NULL;
         fsm::state = fsm::idle;
         fsm::state();
     }
 
+    void initialAction(int initialStrategy = 0)
+    {
+        switch (initialStrategy)
+        {
+        case 0:
+            fsm::configValues = &fsm::woodRing;
+            fsm::state = fsm::normalSearch;
+            break;
+        case 1:
+            fsm::configValues = &fsm::woodRing;
+            fsm::state = fsm::diagonalAttack;
+            break;
+        case 2:
+            fsm::configValues = &fsm::woodRing;
+            fsm::state = fsm::waitSensors;
+            break;
+        case 3:
+            fsm::configValues = &fsm::woodRing;
+            fsm::state = fsm::avoidBack;
+            break;
+        case 4:
+            fsm::configValues = &fsm::metalRing;
+            fsm::state = fsm::normalSearch;
+            break;
+        case 5:
+            fsm::configValues = &fsm::metalRing;
+            fsm::state = fsm::diagonalAttack;
+            break;
+        case 6:
+            fsm::configValues = &fsm::metalRing;
+            fsm::state = fsm::waitSensors;
+            break;
+        case 7:
+            fsm::configValues = &fsm::metalRing;
+            fsm::state = fsm::avoidBack;
+            break;
+        default:
+            fsm::configValues = &fsm::woodRing;
+            fsm::state = fsm::normalSearch;
+            break;
+        }
+    }
+
+    void action()
+    {
+        state();
+    }
+
+    void cleanupAction()
+    {
+        priorState = NULL;
+        state = idle;
+        state();
+    }
+
 }
 
+#include "fsm_configValues.h"
 #include "fsm_idle.h"
 #include "fsm_normalSearch.h"
 #include "fsm_avoidFallFrontRight.h"
@@ -165,5 +233,6 @@ namespace fsm
 #include "fsm_diagonalAttack.h"
 #include "fsm_diagonalKickBack.h"
 #include "fsm_waitSensors.h"
+#include "fsm_avoidBack.h"
 
 #endif

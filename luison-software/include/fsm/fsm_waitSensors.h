@@ -7,11 +7,6 @@
 
 namespace waitSensors_fsm
 {
-    int goForwardSpeed = WAIT_SENSORS_MOVE_FORWARD_SPEED;
-    int goForwardDuration = WAIT_SENSORS_MOVE_FORWARD_DURATION;
-    int waitMaxDuration = WAIT_SENSORS_WAIT_MAX_DURATION;
-    uint_fast32_t referenceTime;
-    uint_fast32_t currentTime;
     bool goingForward;
 }
 
@@ -25,7 +20,7 @@ namespace fsm
 
             fsm::priorState = fsm::state;
 
-            waitSensors_fsm::referenceTime = millis();
+            fsm::referenceTime = millis();
             waitSensors_fsm::goingForward = false;
             motors::brake();
         }
@@ -42,26 +37,26 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
 
-        waitSensors_fsm::currentTime = millis();
+        fsm::currentTime = millis();
 
         if (waitSensors_fsm::goingForward)
         {
-            if (waitSensors_fsm::currentTime - waitSensors_fsm::referenceTime > waitSensors_fsm::goForwardDuration)
+            if (fsm::currentTime - fsm::referenceTime > fsm::configValues->waitSensorsMoveForwardDuration)
             {
                 waitSensors_fsm::goingForward = false;
                 motors::brake();
                 DEBUG_PRINTLN("wait sensors: brake");
-                waitSensors_fsm::referenceTime = waitSensors_fsm::currentTime;
+                fsm::referenceTime = fsm::currentTime;
             }
         }
         else
         {
-            if (waitSensors_fsm::currentTime - waitSensors_fsm::referenceTime > waitSensors_fsm::waitMaxDuration)
+            if (fsm::currentTime - fsm::referenceTime > fsm::configValues->waitSensorsWaitMaxDuration)
             {
                 waitSensors_fsm::goingForward = true;
-                motors::goForward(waitSensors_fsm::goForwardSpeed);
+                motors::goForward(fsm::configValues->waitSensorsMoveForwardSpeed);
                 DEBUG_PRINTLN("wait sensors: go forward");
-                waitSensors_fsm::referenceTime = waitSensors_fsm::currentTime;
+                fsm::referenceTime = fsm::currentTime;
             }
         }
     }

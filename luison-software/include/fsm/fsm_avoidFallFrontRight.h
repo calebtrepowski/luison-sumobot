@@ -5,14 +5,6 @@
 
 namespace avoidFallFrontRight_fsm
 {
-    int reverseDuration = AVOID_FALL_FRONT_REVERSE_DURATION;  // ms
-    int maxTurnDuration = AVOID_FALL_FRONT_MAX_TURN_DURATION; // ms
-    uint_fast32_t currentTime;
-    const uint_fast8_t turnAngle = AVOID_FALL_FRONT_TURN_ANGLE; // °
-    uint_fast32_t referenceTime;
-    int reverseSpeed = AVOID_FALL_FRONT_REVERSE_SPEED; // ms
-    int turnSpeed = AVOID_FALL_FRONT_TURN_SPEED;       // ms
-
     void reverse();
     void turnLeft();
 
@@ -24,13 +16,13 @@ namespace avoidFallFrontRight_fsm
 
             fsm::priorInnerState = fsm::innerState;
 
-            referenceTime = millis();
-            motors::goBack(reverseSpeed);
+            fsm::referenceTime = millis();
+            motors::goBack(fsm::configValues->avoidFallFrontReverseSpeed);
         }
 
-        currentTime = millis();
+        fsm::currentTime = millis();
 
-        if (currentTime - referenceTime > reverseDuration)
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidFallFrontReverseDuration)
         {
             fsm::innerState = turnLeft;
         }
@@ -47,11 +39,11 @@ namespace avoidFallFrontRight_fsm
 #if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
 #endif
-            motors::turnLeft(turnSpeed);
+            motors::turnLeft(fsm::configValues->avoidFallFrontTurnSpeed);
 #if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
 #endif
-            referenceTime = millis();
+            fsm::referenceTime = millis();
         }
 
 #if defined(ENABLE_GYRO)
@@ -63,9 +55,9 @@ namespace avoidFallFrontRight_fsm
             return;
         }
 #endif
-        
-        currentTime = millis();
-        if (currentTime - referenceTime > maxTurnDuration)
+
+        fsm::currentTime = millis();
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidFallFrontMaxTurnDuration)
         {
             fsm::innerState = NULL;
             return;
@@ -87,6 +79,8 @@ namespace fsm
             fsm::priorInnerState = NULL;
             fsm::innerState = avoidFallFrontRight_fsm::reverse;
         }
+
+        // TODO: add transitions for proximity sensors
 
         if (fsm::innerState != NULL)
         {

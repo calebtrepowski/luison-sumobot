@@ -7,14 +7,6 @@
 
 namespace diagonalAttack_fsm
 {
-    int moveForwardSpeed = DIAGONAL_ATTACK_MOVE_FORWARD_SPEED;
-    int moveForwardDuration = DIAGONAL_ATTACK_MOVE_FORWARD_DURATION;
-    uint_fast32_t currentTime;
-    uint_fast32_t referenceTime;
-    int turnAimSpeedOuter = DIAGONAL_ATTACK_TURN_AIM_SPEED_OUTER;
-    int turnAimSpeedInner = DIAGONAL_ATTACK_TURN_AIM_SPEED_INNER;
-    int turnAimDuration = DIAGONAL_ATTACK_TURN_AIM_DURATION;
-
     void moveForward();
     void turnAim();
 
@@ -26,8 +18,8 @@ namespace diagonalAttack_fsm
 
             fsm::priorInnerState = fsm::innerState;
 
-            referenceTime = millis();
-            motors::goForward(moveForwardSpeed);
+            fsm::referenceTime = millis();
+            motors::goForward(fsm::configValues->diagonalAttackMoveForwardSpeed);
         }
 
         line::readValues();
@@ -40,9 +32,9 @@ namespace diagonalAttack_fsm
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
 
-        currentTime = millis();
+        fsm::currentTime = millis();
 
-        if (currentTime - referenceTime > moveForwardDuration)
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->diagonalAttackMoveForwardDuration)
         {
             fsm::innerState = turnAim;
         }
@@ -56,8 +48,9 @@ namespace diagonalAttack_fsm
 
             fsm::priorInnerState = fsm::innerState;
 
-            referenceTime = millis();
-            motors::goForward(turnAimSpeedInner, turnAimSpeedOuter);
+            fsm::referenceTime = millis();
+            motors::goForward(fsm::configValues->diagonalTurnAimSpeedInner,
+                              fsm::configValues->diagonalTurnAimSpeedOuter);
         }
 
         line::readValues();
@@ -72,9 +65,9 @@ namespace diagonalAttack_fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
 
-        currentTime = millis();
+        fsm::currentTime = millis();
 
-        if (currentTime - referenceTime > turnAimDuration)
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->diagonalTurnAimDuration)
         {
             fsm::innerState = NULL;
         }

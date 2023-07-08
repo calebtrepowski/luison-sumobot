@@ -6,6 +6,7 @@
 #include "bluetooth.h"
 #include "dipSwitch.h"
 #include "RGBLed.h"
+#include "onOffKillSwitch.h"
 
 /* fsm already includes line, proximity, motor and gyro */
 #include "fsm/fsm.h"
@@ -33,12 +34,24 @@ void setup()
     dipSwitch::setup();
     fsm::setup();
 
+    // push button for start routine
+
     menu.addOption("FSM", fsmSetup, fsmAction, fsmCleanup);
+    menu.addOption(
+        "Elegir madera", []()
+        {
+            fsm::configValues = &fsm::woodRing;
+        Terminal.println("Madera elegida!"); },
+        nullptr, nullptr);
+    menu.addOption(
+        "Elegir metal", []()
+        { fsm::configValues = &fsm::metalRing;Terminal.println("Metal elegido!"); },
+        nullptr, nullptr);
     menu.addOption("Sensores de linea", printReadingsSetup, printLineReadings, nullptr);
     menu.addOption("Sensores de proximidad", printReadingsSetup, printProximityReadings, nullptr);
     menu.addOption(
         "Motores: adelante", []()
-        { motors::goForward(NORMAL_SEARCH_SPEED); },
+        { motors::goForward(fsm::configValues->normalSearchSpeed); },
         []() {}, motors::brake);
     // menu.addOption(
     //     "Motores: atras", []()
@@ -55,7 +68,7 @@ void setup()
     // menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
 
-    calibrationMenu.addField("Normal search speed [1-6]", &normalSearch_fsm::normalSearchSpeed);
+    calibrationMenu.addField("Normal search speed [1-6]", &fsm::configValues->normalSearchSpeed);
 
     /* Attack front */
     // calibrationMenu.addField("AF: full gas speed [1-6]", &attackFront_fsm::fullGasSpeed);
@@ -64,15 +77,16 @@ void setup()
     // calibrationMenu.addField("AF: lift off time [ms]", &attackFront_fsm::liftOffTime);
 
     /* Diagonal Attack */
-    // calibrationMenu.addField("DA: forward speed [1-6]", &diagonalAttack_fsm::moveForwardSpeed);
-    // calibrationMenu.addField("DA: forward duration [ms]", &diagonalAttack_fsm::moveForwardDuration);
-    // calibrationMenu.addField("DA: turn speed outer [1-6]", &diagonalAttack_fsm::turnAimSpeedOuter);
-    // calibrationMenu.addField("DA: turn speed inner [1-6]", &diagonalAttack_fsm::turnAimSpeedInner);
-    // calibrationMenu.addField("DA: turn duration [ms]", &diagonalAttack_fsm::turnAimDuration);
+    // calibrationMenu.addField("DA: forward speed [1-6]", &fsm::configValues->diagonalAttackMoveForwardSpeed);
+    // calibrationMenu.addField("DA: forward duration [ms]", &fsm::configValues->diagonalAttackMoveForwardDuration);
+    // calibrationMenu.addField("DA: turn speed outer [1-6]", &fsm::configValues->diagonalTurnAimSpeedOuter);
+    // calibrationMenu.addField("DA: turn speed inner [1-6]", &fsm::configValues->diagonalTurnAimSpeedInner);
+    // calibrationMenu.addField("DA: turn duration [ms]", &fsm::configValues->diagonalTurnAimDuration);
 
-    calibrationMenu.addField("WS: forward speed [1-6]", &waitSensors_fsm::goForwardSpeed);
-    calibrationMenu.addField("WS: forward duration [ms]", &waitSensors_fsm::goForwardDuration);
-    calibrationMenu.addField("WS: wait duration [ms]", &waitSensors_fsm::waitMaxDuration);
+    /* Wait sensors */
+    // calibrationMenu.addField("WS: forward speed [1-6]", &fsm::configValues->waitSensorsMoveForwardSpeed);
+    // calibrationMenu.addField("WS: forward duration [ms]", &fsm::configValues->waitSensorsMoveForwardDuration);
+    // calibrationMenu.addField("WS: wait duration [ms]", &fsm::configValues->waitSensorsWaitMaxDuration);
 
     RGBLed::showYellow();
 }
@@ -85,18 +99,17 @@ void loop()
 void fsmSetup()
 {
     int initialStrategy = dipSwitch::readInt();
-    switch (initialStrategy)
-    {
-    case 1:
-        fsm::state = fsm::diagonalAttack;
-        break;
-    case 2:
-        fsm::state = fsm::waitSensors;
-        break;
-    default:
-        fsm::state = fsm::normalSearch;
-        break;
-    }
+    fsm::initialAction(initialStrategy);
+    // RGBLed::showRed();
+    // delay(1000);
+    // RGBLed::turnOff();
+    // delay(1000);
+    // RGBLed::showRed();
+    // delay(1000);
+    // RGBLed::turnOff();
+    // delay(1000);
+    // RGBLed::showRed();
+    // delay(1000);
     RGBLed::showRed();
 }
 

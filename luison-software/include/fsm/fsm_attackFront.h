@@ -7,11 +7,6 @@
 
 namespace attackFront_fsm
 {
-    int fullGasSpeed = ATTACK_FRONT_FULL_GAS_SPEED;
-    int fullGasTime = ATTACK_FRONT_FULL_GAS_TIME;
-    int liftOffSpeed = ATTACK_FRONT_LIFT_OFF_SPEED;
-    int liftOffTime = ATTACK_FRONT_LIFT_OFF_TIME;
-    uint_fast32_t currentTime;
     uint_fast8_t currentSpeed;
 }
 
@@ -19,15 +14,14 @@ namespace fsm
 {
     void attackFront()
     {
-        using namespace attackFront_fsm;
         if (fsm::state != fsm::priorState)
         {
             DEBUG_PRINTLN("attack front");
 
             fsm::priorState = fsm::state;
 
-            motors::goForward(fullGasSpeed);
-            currentSpeed = fullGasSpeed;
+            motors::goForward(fsm::configValues->attackFrontFullGasSpeed);
+            attackFront_fsm::currentSpeed = fsm::configValues->attackFrontFullGasSpeed;
         }
 
         line::readValues();
@@ -47,18 +41,18 @@ namespace fsm
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
 
-        currentTime = millis();
-        if (currentTime % liftOffTime > fullGasTime && currentSpeed == fullGasSpeed)
+        fsm::currentTime = millis();
+        if (fsm::currentTime % fsm::configValues->attackFrontLiftOffTime > fsm::configValues->attackFrontFullGasTime && attackFront_fsm::currentSpeed == fsm::configValues->attackFrontFullGasSpeed)
         {
             DEBUG_PRINTLN("lift off speed");
-            motors::goForward(liftOffSpeed);
-            currentSpeed = liftOffSpeed;
+            motors::goForward(fsm::configValues->attackFrontLiftOffSpeed);
+            attackFront_fsm::currentSpeed = fsm::configValues->attackFrontLiftOffSpeed;
         }
-        else if (currentSpeed == liftOffSpeed)
+        else if (attackFront_fsm::currentSpeed == fsm::configValues->attackFrontLiftOffSpeed)
         {
             DEBUG_PRINTLN("full gas speed");
-            motors::goForward(fullGasSpeed);
-            currentSpeed = fullGasSpeed;
+            motors::goForward(fsm::configValues->attackFrontFullGasSpeed);
+            attackFront_fsm::currentSpeed = fsm::configValues->attackFrontFullGasSpeed;
         }
     }
 }

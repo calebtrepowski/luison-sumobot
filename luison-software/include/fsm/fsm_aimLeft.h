@@ -5,16 +5,6 @@
 
 #ifdef ENABLE_STATE_AIM_LEFT
 
-namespace aimLeft_fsm
-{
-    const uint_fast8_t maxTurnDuration = AIM_SIDE_MAX_TURN_DURATION; // ms
-    const uint_fast8_t turnAngle = AIM_SIDE_TURN_ANGLE;              // °
-    uint_fast32_t referenceTime;
-    uint_fast32_t currentTime;
-    const uint_fast8_t aimSpeedOuter = AIM_SIDE_SPEED_OUTER;
-    const uint_fast8_t aimSpeedInner = AIM_SIDE_SPEED_INNER;
-}
-
 namespace fsm
 {
     void aimLeft()
@@ -28,11 +18,11 @@ namespace fsm
 #if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
 #endif
-            motors::turnLeft(aimLeft_fsm::aimSpeedOuter);
+            motors::turnLeft(fsm::configValues->aimSideSpeedOuter);
 #if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
 #endif
-            aimLeft_fsm::referenceTime = millis();
+            fsm::referenceTime = millis();
         }
 
         line::readValues();
@@ -57,9 +47,9 @@ namespace fsm
         }
 #endif
 
-        aimLeft_fsm::currentTime = millis();
+        fsm::currentTime = millis();
 
-        if (aimLeft_fsm::currentTime - aimLeft_fsm::referenceTime > aimLeft_fsm::maxTurnDuration)
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->aimSideMaxTurnDuration)
         {
             fsm::state = normalSearch;
             return;
