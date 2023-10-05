@@ -1,18 +1,15 @@
-#ifndef _fsm_avoid_back_h_
-#define _fsm_avoid_back_h_
-
+#ifndef _fsm_bullet_h
 #include "fsm.h"
 
 namespace fsm
 {
-    void avoidBack()
+    void bullet()
     {
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN("avoid Back");
+            DEBUG_PRINTLN("bullet");
             fsm::priorState = fsm::state;
-            motors::turnLeft(configValues->avoidBackTurnSpeed);
-            fsm::referenceTime = millis();
+            motors::goForward(configValues->bulletSpeed);
         }
 
         line::readValues();
@@ -26,14 +23,6 @@ namespace fsm
         TRANSITION_AIM_FRONT_LEFT
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
-
-        fsm::currentTime = millis();
-
-        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidBackMaxTurnDuration)
-        {
-            fsm::state = fsm::defaultExploringState;
-            return;
-        }
     }
 }
 

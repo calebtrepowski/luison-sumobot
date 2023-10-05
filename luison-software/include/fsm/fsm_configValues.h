@@ -5,6 +5,8 @@ namespace fsm
 {
     struct ConfigValues
     {
+        int normalInitialSearchSpeed;
+        int normalInitialSearchDuration;
         int normalSearchSpeed;
 
         int attackFrontFullGasTime; // ms
@@ -35,20 +37,31 @@ namespace fsm
         int waitSensorsMoveForwardDuration; // ms
         int waitSensorsWaitMaxDuration;     // ms
 
-        int avoidBackInnerSpeed;
-        int avoidBackOuterSpeed;
-        int avoidBackMaxDuration; // ms
+        int avoidBackTurnSpeed;
+        int avoidBackMaxTurnDuration; // ms
+
+        int avoidBackInJInnerSpeed;
+        int avoidBackInJOuterSpeed;
+        int avoidBackInJMaxTurnDuration;
+
+        int avoidBackInJFrontInnerSpeed;
+        int avoidBackInJFrontOuterSpeed;
+        int avoidBackInJFrontMaxTurnDuration;
+
+        int bulletSpeed;
     } metalRing, woodRing;
 
     void initializeValues(void)
     {
         metalRing = {
-            .normalSearchSpeed = 3,
+            .normalInitialSearchSpeed = 1,
+            .normalInitialSearchDuration = 50,
+            .normalSearchSpeed = 1,
 
             .attackFrontFullGasTime = 500,
             .attackFrontLiftOffTime = 1000,
             .attackFrontFullGasSpeed = 6,
-            .attackFrontLiftOffSpeed = 4,
+            .attackFrontLiftOffSpeed = 6,
 
             .aimFrontSideMaxTurnDuration = 10,
             .aimFrontSideSpeedOuter = 6,
@@ -58,10 +71,10 @@ namespace fsm
             .aimSideSpeedOuter = 6,
             .aimSideSpeedInner = 1,
 
-            .avoidFallFrontReverseDuration = 115,
-            .avoidFallFrontMaxTurnDuration = 135,
-            .avoidFallFrontReverseSpeed = 6,
-            .avoidFallFrontTurnSpeed = 6,
+            .avoidFallFrontReverseDuration = 200,
+            .avoidFallFrontMaxTurnDuration = 50,
+            .avoidFallFrontReverseSpeed = 4,
+            .avoidFallFrontTurnSpeed = 3,
 
             .diagonalAttackMoveForwardSpeed = 6,
             .diagonalAttackMoveForwardDuration = 200,
@@ -71,13 +84,24 @@ namespace fsm
 
             .waitSensorsMoveForwardSpeed = 6,
             .waitSensorsMoveForwardDuration = 50,
-            .waitSensorsWaitMaxDuration = 3000,
+            .waitSensorsWaitMaxDuration = 2000,
 
-            .avoidBackInnerSpeed = 1,
-            .avoidBackOuterSpeed = 6,
-            .avoidBackMaxDuration = 500};
+            .avoidBackTurnSpeed = 6,
+            .avoidBackMaxTurnDuration = 225,
+
+            .avoidBackInJInnerSpeed = 6,
+            .avoidBackInJOuterSpeed = 2,
+            .avoidBackInJMaxTurnDuration = 300,
+
+            .avoidBackInJFrontInnerSpeed = 6,
+            .avoidBackInJFrontOuterSpeed = 2,
+            .avoidBackInJFrontMaxTurnDuration = 300,
+
+            .bulletSpeed = 6};
 
         woodRing = {
+            .normalInitialSearchSpeed = 2,
+            .normalInitialSearchDuration = 10,
             .normalSearchSpeed = 2,
 
             .attackFrontFullGasTime = 500,
@@ -108,9 +132,8 @@ namespace fsm
             .waitSensorsMoveForwardDuration = 100,
             .waitSensorsWaitMaxDuration = 1000,
 
-            .avoidBackInnerSpeed = 1,
-            .avoidBackOuterSpeed = 3,
-            .avoidBackMaxDuration = 500};
+            .avoidBackTurnSpeed = 6,
+            .avoidBackMaxTurnDuration = 200};
     }
 }
 

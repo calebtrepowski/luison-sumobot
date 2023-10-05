@@ -147,6 +147,18 @@ namespace fsm
     void avoidBack();
 #endif
 
+#ifdef ENABLE_STRATEGY_AVOID_BACK_IN_J
+    void avoidBackInJ(void);
+#endif
+
+#ifdef ENABLE_STRATEGY_AVOID_BACK_IN_J_FRONT
+    void avoidBackInJFront(void);
+#endif
+
+#ifdef ENABLE_STRATEGY_BULLET
+    void bullet();
+#endif
+
     void setup()
     {
         proximity::setup();
@@ -183,20 +195,16 @@ namespace fsm
             fsm::state = fsm::avoidBack;
             break;
         case 4:
-            fsm::configValues = &fsm::metalRing;
-            fsm::state = fsm::normalSearch;
+            fsm::defaultExploringState = fsm::waitSensors;
+            fsm::state = fsm::avoidBackInJ;
             break;
         case 5:
-            fsm::configValues = &fsm::metalRing;
-            fsm::state = fsm::diagonalAttack;
+            fsm::defaultExploringState = fsm::waitSensors;
+            fsm::state = fsm::avoidBackInJFront;
             break;
         case 6:
-            fsm::configValues = &fsm::metalRing;
-            fsm::state = fsm::waitSensors;
-            break;
-        case 7:
-            fsm::configValues = &fsm::metalRing;
-            fsm::state = fsm::avoidBack;
+            fsm::defaultExploringState = fsm::normalSearch;
+            fsm::state = fsm::bullet;
             break;
         default:
             fsm::defaultExploringState = fsm::normalSearch;
@@ -234,5 +242,8 @@ namespace fsm
 #include "fsm_diagonalKickBack.h"
 #include "fsm_waitSensors.h"
 #include "fsm_avoidBack.h"
+#include "fsm_avoidBackInJ.h"
+#include "fsm_avoidBackInJFront.h"
+#include "fsm_bullet.h"
 
 #endif

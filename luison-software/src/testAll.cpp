@@ -68,7 +68,19 @@ void setup()
     // menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
 
-    calibrationMenu.addField("Normal search speed [1-6]", &fsm::configValues->normalSearchSpeed);
+    calibrationMenu.addField("Norm srch speed [1-6]", &fsm::configValues->normalSearchSpeed);
+    // calibrationMenu.addField("Norm srch init speed [1-6]", &fsm::configValues->normalInitialSearchSpeed);
+    calibrationMenu.addField("Norm srch init dur [ms]", &fsm::configValues->normalInitialSearchDuration);
+
+    /* Avoid fall */
+    calibrationMenu.addField("av fall: rev dur [ms]", &fsm::configValues->avoidFallFrontReverseDuration);
+    calibrationMenu.addField("av fall: rev speed [1-6]", &fsm::configValues->avoidFallFrontReverseSpeed);
+    calibrationMenu.addField("av fall: turn dur [ms]", &fsm::configValues->avoidFallFrontMaxTurnDuration);
+    calibrationMenu.addField("av fall: turn speed [ms]", &fsm::configValues->avoidFallFrontTurnSpeed);
+
+    /* Aim side */
+    // calibrationMenu.addField("aim s: trn spd  [1-6]", &fsm::configValues->aimSideSpeedOuter);
+    // calibrationMenu.addField("aim s: trn dur  [ms]", &fsm::configValues->aimSideMaxTurnDuration);
 
     /* Attack front */
     // calibrationMenu.addField("AF: full gas speed [1-6]", &attackFront_fsm::fullGasSpeed);
@@ -87,6 +99,15 @@ void setup()
     // calibrationMenu.addField("WS: forward speed [1-6]", &fsm::configValues->waitSensorsMoveForwardSpeed);
     // calibrationMenu.addField("WS: forward duration [ms]", &fsm::configValues->waitSensorsMoveForwardDuration);
     // calibrationMenu.addField("WS: wait duration [ms]", &fsm::configValues->waitSensorsWaitMaxDuration);
+
+    /* Avoid back */
+    // calibrationMenu.addField("av bck: trn spd [1-6]", &fsm::configValues->avoidBackTurnSpeed);
+    // calibrationMenu.addField("av bck: trn drtn [ms]", &fsm::configValues->avoidBackMaxTurnDuration);
+
+    /* Avoid back in J*/
+    // calibrationMenu.addField("av bck J: trn spd innr [1-6]", &fsm::configValues->avoidBackInJInnerSpeed);
+    // calibrationMenu.addField("av bck J: trn spd outr [1-6]", &fsm::configValues->avoidBackInJOuterSpeed);
+    // calibrationMenu.addField("av bck J: trn drtn [ms]", &fsm::configValues->avoidBackInJMaxTurnDuration);
 
     RGBLed::showYellow();
 }

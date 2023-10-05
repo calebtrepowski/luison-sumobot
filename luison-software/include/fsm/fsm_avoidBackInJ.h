@@ -1,17 +1,17 @@
-#ifndef _fsm_avoid_back_h_
-#define _fsm_avoid_back_h_
+#ifndef _avoid_back_in_j_h_
+#define _avoid_back_in_j_h_
 
 #include "fsm.h"
 
 namespace fsm
 {
-    void avoidBack()
+    void avoidBackInJ(void)
     {
         if (fsm::state != fsm::priorState)
         {
-            DEBUG_PRINTLN("avoid Back");
+            DEBUG_PRINTLN("avoid back in J");
             fsm::priorState = fsm::state;
-            motors::turnLeft(configValues->avoidBackTurnSpeed);
+            motors::goBack(configValues->avoidBackInJInnerSpeed, configValues->avoidBackInJOuterSpeed);
             fsm::referenceTime = millis();
         }
 
@@ -27,9 +27,10 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
 
+
         fsm::currentTime = millis();
 
-        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidBackMaxTurnDuration)
+        if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidBackInJMaxTurnDuration)
         {
             fsm::state = fsm::defaultExploringState;
             return;

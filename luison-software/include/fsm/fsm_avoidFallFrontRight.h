@@ -39,7 +39,7 @@ namespace avoidFallFrontRight_fsm
 #if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
 #endif
-            motors::turnLeft(fsm::configValues->avoidFallFrontTurnSpeed);
+            motors::turnRight(fsm::configValues->avoidFallFrontTurnSpeed);
 #if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
 #endif
@@ -88,7 +88,7 @@ namespace fsm
             return;
         }
 
-        fsm::state = fsm::normalSearch;
+        fsm::state = fsm::defaultExploringState;
     }
 }
 
