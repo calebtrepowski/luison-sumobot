@@ -46,7 +46,7 @@ namespace fsm
 
             if (abs(gyroscope::currentAngleZ - gyroscope::referenceAngleZ) > aimFrontLeft_fsm::turnAngle)
             {
-                fsm::state = normalSearch;
+                fsm::state = fsm::defaultExploringState;
                 return;
             }
         }
@@ -56,7 +56,7 @@ namespace fsm
 
         if (fsm::currentTime - fsm::referenceTime > fsm::configValues->aimFrontSideMaxTurnDuration)
         {
-            fsm::state = normalSearch;
+            fsm::state = fsm::defaultExploringState;
             return;
         }
     }

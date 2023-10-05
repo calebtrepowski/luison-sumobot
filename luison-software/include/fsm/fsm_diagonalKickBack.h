@@ -36,7 +36,7 @@ namespace fsm
         currentTime = millis();
         if (currentTime - referenceTime > maxReverseTime)
         {
-            fsm::state = fsm::normalSearch;
+            fsm::state = fsm::defaultExploringState;
             return;
         }
     }

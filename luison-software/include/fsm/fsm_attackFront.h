@@ -31,7 +31,7 @@ namespace fsm
         proximity::readStates();
         if (OPPONENT_NOT_DETECTED_FRONT_CENTER)
         {
-            fsm::state = fsm::normalSearch;
+            fsm::state = fsm::defaultExploringState;
             return;
         }
 

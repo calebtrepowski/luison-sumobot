@@ -31,7 +31,7 @@ namespace fsm
 
         if (fsm::currentTime - fsm::referenceTime > fsm::configValues->avoidBackMaxDuration)
         {
-            fsm::state = normalSearch;
+            fsm::state = fsm::defaultExploringState;
             return;
         }
     }

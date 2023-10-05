@@ -16,7 +16,7 @@ namespace fsm
     typedef void (*STATE_HANDLER_T)();
     typedef void (*INNER_STATE_HANDLER_T)();
 
-    volatile STATE_HANDLER_T priorState, state;
+    volatile STATE_HANDLER_T priorState, state, defaultExploringState;
     volatile INNER_STATE_HANDLER_T priorInnerState, innerState;
 
     ConfigValues *configValues = &woodRing;
@@ -167,19 +167,19 @@ namespace fsm
         switch (initialStrategy)
         {
         case 0:
-            fsm::configValues = &fsm::woodRing;
+            fsm::defaultExploringState = fsm::normalSearch;
             fsm::state = fsm::normalSearch;
             break;
         case 1:
-            fsm::configValues = &fsm::woodRing;
+            fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::diagonalAttack;
             break;
         case 2:
-            fsm::configValues = &fsm::woodRing;
+            fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::waitSensors;
             break;
         case 3:
-            fsm::configValues = &fsm::woodRing;
+            fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::avoidBack;
             break;
         case 4:
@@ -199,7 +199,7 @@ namespace fsm
             fsm::state = fsm::avoidBack;
             break;
         default:
-            fsm::configValues = &fsm::woodRing;
+            fsm::defaultExploringState = fsm::normalSearch;
             fsm::state = fsm::normalSearch;
             break;
         }

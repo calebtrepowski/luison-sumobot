@@ -93,7 +93,7 @@ namespace fsm
             return;
         }
 
-        fsm::state = fsm::normalSearch;
+        fsm::state = fsm::defaultExploringState;
     }
 }
 
