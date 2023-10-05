@@ -61,15 +61,15 @@ const uint_fast8_t MOTOR_B_PWM = 16;
 const uint_fast8_t MOTOR_B_ENABLE = 4;
 
 #elif defined(DRIVER_MEIMOTOR)
-const uint_fast8_t MOTOR_A_PWM = 5;
-const uint_fast8_t MOTOR_A_OUTPUT_1 = 18;
-const uint_fast8_t MOTOR_A_OUTPUT_2 = 19;
+const uint_fast8_t MOTOR_A_PWM = 17;
+const uint_fast8_t MOTOR_A_OUTPUT_1 = 6;
+const uint_fast8_t MOTOR_A_OUTPUT_2 = 16;
 
-const uint_fast8_t MOTOR_B_PWM = 16;
-const uint_fast8_t MOTOR_B_OUTPUT_1 = 4;
-const uint_fast8_t MOTOR_B_OUTPUT_2 = 2;
+const uint_fast8_t MOTOR_B_PWM = 18;
+const uint_fast8_t MOTOR_B_OUTPUT_1 = 15;
+const uint_fast8_t MOTOR_B_OUTPUT_2 = 4;
 // const uint_fast8_t MOTOR_POWER_SENSOR = 17;
-const uint_fast8_t MOTOR_CURRENT_DETECTION = 15;
+// const uint_fast8_t MOTOR_CURRENT_DETECTION = 15;
 
 #endif
 
