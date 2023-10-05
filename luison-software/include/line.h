@@ -49,12 +49,12 @@ namespace line
         // backLeft.value = adc1_get_raw(backLeft.channel);
     }
 
-    const char* valuesToString()
+    const char *valuesToString()
     {
         std::ostringstream aux;
-        aux << "-----------\n";
-        aux << line::frontLeft.value << "\t" << line::frontRight.value << "\n";
-        aux << line::backLeft.value << "\t" << line::backRight.value << "\n-----------";
+        // aux << "-----------\n";
+        aux << line::frontLeft.value << ' ' << line::frontRight.value /*  << "\n" */;
+        // aux << line::backLeft.value << "\t" << line::backRight.value /* << "\n-----------" */;
 
         return aux.str().data();
     }
