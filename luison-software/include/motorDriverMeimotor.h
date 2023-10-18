@@ -15,14 +15,16 @@ namespace motors
     const uint_fast8_t MOTOR_A_PWM_CHANNEL = 0;
     const uint_fast8_t MOTOR_B_PWM_CHANNEL = 1;
 
+    const uint_fast8_t STEP_DURATION_MS = 100;
+
     struct Motor
     {
         uint_fast8_t PWM_channel;
         uint_fast8_t PWM_pin;
         uint_fast8_t OUTPUT_1;
         uint_fast8_t OUTPUT_2;
-        uint_fast8_t targetSpeed;  // target speed over 2^RESOLUTION steps
-        uint_fast8_t currentSpeed; // current speed over 2^RESOLUTION steps
+        int_fast8_t targetSpeed;  // target speed over 2^RESOLUTION steps (sign indicates direction)
+        int_fast8_t currentSpeed; // current speed over 2^RESOLUTION steps (sign indicates direction)
         TaskHandle_t updateSpeedHandle;
     } A, B;
 
@@ -54,16 +56,15 @@ namespace motors
                 else if (A.targetSpeed * A.currentSpeed < 0)
                 {
                     DEBUG_PRINTLN("cambiando direccion motor A");
-                    ledcWrite(A.PWM_channel, 0);
-                    A.currentSpeed = 0;
-                    A.targetSpeed = A.targetSpeed > 0 ? A.targetSpeed : -A.targetSpeed;
+                    ledcWrite(A.PWM_channel, 1);
+                    A.currentSpeed = A.targetSpeed / abs(A.targetSpeed);
                     increaseSpeed = true;
                     referenceTime = millis();
                 }
-                else if (A.targetSpeed < A.currentSpeed)
+                else if (abs(A.targetSpeed) < abs(A.currentSpeed))
                 {
                     DEBUG_PRINTLN("reduciendo velocidad motor A");
-                    ledcWrite(A.PWM_channel, A.targetSpeed);
+                    ledcWrite(A.PWM_channel, abs(A.targetSpeed));
                     A.currentSpeed = A.targetSpeed;
                 }
                 else
@@ -73,25 +74,32 @@ namespace motors
                 }
             }
 
-            if (increaseSpeed && A.currentSpeed < A.targetSpeed)
+            if (increaseSpeed && abs(A.currentSpeed) < abs(A.targetSpeed))
             {
                 currentTime = millis();
-                if (currentTime - referenceTime > 1000)
+                if (currentTime - referenceTime > STEP_DURATION_MS)
                 {
                     DEBUG_PRINTLN("aumentando velocidad motor A");
-                    ++A.currentSpeed;
-                    ledcWrite(A.PWM_channel, A.currentSpeed);
+                    if (A.targetSpeed < A.currentSpeed)
+                    {
+                        --A.currentSpeed;
+                    }
+                    else
+                    {
+                        ++A.currentSpeed;
+                    }
+                    DEBUG_PRINTLN(A.currentSpeed);
+                    ledcWrite(A.PWM_channel, abs(A.currentSpeed));
                     referenceTime = currentTime;
                 }
-                else
-                {
-                    increaseSpeed = false;
-                }
+            }
+            else
+            {
+                increaseSpeed = false;
             }
             vTaskDelay(pdMS_TO_TICKS(1));
         }
     }
-
     void motorBUpdateSpeed(void *pvParameters)
     {
         bool increaseSpeed = false;
@@ -113,16 +121,15 @@ namespace motors
                 else if (B.targetSpeed * B.currentSpeed < 0)
                 {
                     DEBUG_PRINTLN("cambiando direccion motor B");
-                    ledcWrite(B.PWM_channel, 0);
-                    B.currentSpeed = 0;
-                    B.targetSpeed = B.targetSpeed > 0 ? B.targetSpeed : -B.targetSpeed;
+                    ledcWrite(B.PWM_channel, 1);
+                    B.currentSpeed = B.targetSpeed / abs(B.targetSpeed);
                     increaseSpeed = true;
                     referenceTime = millis();
                 }
-                else if (B.targetSpeed < B.currentSpeed)
+                else if (abs(B.targetSpeed) < abs(B.currentSpeed))
                 {
                     DEBUG_PRINTLN("reduciendo velocidad motor B");
-                    ledcWrite(B.PWM_channel, B.targetSpeed);
+                    ledcWrite(B.PWM_channel, abs(B.targetSpeed));
                     B.currentSpeed = B.targetSpeed;
                 }
                 else
@@ -132,20 +139,28 @@ namespace motors
                 }
             }
 
-            if (increaseSpeed && B.currentSpeed < B.targetSpeed)
+            if (increaseSpeed && abs(B.currentSpeed) < abs(B.targetSpeed))
             {
                 currentTime = millis();
-                if (currentTime - referenceTime > 1000)
+                if (currentTime - referenceTime > STEP_DURATION_MS)
                 {
                     DEBUG_PRINTLN("aumentando velocidad motor B");
-                    ++B.currentSpeed;
-                    ledcWrite(B.PWM_channel, B.currentSpeed);
+                    if (B.targetSpeed < B.currentSpeed)
+                    {
+                        --B.currentSpeed;
+                    }
+                    else
+                    {
+                        ++B.currentSpeed;
+                    }
+                    DEBUG_PRINTLN(B.currentSpeed);
+                    ledcWrite(B.PWM_channel, abs(B.currentSpeed));
                     referenceTime = currentTime;
                 }
-                else
-                {
-                    increaseSpeed = false;
-                }
+            }
+            else
+            {
+                increaseSpeed = false;
             }
             vTaskDelay(pdMS_TO_TICKS(1));
         }
@@ -206,11 +221,11 @@ namespace motors
     {
         DEBUG_PRINTLN("go forward common speed");
 
-        digitalWrite(A.OUTPUT_1, LOW);
-        digitalWrite(A.OUTPUT_2, HIGH);
+        digitalWrite(A.OUTPUT_2, LOW);
+        digitalWrite(A.OUTPUT_1, HIGH);
 
-        digitalWrite(B.OUTPUT_1, LOW);
-        digitalWrite(B.OUTPUT_2, HIGH);
+        digitalWrite(B.OUTPUT_2, LOW);
+        digitalWrite(B.OUTPUT_1, HIGH);
 
         xTaskNotify(A.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
         xTaskNotify(B.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
@@ -218,15 +233,14 @@ namespace motors
 
     void goForward(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
-
         // ledcWrite(A.PWM_channel, speedMotorA);
         // ledcWrite(B.PWM_channel, speedMotorB);
 
-        digitalWrite(A.OUTPUT_1, LOW);
-        digitalWrite(A.OUTPUT_2, HIGH);
+        digitalWrite(A.OUTPUT_2, LOW);
+        digitalWrite(A.OUTPUT_1, HIGH);
 
-        digitalWrite(B.OUTPUT_1, LOW);
-        digitalWrite(B.OUTPUT_2, HIGH);
+        digitalWrite(B.OUTPUT_2, LOW);
+        digitalWrite(B.OUTPUT_1, HIGH);
 
         xTaskNotify(A.updateSpeedHandle, OFFSET + speedMotorA, eSetValueWithOverwrite);
         xTaskNotify(B.updateSpeedHandle, OFFSET + speedMotorB, eSetValueWithOverwrite);
@@ -234,14 +248,16 @@ namespace motors
 
     void goBack(const uint_fast8_t commonSpeed)
     {
+        DEBUG_PRINTLN("go back common speed");
+
         // ledcWrite(A.PWM_channel, commonSpeed);
         // ledcWrite(B.PWM_channel, commonSpeed);
 
-        digitalWrite(A.OUTPUT_2, LOW);
-        digitalWrite(A.OUTPUT_1, HIGH);
+        digitalWrite(A.OUTPUT_1, LOW);
+        digitalWrite(A.OUTPUT_2, HIGH);
 
-        digitalWrite(B.OUTPUT_2, LOW);
-        digitalWrite(B.OUTPUT_1, HIGH);
+        digitalWrite(B.OUTPUT_1, LOW);
+        digitalWrite(B.OUTPUT_2, HIGH);
 
         xTaskNotify(A.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
         xTaskNotify(B.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
@@ -249,11 +265,11 @@ namespace motors
 
     void goBack(const uint_fast8_t speedMotorA, const uint_fast8_t speedMotorB)
     {
-        digitalWrite(A.OUTPUT_2, LOW);
-        digitalWrite(A.OUTPUT_1, HIGH);
+        digitalWrite(A.OUTPUT_1, LOW);
+        digitalWrite(A.OUTPUT_2, HIGH);
 
-        digitalWrite(B.OUTPUT_2, LOW);
-        digitalWrite(B.OUTPUT_1, HIGH);
+        digitalWrite(B.OUTPUT_1, LOW);
+        digitalWrite(B.OUTPUT_2, HIGH);
 
         xTaskNotify(A.updateSpeedHandle, OFFSET - speedMotorA, eSetValueWithOverwrite);
         xTaskNotify(B.updateSpeedHandle, OFFSET - speedMotorB, eSetValueWithOverwrite);
@@ -261,32 +277,26 @@ namespace motors
 
     void turnRight(const uint_fast8_t commonSpeed)
     {
-        // ledcWrite(A.PWM_channel, commonSpeed);
-        // ledcWrite(B.PWM_channel, commonSpeed);
-
         digitalWrite(A.OUTPUT_2, LOW);
         digitalWrite(A.OUTPUT_1, HIGH);
 
         digitalWrite(B.OUTPUT_1, LOW);
         digitalWrite(B.OUTPUT_2, HIGH);
 
-        xTaskNotify(A.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
-        xTaskNotify(B.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
+        xTaskNotify(A.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
+        xTaskNotify(B.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
     }
 
     void turnLeft(const uint_fast8_t commonSpeed)
     {
-        // ledcWrite(A.PWM_channel, commonSpeed);
-        // ledcWrite(B.PWM_channel, commonSpeed);
+        digitalWrite(A.OUTPUT_1, LOW);
+        digitalWrite(A.OUTPUT_2, HIGH);
 
         digitalWrite(B.OUTPUT_2, LOW);
         digitalWrite(B.OUTPUT_1, HIGH);
 
-        digitalWrite(A.OUTPUT_1, LOW);
-        digitalWrite(A.OUTPUT_2, HIGH);
-
-        xTaskNotify(A.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
-        xTaskNotify(B.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
+        xTaskNotify(A.updateSpeedHandle, OFFSET - commonSpeed, eSetValueWithOverwrite);
+        xTaskNotify(B.updateSpeedHandle, OFFSET + commonSpeed, eSetValueWithOverwrite);
     }
 }
 
