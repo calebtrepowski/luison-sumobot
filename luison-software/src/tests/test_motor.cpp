@@ -4,18 +4,25 @@
 
 #include "pinNumbers.h"
 #include "motorDriver.h"
+#include "debugUtils.h"
 
 void testForward();
 void testBack();
 
 void setup()
 {
+    DEBUG_BEGIN(MONITOR_SPEED);
+    DEBUG_PRINTLN(pcTaskGetName(NULL));
     motors::setup();
 }
 
 void loop()
 {
-    testForward();
+    motors::goForward(5);
+    delay(6000);
+    motors::brake();
+    delay(3000);
+    // testForward();
     // testBack();
 }
 
