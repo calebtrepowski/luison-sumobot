@@ -23,8 +23,7 @@ namespace fsm
             }
 #endif
             fsm::referenceTime = millis();
-            motors::goForward(fsm::configValues->aimFrontSideSpeedInner,
-                              fsm::configValues->aimFrontSideSpeedOuter);
+            motors::turnLeft(fsm::configValues->aimFrontSideSpeedOuter);
         }
 
         line::readValues();

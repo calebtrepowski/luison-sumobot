@@ -15,7 +15,7 @@ namespace motors
     const uint_fast8_t MOTOR_A_PWM_CHANNEL = 0;
     const uint_fast8_t MOTOR_B_PWM_CHANNEL = 1;
 
-    const uint_fast8_t STEP_DURATION_MS = 100;
+    int STEP_DURATION_MS = 15;
 
     struct Motor
     {
@@ -29,8 +29,8 @@ namespace motors
     } A, B;
 
     /*
-    motor A: right
-    motor B: left
+    motor A: left
+    motor B: right
     */
 
 #define CORE_0 0
@@ -56,7 +56,7 @@ namespace motors
                 else if (A.targetSpeed * A.currentSpeed < 0)
                 {
                     DEBUG_PRINTLN("cambiando direccion motor A");
-                    ledcWrite(A.PWM_channel, 1);
+                    ledcWrite(A.PWM_channel, 3);
                     A.currentSpeed = A.targetSpeed / abs(A.targetSpeed);
                     increaseSpeed = true;
                     referenceTime = millis();
@@ -121,7 +121,7 @@ namespace motors
                 else if (B.targetSpeed * B.currentSpeed < 0)
                 {
                     DEBUG_PRINTLN("cambiando direccion motor B");
-                    ledcWrite(B.PWM_channel, 1);
+                    ledcWrite(B.PWM_channel, 3);
                     B.currentSpeed = B.targetSpeed / abs(B.targetSpeed);
                     increaseSpeed = true;
                     referenceTime = millis();

@@ -38,12 +38,6 @@ void setup()
 
     menu.addOption("FSM", fsmSetup, fsmAction, fsmCleanup);
     menu.addOption(
-        "Elegir madera", []()
-        {
-            fsm::configValues = &fsm::woodRing;
-        Terminal.println("Madera elegida!"); },
-        nullptr, nullptr);
-    menu.addOption(
         "Elegir metal", []()
         { fsm::configValues = &fsm::metalRing;Terminal.println("Metal elegido!"); },
         nullptr, nullptr);
@@ -67,20 +61,26 @@ void setup()
     //     []() {}, motors::brake);
     // menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
     menu.addOption("Calibrar parámetro", calibrateValue, nullptr, nullptr);
+    calibrationMenu.addField("step time [ms]", &motors::STEP_DURATION_MS);
 
-    calibrationMenu.addField("Norm srch speed [1-6]", &fsm::configValues->normalSearchSpeed);
+    calibrationMenu.addField("Norm srch speed [1-14]", &fsm::configValues->normalSearchSpeed);
     // calibrationMenu.addField("Norm srch init speed [1-6]", &fsm::configValues->normalInitialSearchSpeed);
-    calibrationMenu.addField("Norm srch init dur [ms]", &fsm::configValues->normalInitialSearchDuration);
+    // calibrationMenu.addField("Norm srch init dur [ms]", &fsm::configValues->normalInitialSearchDuration);
 
     /* Avoid fall */
-    calibrationMenu.addField("av fall: rev dur [ms]", &fsm::configValues->avoidFallFrontReverseDuration);
-    calibrationMenu.addField("av fall: rev speed [1-6]", &fsm::configValues->avoidFallFrontReverseSpeed);
-    calibrationMenu.addField("av fall: turn dur [ms]", &fsm::configValues->avoidFallFrontMaxTurnDuration);
-    calibrationMenu.addField("av fall: turn speed [ms]", &fsm::configValues->avoidFallFrontTurnSpeed);
+    // calibrationMenu.addField("av fall: rev dur [ms]", &fsm::configValues->avoidFallFrontReverseDuration);
+    // calibrationMenu.addField("av fall: rev speed [1-14]", &fsm::configValues->avoidFallFrontReverseSpeed);
+    // calibrationMenu.addField("av fall: turn dur [ms]", &fsm::configValues->avoidFallFrontMaxTurnDuration);
+    // calibrationMenu.addField("av fall: turn speed [1-14]", &fsm::configValues->avoidFallFrontTurnSpeed);
+
+    /* Aim front side */
+    // calibrationMenu.addField("aim fs: trn spd in [1-14]", &fsm::configValues->aimFrontSideSpeedInner);
+    // calibrationMenu.addField("aim fs: trn spd out [1-14]", &fsm::configValues->aimFrontSideSpeedOuter);
+    // calibrationMenu.addField("aim fs: trn dur  [ms]", &fsm::configValues->aimFrontSideMaxTurnDuration);
 
     /* Aim side */
-    // calibrationMenu.addField("aim s: trn spd  [1-6]", &fsm::configValues->aimSideSpeedOuter);
-    // calibrationMenu.addField("aim s: trn dur  [ms]", &fsm::configValues->aimSideMaxTurnDuration);
+    calibrationMenu.addField("aim s: trn spd  [1-14]", &fsm::configValues->aimSideSpeedOuter);
+    calibrationMenu.addField("aim s: trn dur  [ms]", &fsm::configValues->aimSideMaxTurnDuration);
 
     /* Attack front */
     // calibrationMenu.addField("AF: full gas speed [1-6]", &attackFront_fsm::fullGasSpeed);
@@ -109,7 +109,7 @@ void setup()
     // calibrationMenu.addField("av bck J: trn spd outr [1-6]", &fsm::configValues->avoidBackInJOuterSpeed);
     // calibrationMenu.addField("av bck J: trn drtn [ms]", &fsm::configValues->avoidBackInJMaxTurnDuration);
 
-    RGBLed::showYellow();
+    RGBLed::showGreen();
 }
 
 void loop()
@@ -119,24 +119,39 @@ void loop()
 
 void fsmSetup()
 {
+    pinMode(KILL_SWITCH_START, INPUT_PULLDOWN);
+    RGBLed::showYellow();
+    while (!digitalRead(KILL_SWITCH_START))
+    {
+    }
     int initialStrategy = dipSwitch::readInt();
     fsm::initialAction(initialStrategy);
-    // RGBLed::showRed();
-    // delay(1000);
-    // RGBLed::turnOff();
-    // delay(1000);
-    // RGBLed::showRed();
-    // delay(1000);
-    // RGBLed::turnOff();
-    // delay(1000);
-    // RGBLed::showRed();
-    // delay(1000);
+    RGBLed::showYellow();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
+    RGBLed::showYellow();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
     RGBLed::showRed();
+    delay(1000);
 }
 
 void fsmAction()
 {
-    fsm::state();
+    if (digitalRead(KILL_SWITCH_START))
+    {
+        fsm::state();
+    }
+    else
+    {
+        fsm::cleanupAction();
+        RGBLed::showGreen();
+        while (true)
+        {
+        }
+    }
 }
 
 void fsmCleanup()

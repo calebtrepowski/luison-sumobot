@@ -11,8 +11,8 @@ namespace fsm
         {
             DEBUG_PRINTLN("normal operation");
             fsm::priorState = fsm::state;
-            motors::goForward(configValues->normalInitialSearchSpeed);
-            fsm::referenceTime = millis();
+            motors::goForward(configValues->normalSearchSpeed);
+            // fsm::referenceTime = millis();
             // motors::brake(); //uncomment for testing turns
         }
 
@@ -28,10 +28,10 @@ namespace fsm
         TRANSITION_AIM_FRONT_RIGHT
         TRANSITION_AIM_BACK
 
-        if (millis() - fsm::referenceTime > fsm::configValues->normalInitialSearchDuration)
-        {
-            motors::goForward(configValues->normalSearchSpeed);
-        }
+        // if (millis() - fsm::referenceTime > fsm::configValues->normalInitialSearchDuration)
+        // {
+        //     motors::goForward(configValues->normalSearchSpeed);
+        // }
     }
 }
 

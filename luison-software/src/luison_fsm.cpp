@@ -20,8 +20,16 @@ void loop()
     }
 
     fsm::initialAction(dipSwitch::readInt());
-
+    RGBLed::showYellow();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
+    RGBLed::showYellow();
+    delay(1000);
+    RGBLed::turnOff();
+    delay(1000);
     RGBLed::showRed();
+    delay(1000);
 
     while (digitalRead(KILL_SWITCH_START))
     {

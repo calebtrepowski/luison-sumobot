@@ -54,36 +54,36 @@ namespace fsm
     void initializeValues(void)
     {
         metalRing = {
-            .normalInitialSearchSpeed = 1,
+            .normalInitialSearchSpeed = 5,
             .normalInitialSearchDuration = 50,
-            .normalSearchSpeed = 1,
+            .normalSearchSpeed = 8,
 
             .attackFrontFullGasTime = 500,
             .attackFrontLiftOffTime = 1000,
-            .attackFrontFullGasSpeed = 6,
-            .attackFrontLiftOffSpeed = 6,
+            .attackFrontFullGasSpeed = 14,
+            .attackFrontLiftOffSpeed = 12,
 
-            .aimFrontSideMaxTurnDuration = 10,
-            .aimFrontSideSpeedOuter = 6,
-            .aimFrontSideSpeedInner = 1,
+            .aimFrontSideMaxTurnDuration = 100,
+            .aimFrontSideSpeedOuter = 10,
+            .aimFrontSideSpeedInner = 6,
 
-            .aimSideMaxTurnDuration = 20,
-            .aimSideSpeedOuter = 6,
-            .aimSideSpeedInner = 1,
+            .aimSideMaxTurnDuration = 100,
+            .aimSideSpeedOuter = 10,
+            .aimSideSpeedInner = 4,
 
             .avoidFallFrontReverseDuration = 200,
             .avoidFallFrontMaxTurnDuration = 50,
-            .avoidFallFrontReverseSpeed = 4,
-            .avoidFallFrontTurnSpeed = 3,
+            .avoidFallFrontReverseSpeed = 8,
+            .avoidFallFrontTurnSpeed = 8,
 
-            .diagonalAttackMoveForwardSpeed = 6,
+            .diagonalAttackMoveForwardSpeed = 11,
             .diagonalAttackMoveForwardDuration = 200,
-            .diagonalTurnAimSpeedOuter = 6,
-            .diagonalTurnAimSpeedInner = 1,
+            .diagonalTurnAimSpeedOuter = 11,
+            .diagonalTurnAimSpeedInner = 6,
             .diagonalTurnAimDuration = 150,
 
-            .waitSensorsMoveForwardSpeed = 6,
-            .waitSensorsMoveForwardDuration = 50,
+            .waitSensorsMoveForwardSpeed = 11,
+            .waitSensorsMoveForwardDuration = 200,
             .waitSensorsWaitMaxDuration = 2000,
 
             .avoidBackTurnSpeed = 6,
@@ -97,12 +97,12 @@ namespace fsm
             .avoidBackInJFrontOuterSpeed = 2,
             .avoidBackInJFrontMaxTurnDuration = 300,
 
-            .bulletSpeed = 6};
+            .bulletSpeed = 14};
 
         woodRing = {
             .normalInitialSearchSpeed = 2,
             .normalInitialSearchDuration = 10,
-            .normalSearchSpeed = 2,
+            .normalSearchSpeed = 4,
 
             .attackFrontFullGasTime = 500,
             .attackFrontLiftOffTime = 1000,

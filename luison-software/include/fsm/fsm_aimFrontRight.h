@@ -18,8 +18,7 @@ namespace fsm
 #if defined(ENABLE_GYRO)
             gyroscope::mpu.update();
 #endif
-            motors::goForward(fsm::configValues->aimFrontSideSpeedOuter,
-                              fsm::configValues->aimFrontSideSpeedInner);
+            motors::turnRight(fsm::configValues->aimFrontSideSpeedOuter);
 #if defined(ENABLE_GYRO)
             gyroscope::referenceAngleZ = gyroscope::mpu.getAngleZ();
 #endif

@@ -41,19 +41,19 @@ namespace fsm
         TRANSITION_AIM_RIGHT
         TRANSITION_AIM_BACK
 
-        fsm::currentTime = millis();
-        if (fsm::currentTime % fsm::configValues->attackFrontLiftOffTime > fsm::configValues->attackFrontFullGasTime && attackFront_fsm::currentSpeed == fsm::configValues->attackFrontFullGasSpeed)
-        {
-            DEBUG_PRINTLN("lift off speed");
-            motors::goForward(fsm::configValues->attackFrontLiftOffSpeed);
-            attackFront_fsm::currentSpeed = fsm::configValues->attackFrontLiftOffSpeed;
-        }
-        else if (attackFront_fsm::currentSpeed == fsm::configValues->attackFrontLiftOffSpeed)
-        {
-            DEBUG_PRINTLN("full gas speed");
-            motors::goForward(fsm::configValues->attackFrontFullGasSpeed);
-            attackFront_fsm::currentSpeed = fsm::configValues->attackFrontFullGasSpeed;
-        }
+        // fsm::currentTime = millis();
+        // if (fsm::currentTime % fsm::configValues->attackFrontLiftOffTime > fsm::configValues->attackFrontFullGasTime && attackFront_fsm::currentSpeed == fsm::configValues->attackFrontFullGasSpeed)
+        // {
+        //     DEBUG_PRINTLN("lift off speed");
+        //     motors::goForward(fsm::configValues->attackFrontLiftOffSpeed);
+        //     attackFront_fsm::currentSpeed = fsm::configValues->attackFrontLiftOffSpeed;
+        // }
+        // else if (attackFront_fsm::currentSpeed == fsm::configValues->attackFrontLiftOffSpeed)
+        // {
+        //     DEBUG_PRINTLN("full gas speed");
+        //     motors::goForward(fsm::configValues->attackFrontFullGasSpeed);
+        //     attackFront_fsm::currentSpeed = fsm::configValues->attackFrontFullGasSpeed;
+        // }
     }
 }
 

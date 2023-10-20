@@ -19,7 +19,7 @@ namespace fsm
     volatile STATE_HANDLER_T priorState, state, defaultExploringState;
     volatile INNER_STATE_HANDLER_T priorInnerState, innerState;
 
-    ConfigValues *configValues = &woodRing;
+    ConfigValues *configValues = &metalRing;
 
     uint_fast32_t currentTime;
     uint_fast32_t referenceTime;
@@ -184,28 +184,28 @@ namespace fsm
             break;
         case 1:
             fsm::defaultExploringState = fsm::waitSensors;
-            fsm::state = fsm::diagonalAttack;
-            break;
-        case 2:
-            fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::waitSensors;
             break;
-        case 3:
-            fsm::defaultExploringState = fsm::waitSensors;
-            fsm::state = fsm::avoidBack;
-            break;
-        case 4:
-            fsm::defaultExploringState = fsm::waitSensors;
-            fsm::state = fsm::avoidBackInJ;
-            break;
-        case 5:
-            fsm::defaultExploringState = fsm::waitSensors;
-            fsm::state = fsm::avoidBackInJFront;
-            break;
-        case 6:
-            fsm::defaultExploringState = fsm::normalSearch;
-            fsm::state = fsm::bullet;
-            break;
+        // case 2:
+        //     fsm::defaultExploringState = fsm::waitSensors;
+        //     fsm::state = fsm::waitSensors;
+        //     break;
+        // case 3:
+        //     fsm::defaultExploringState = fsm::waitSensors;
+        //     fsm::state = fsm::avoidBack;
+        //     break;
+        // case 4:
+        //     fsm::defaultExploringState = fsm::waitSensors;
+        //     fsm::state = fsm::avoidBackInJ;
+        //     break;
+        // case 5:
+        //     fsm::defaultExploringState = fsm::waitSensors;
+        //     fsm::state = fsm::avoidBackInJFront;
+        //     break;
+        // case 6:
+        //     fsm::defaultExploringState = fsm::normalSearch;
+        //     fsm::state = fsm::bullet;
+        //     break;
         default:
             fsm::defaultExploringState = fsm::normalSearch;
             fsm::state = fsm::normalSearch;
