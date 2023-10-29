@@ -78,7 +78,20 @@ namespace fsm
             fsm::innerState = avoidFallFrontLeft_fsm::reverse;
         }
 
-        // TODO: add transitions for proximity sensors
+        if (fsm::innerState == avoidFallFrontLeft_fsm::turnRight)
+        {
+            line::readValues();
+            proximity::readStates();
+            TRANSITION_AVOID_FALL_FRONT_LEFT
+            TRANSITION_AVOID_FALL_FRONT_RIGHT
+
+            TRANSITION_ATTACK_FRONT
+            TRANSITION_AIM_RIGHT
+            TRANSITION_AIM_FRONT_RIGHT
+            TRANSITION_AIM_LEFT
+            TRANSITION_AIM_FRONT_LEFT
+            TRANSITION_AIM_BACK
+        }
 
         if (fsm::innerState != NULL)
         {

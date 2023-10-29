@@ -49,6 +49,13 @@ namespace fsm
         int avoidBackInJFrontMaxTurnDuration;
 
         int bulletSpeed;
+
+        int avoidBulletTurnRightSpeed;
+        int avoidBulletTurnRightDuration;
+        int avoidBulletGoForwardSpeed;
+        int avoidBulletGoForwardDuration;
+        int avoidBulletTurnLeftSpeed;
+        int avoidBulletTurnLeftDuration;
     } metalRing, woodRing;
 
     void initializeValues(void)
@@ -56,7 +63,7 @@ namespace fsm
         metalRing = {
             .normalInitialSearchSpeed = 5,
             .normalInitialSearchDuration = 50,
-            .normalSearchSpeed = 8,
+            .normalSearchSpeed = 10,
 
             .attackFrontFullGasTime = 500,
             .attackFrontLiftOffTime = 1000,
@@ -71,8 +78,8 @@ namespace fsm
             .aimSideSpeedOuter = 10,
             .aimSideSpeedInner = 4,
 
-            .avoidFallFrontReverseDuration = 200,
-            .avoidFallFrontMaxTurnDuration = 50,
+            .avoidFallFrontReverseDuration = 180,
+            .avoidFallFrontMaxTurnDuration = 80,
             .avoidFallFrontReverseSpeed = 8,
             .avoidFallFrontTurnSpeed = 8,
 
@@ -83,7 +90,7 @@ namespace fsm
             .diagonalTurnAimDuration = 150,
 
             .waitSensorsMoveForwardSpeed = 11,
-            .waitSensorsMoveForwardDuration = 200,
+            .waitSensorsMoveForwardDuration = 100,
             .waitSensorsWaitMaxDuration = 2000,
 
             .avoidBackTurnSpeed = 6,
@@ -97,43 +104,50 @@ namespace fsm
             .avoidBackInJFrontOuterSpeed = 2,
             .avoidBackInJFrontMaxTurnDuration = 300,
 
-            .bulletSpeed = 14};
+            .bulletSpeed = 14,
 
-        woodRing = {
-            .normalInitialSearchSpeed = 2,
-            .normalInitialSearchDuration = 10,
-            .normalSearchSpeed = 4,
+            .avoidBulletTurnRightSpeed = 6,
+            .avoidBulletTurnRightDuration = 90,
+            .avoidBulletGoForwardSpeed = 11,
+            .avoidBulletGoForwardDuration = 200,
+            .avoidBulletTurnLeftSpeed = 11,
+            .avoidBulletTurnLeftDuration = 150};
 
-            .attackFrontFullGasTime = 500,
-            .attackFrontLiftOffTime = 1000,
-            .attackFrontFullGasSpeed = 6,
-            .attackFrontLiftOffSpeed = 4,
+        // woodRing = {
+        //     .normalInitialSearchSpeed = 2,
+        //     .normalInitialSearchDuration = 10,
+        //     .normalSearchSpeed = 4,
 
-            .aimFrontSideMaxTurnDuration = 10,
-            .aimFrontSideSpeedOuter = 3,
-            .aimFrontSideSpeedInner = 1,
+        //     .attackFrontFullGasTime = 500,
+        //     .attackFrontLiftOffTime = 1000,
+        //     .attackFrontFullGasSpeed = 6,
+        //     .attackFrontLiftOffSpeed = 4,
 
-            .aimSideMaxTurnDuration = 20,
-            .aimSideSpeedOuter = 2,
-            .aimSideSpeedInner = 1,
+        //     .aimFrontSideMaxTurnDuration = 10,
+        //     .aimFrontSideSpeedOuter = 3,
+        //     .aimFrontSideSpeedInner = 1,
 
-            .avoidFallFrontReverseDuration = 275,
-            .avoidFallFrontMaxTurnDuration = 225,
-            .avoidFallFrontReverseSpeed = 2,
-            .avoidFallFrontTurnSpeed = 2,
+        //     .aimSideMaxTurnDuration = 20,
+        //     .aimSideSpeedOuter = 2,
+        //     .aimSideSpeedInner = 1,
 
-            .diagonalAttackMoveForwardSpeed = 2,
-            .diagonalAttackMoveForwardDuration = 800,
-            .diagonalTurnAimSpeedOuter = 3,
-            .diagonalTurnAimSpeedInner = 1,
-            .diagonalTurnAimDuration = 120,
+        //     .avoidFallFrontReverseDuration = 275,
+        //     .avoidFallFrontMaxTurnDuration = 225,
+        //     .avoidFallFrontReverseSpeed = 2,
+        //     .avoidFallFrontTurnSpeed = 2,
 
-            .waitSensorsMoveForwardSpeed = 2,
-            .waitSensorsMoveForwardDuration = 100,
-            .waitSensorsWaitMaxDuration = 1000,
+        //     .diagonalAttackMoveForwardSpeed = 2,
+        //     .diagonalAttackMoveForwardDuration = 800,
+        //     .diagonalTurnAimSpeedOuter = 3,
+        //     .diagonalTurnAimSpeedInner = 1,
+        //     .diagonalTurnAimDuration = 120,
 
-            .avoidBackTurnSpeed = 6,
-            .avoidBackMaxTurnDuration = 200};
+        //     .waitSensorsMoveForwardSpeed = 2,
+        //     .waitSensorsMoveForwardDuration = 100,
+        //     .waitSensorsWaitMaxDuration = 1000,
+
+        //     .avoidBackTurnSpeed = 6,
+        //     .avoidBackMaxTurnDuration = 200};
     }
 }
 

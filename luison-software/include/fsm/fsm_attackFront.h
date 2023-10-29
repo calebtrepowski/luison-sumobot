@@ -25,10 +25,10 @@ namespace fsm
         }
 
         line::readValues();
+        proximity::readStates();
         TRANSITION_AVOID_FALL_FRONT_LEFT
         TRANSITION_AVOID_FALL_FRONT_RIGHT
 
-        proximity::readStates();
         if (OPPONENT_NOT_DETECTED_FRONT_CENTER)
         {
             fsm::state = fsm::defaultExploringState;

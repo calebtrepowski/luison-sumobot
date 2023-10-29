@@ -65,5 +65,6 @@ namespace proximity
 #define OPPONENT_NOT_DETECTED_FRONT_CENTER proximity::frontCenter.state
 #define OPPONENT_NOT_DETECTED_FRONT_RIGHT proximity::frontRight.state
 #define OPPONENT_NOT_DETECTED_FRONT_LEFT proximity::frontLeft.state
+#define OPPONENT_NOT_DETECTED_FRONT (proximity::frontLeft.state &&proximity::frontCenter.state &&proximity::frontRight.state)
 
 #endif

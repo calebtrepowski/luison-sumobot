@@ -26,10 +26,10 @@ namespace fsm
         }
 
         line::readValues();
+        proximity::readStates();
         TRANSITION_AVOID_FALL_FRONT_LEFT
         TRANSITION_AVOID_FALL_FRONT_RIGHT
 
-        proximity::readStates();
         TRANSITION_ATTACK_FRONT
         // TRANSITION_AIM_FRONT_LEFT
         TRANSITION_AIM_RIGHT

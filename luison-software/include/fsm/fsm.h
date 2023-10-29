@@ -31,12 +31,15 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_LEFT
     void avoidFallFrontLeft();
-#define TRANSITION_AVOID_FALL_FRONT_LEFT                               \
-    if (LINE_FRONT_LEFT_DETECTED)                                      \
-    {                                                                  \
-        motors::goBack(fsm::configValues->avoidFallFrontReverseSpeed); \
-        fsm::state = fsm::avoidFallFrontLeft;                          \
-        return;                                                        \
+#define TRANSITION_AVOID_FALL_FRONT_LEFT                         \
+    if (LINE_FRONT_LEFT_DETECTED && OPPONENT_NOT_DETECTED_FRONT) \
+    {                                                            \
+        fsm::state = fsm::avoidFallFrontLeft;                    \
+        if (fsm::innerState != NULL)                             \
+        {                                                        \
+            fsm::innerState = NULL;                              \
+        }                                                        \
+        return;                                                  \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_LEFT ;
@@ -44,12 +47,15 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AVOID_FALL_FRONT_RIGHT
     void avoidFallFrontRight();
-#define TRANSITION_AVOID_FALL_FRONT_RIGHT                              \
-    if (LINE_FRONT_RIGHT_DETECTED)                                     \
-    {                                                                  \
-        motors::goBack(fsm::configValues->avoidFallFrontReverseSpeed); \
-        fsm::state = fsm::avoidFallFrontRight;                         \
-        return;                                                        \
+#define TRANSITION_AVOID_FALL_FRONT_RIGHT                         \
+    if (LINE_FRONT_RIGHT_DETECTED && OPPONENT_NOT_DETECTED_FRONT) \
+    {                                                             \
+        fsm::state = fsm::avoidFallFrontRight;                    \
+        if (fsm::innerState != NULL)                              \
+        {                                                         \
+            fsm::innerState = NULL;                               \
+        }                                                         \
+        return;                                                   \
     }
 #else
 #define TRANSITION_AVOID_FALL_FRONT_RIGHT ;
@@ -61,6 +67,10 @@ namespace fsm
     if (OPPONENT_DETECTED_FRONT_CENTER_ONLY) \
     {                                        \
         fsm::state = fsm::attackFront;       \
+        if (fsm::innerState != NULL)         \
+        {                                    \
+            fsm::innerState = NULL;          \
+        }                                    \
         return;                              \
     }
 #else
@@ -76,6 +86,10 @@ namespace fsm
     if (OPPONENT_DETECTED_FRONT_RIGHT)   \
     {                                    \
         fsm::state = fsm::aimFrontRight; \
+        if (fsm::innerState != NULL)     \
+        {                                \
+            fsm::innerState = NULL;      \
+        }                                \
         return;                          \
     }
 #else
@@ -88,6 +102,10 @@ namespace fsm
     if (OPPONENT_DETECTED_FRONT_LEFT)   \
     {                                   \
         fsm::state = fsm::aimFrontLeft; \
+        if (fsm::innerState != NULL)    \
+        {                               \
+            fsm::innerState = NULL;     \
+        }                               \
         return;                         \
     }
 #else
@@ -96,11 +114,15 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AIM_LEFT
     void aimLeft();
-#define TRANSITION_AIM_LEFT        \
-    if (OPPONENT_DETECTED_LEFT)    \
-    {                              \
-        fsm::state = fsm::aimLeft; \
-        return;                    \
+#define TRANSITION_AIM_LEFT          \
+    if (OPPONENT_DETECTED_LEFT)      \
+    {                                \
+        fsm::state = fsm::aimLeft;   \
+        if (fsm::innerState != NULL) \
+        {                            \
+            fsm::innerState = NULL;  \
+        }                            \
+        return;                      \
     }
 #else
 #define TRANSITION_AIM_LEFT ;
@@ -108,11 +130,15 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AIM_RIGHT
     void aimRight();
-#define TRANSITION_AIM_RIGHT        \
-    if (OPPONENT_DETECTED_RIGHT)    \
-    {                               \
-        fsm::state = fsm::aimRight; \
-        return;                     \
+#define TRANSITION_AIM_RIGHT         \
+    if (OPPONENT_DETECTED_RIGHT)     \
+    {                                \
+        fsm::state = fsm::aimRight;  \
+        if (fsm::innerState != NULL) \
+        {                            \
+            fsm::innerState = NULL;  \
+        }                            \
+        return;                      \
     }
 #else
 #define TRANSITION_AIM_RIGHT ;
@@ -120,17 +146,21 @@ namespace fsm
 
 #ifdef ENABLE_STATE_AIM_BACK
     void aimBack();
-#define TRANSITION_AIM_BACK        \
-    if (OPPONENT_DETECTED_BACK)    \
-    {                              \
-        fsm::state = fsm::aimBack; \
-        return;                    \
+#define TRANSITION_AIM_BACK          \
+    if (OPPONENT_DETECTED_BACK)      \
+    {                                \
+        fsm::state = fsm::aimBack;   \
+        if (fsm::innerState != NULL) \
+        {                            \
+            fsm::innerState = NULL;  \
+        }                            \
+        return;                      \
     }
 #else
 #define TRANSITION_AIM_BACK ;
 #endif
 
-    /* initial strategies */
+/* initial strategies */
 #ifdef ENABLE_STRATEGY_DIAGONAL_ATTACK
     void diagonalAttack();
 #endif
@@ -157,6 +187,10 @@ namespace fsm
 
 #ifdef ENABLE_STRATEGY_BULLET
     void bullet();
+#endif
+
+#ifdef ENABLE_STRATEGY_AVOID_BULLET
+    void avoidBullet(void);
 #endif
 
     void setup()
@@ -186,10 +220,10 @@ namespace fsm
             fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::waitSensors;
             break;
-        // case 2:
-        //     fsm::defaultExploringState = fsm::waitSensors;
-        //     fsm::state = fsm::waitSensors;
-        //     break;
+        case 2:
+            fsm::defaultExploringState = fsm::waitSensors;
+            fsm::state = fsm::avoidBullet;
+            break;
         // case 3:
         //     fsm::defaultExploringState = fsm::waitSensors;
         //     fsm::state = fsm::avoidBack;
@@ -224,7 +258,6 @@ namespace fsm
         state = idle;
         state();
     }
-
 }
 
 #include "fsm_configValues.h"
@@ -245,5 +278,6 @@ namespace fsm
 #include "fsm_avoidBackInJ.h"
 #include "fsm_avoidBackInJFront.h"
 #include "fsm_bullet.h"
+#include "fsm_avoidBullet.h"
 
 #endif
