@@ -63,7 +63,7 @@ namespace fsm
         metalRing = {
             .normalInitialSearchSpeed = 5,
             .normalInitialSearchDuration = 50,
-            .normalSearchSpeed = 10,
+            .normalSearchSpeed = 12,
 
             .attackFrontFullGasTime = 500,
             .attackFrontLiftOffTime = 1000,
@@ -83,11 +83,11 @@ namespace fsm
             .avoidFallFrontReverseSpeed = 8,
             .avoidFallFrontTurnSpeed = 8,
 
-            .diagonalAttackMoveForwardSpeed = 11,
+            .diagonalAttackMoveForwardSpeed = 12,
             .diagonalAttackMoveForwardDuration = 200,
-            .diagonalTurnAimSpeedOuter = 11,
+            .diagonalTurnAimSpeedOuter = 12,
             .diagonalTurnAimSpeedInner = 6,
-            .diagonalTurnAimDuration = 150,
+            .diagonalTurnAimDuration = 50,
 
             .waitSensorsMoveForwardSpeed = 11,
             .waitSensorsMoveForwardDuration = 100,

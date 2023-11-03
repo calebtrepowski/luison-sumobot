@@ -11,7 +11,7 @@ namespace bluetooth
 {
     void setup()
     {
-        Dabble.begin("LUISON_BT");
+        Dabble.begin("JBL Flip 4");
     }
 
     void echo()

@@ -224,21 +224,17 @@ namespace fsm
             fsm::defaultExploringState = fsm::waitSensors;
             fsm::state = fsm::avoidBullet;
             break;
-        // case 3:
-        //     fsm::defaultExploringState = fsm::waitSensors;
-        //     fsm::state = fsm::avoidBack;
-        //     break;
-        // case 4:
-        //     fsm::defaultExploringState = fsm::waitSensors;
-        //     fsm::state = fsm::avoidBackInJ;
-        //     break;
+        case 3:
+            fsm::defaultExploringState = fsm::normalSearch;
+            fsm::state = fsm::bullet;
+            break;
+        case 4:
+            fsm::defaultExploringState = fsm::normalSearch;
+            fsm::state = fsm::diagonalAttack;
+            break;
         // case 5:
         //     fsm::defaultExploringState = fsm::waitSensors;
         //     fsm::state = fsm::avoidBackInJFront;
-        //     break;
-        // case 6:
-        //     fsm::defaultExploringState = fsm::normalSearch;
-        //     fsm::state = fsm::bullet;
         //     break;
         default:
             fsm::defaultExploringState = fsm::normalSearch;

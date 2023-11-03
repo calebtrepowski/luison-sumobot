@@ -12,7 +12,7 @@
 #include "fsm/fsm.h"
 
 MenuDabbleTerminal menu;
-CalibrationMenu calibrationMenu, calibrationMenu2;
+CalibrationMenu calibrationMenu, calibrationMenu2, calibrationMenu3;
 
 void fsmSetup();
 void fsmAction();
@@ -28,6 +28,7 @@ void printDipSwitchReading();
 
 void calibrateValue1();
 void calibrateValue2();
+void calibrateValue3();
 
 bool onlyFSM;
 
@@ -47,9 +48,25 @@ void setup()
 
         menu.addOption("FSM", fsmSetup, fsmAction, fsmCleanup);
         // menu.addOption(
-        // "Elegir metal", []()
-        // { fsm::configValues = &fsm::metalRing;Terminal.println("Metal elegido!"); },
-        // nullptr, nullptr);
+        //     "Elegir normal", []()
+        //     { fsm::initialAction(0); Terminal.println("Normal elegido.");},
+        //     nullptr, nullptr);
+        // menu.addOption(
+        //     "Elegir turco", []()
+        //     { fsm::initialAction(1); Terminal.println("Turco elegido.");},
+        //     nullptr, nullptr);
+        // menu.addOption(
+        //     "Elegir esquiva", []()
+        //     { fsm::initialAction(2); Terminal.println("Esquiva elegido.");},
+        //     nullptr, nullptr);
+        // menu.addOption(
+        //     "Elegir bala", []()
+        //     { fsm::initialAction(3); Terminal.println("Bala elegido.");},
+        //     nullptr, nullptr);
+        // menu.addOption(
+        //     "Elegir bulby", []()
+        //     { fsm::initialAction(4); Terminal.println("Bulby elegido.");},
+        //     nullptr, nullptr);
         menu.addOption("Sensores de linea", printReadingsSetup, printLineReadings, nullptr);
         // menu.addOption("Sensores de proximidad", printReadingsSetup, printProximityReadings, nullptr);
         menu.addOption(
@@ -69,8 +86,11 @@ void setup()
         //     { motors::turnRight(3); },
         //     []() {}, motors::brake);
         // menu.addOption("Dip Switch", printReadingsSetup, printDipSwitchReading, nullptr);
+
+
         menu.addOption("Calibrar parámetro", calibrateValue1, nullptr, nullptr);
         menu.addOption("Calibrar parámetro 2", calibrateValue2, nullptr, nullptr);
+        menu.addOption("Calibrar parámetro 3", calibrateValue3, nullptr, nullptr);
         calibrationMenu.addField("step time [ms]", &motors::STEP_DURATION_MS);
 
         calibrationMenu.addField("Norm srch speed [1-14]", &fsm::configValues->normalSearchSpeed);
@@ -93,22 +113,22 @@ void setup()
         calibrationMenu2.addField("aim s: trn dur  [ms]", &fsm::configValues->aimSideMaxTurnDuration);
 
         /* Attack front */
-        calibrationMenu2.addField("AF: full gas speed [1-14]", &fsm::configValues->attackFrontFullGasSpeed);
+        // calibrationMenu2.addField("AF: full gas speed [1-14]", &fsm::configValues->attackFrontFullGasSpeed);
         // calibrationMenu.addField("AF: full gas time [ms]", &attackFront_fsm::fullGasTime);
         // calibrationMenu.addField("AF: lift off speed [1-6]", &attackFront_fsm::liftOffSpeed);
         // calibrationMenu.addField("AF: lift off time [ms]", &attackFront_fsm::liftOffTime);
 
         /* Diagonal Attack */
-        // calibrationMenu.addField("DA: forward speed [1-6]", &fsm::configValues->diagonalAttackMoveForwardSpeed);
-        // calibrationMenu.addField("DA: forward duration [ms]", &fsm::configValues->diagonalAttackMoveForwardDuration);
-        // calibrationMenu.addField("DA: turn speed outer [1-6]", &fsm::configValues->diagonalTurnAimSpeedOuter);
-        // calibrationMenu.addField("DA: turn speed inner [1-6]", &fsm::configValues->diagonalTurnAimSpeedInner);
-        // calibrationMenu.addField("DA: turn duration [ms]", &fsm::configValues->diagonalTurnAimDuration);
+        calibrationMenu2.addField("DA: forward speed [1-14]", &fsm::configValues->diagonalAttackMoveForwardSpeed);
+        calibrationMenu2.addField("DA: forward duration [ms]", &fsm::configValues->diagonalAttackMoveForwardDuration);
+        calibrationMenu2.addField("DA: turn speed outer [1-14]", &fsm::configValues->diagonalTurnAimSpeedOuter);
+        calibrationMenu2.addField("DA: turn speed inner [1-14]", &fsm::configValues->diagonalTurnAimSpeedInner);
+        calibrationMenu2.addField("DA: turn duration [ms]", &fsm::configValues->diagonalTurnAimDuration);
 
         /* Wait sensors */
-        calibrationMenu2.addField("WS: forward speed [1-14]", &fsm::configValues->waitSensorsMoveForwardSpeed);
-        calibrationMenu2.addField("WS: forward duration [ms]", &fsm::configValues->waitSensorsMoveForwardDuration);
-        calibrationMenu2.addField("WS: wait duration [ms]", &fsm::configValues->waitSensorsWaitMaxDuration);
+        calibrationMenu3.addField("WS: forward speed [1-14]", &fsm::configValues->waitSensorsMoveForwardSpeed);
+        calibrationMenu3.addField("WS: forward duration [ms]", &fsm::configValues->waitSensorsMoveForwardDuration);
+        calibrationMenu3.addField("WS: wait duration [ms]", &fsm::configValues->waitSensorsWaitMaxDuration);
 
         /* Avoid back */
         // calibrationMenu.addField("av bck: trn spd [1-6]", &fsm::configValues->avoidBackTurnSpeed);
@@ -120,12 +140,12 @@ void setup()
         // calibrationMenu.addField("av bck J: trn drtn [ms]", &fsm::configValues->avoidBackInJMaxTurnDuration);
 
         /* Avoid Bullet */
-        // calibrationMenu.addField("AB: tr spd [1-14]", &fsm::configValues->avoidBulletTurnRightSpeed);
-        // calibrationMenu.addField("AB: tr dur [ms]", &fsm::configValues->avoidBulletTurnRightDuration);
-        // calibrationMenu.addField("AB: gf spd [1-14]", &fsm::configValues->avoidBulletGoForwardSpeed);
-        // calibrationMenu.addField("AB: gf dur [ms]", &fsm::configValues->avoidBulletGoForwardDuration);
-        // calibrationMenu.addField("AB: tl spd [1-14]", &fsm::configValues->avoidBulletTurnLeftSpeed);
-        // calibrationMenu.addField("AB: tl dur [ms]", &fsm::configValues->avoidBulletTurnLeftDuration);
+        calibrationMenu3.addField("AB: tr spd [1-14]", &fsm::configValues->avoidBulletTurnRightSpeed);
+        calibrationMenu3.addField("AB: tr dur [ms]", &fsm::configValues->avoidBulletTurnRightDuration);
+        calibrationMenu3.addField("AB: gf spd [1-14]", &fsm::configValues->avoidBulletGoForwardSpeed);
+        calibrationMenu3.addField("AB: gf dur [ms]", &fsm::configValues->avoidBulletGoForwardDuration);
+        calibrationMenu3.addField("AB: tl spd [1-14]", &fsm::configValues->avoidBulletTurnLeftSpeed);
+        calibrationMenu3.addField("AB: tl dur [ms]", &fsm::configValues->avoidBulletTurnLeftDuration);
     }
 }
 
@@ -156,6 +176,7 @@ void fsmSetup()
 {
     pinMode(KILL_SWITCH_START, INPUT_PULLDOWN);
     RGBLed::showYellow();
+    // delay(1000);
     while (!digitalRead(KILL_SWITCH_START))
     {
         vTaskDelay(1);
@@ -167,18 +188,18 @@ void fsmSetup()
 
 void fsmAction()
 {
-    // if (digitalRead(KILL_SWITCH_START))
-    // {
-    fsm::state();
-    // }
-    // else
-    // {
-    //     fsm::cleanupAction();
-    //     RGBLed::showGreen();
-    //     while (true)
-    //     {
-    //     }
-    // }
+    if (digitalRead(KILL_SWITCH_START))
+    {
+        fsm::state();
+    }
+    else
+    {
+        fsm::cleanupAction();
+        RGBLed::showGreen();
+        // while (true)
+        // {
+        // }
+    }
 }
 
 void fsmCleanup()
@@ -186,7 +207,7 @@ void fsmCleanup()
     fsm::priorState = NULL;
     fsm::state = fsm::idle;
     fsm::state();
-    RGBLed::showYellow();
+    RGBLed::showGreen();
 }
 void printReadingsSetup()
 {
@@ -280,6 +301,38 @@ void calibrateValue2()
 
     int newValue = Terminal.readString().toInt();
     calibrationMenu2.updateField(fieldNumber - 1, newValue);
+
+    Terminal.println("Asignacion correcta");
+}
+void calibrateValue3()
+{
+    Terminal.println(calibrationMenu3.getFields());
+
+    while (true)
+    {
+        Dabble.processInput();
+        if (Terminal.available())
+            break;
+    }
+
+    int fieldNumber = Terminal.readString().toInt();
+    if (fieldNumber <= 0 || fieldNumber > calibrationMenu3.getFieldCount())
+    {
+        Terminal.println("Asignacion cancelada.");
+        return;
+    }
+
+    Terminal.println("Ingresar nuevo valor");
+
+    while (true)
+    {
+        Dabble.processInput();
+        if (Terminal.available())
+            break;
+    }
+
+    int newValue = Terminal.readString().toInt();
+    calibrationMenu3.updateField(fieldNumber - 1, newValue);
 
     Terminal.println("Asignacion correcta");
 }
